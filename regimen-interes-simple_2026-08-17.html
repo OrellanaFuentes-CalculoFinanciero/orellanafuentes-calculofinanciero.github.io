@@ -1,0 +1,3219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="author" content="Orlando Orellana">
+<meta name="date" content="2026-08-16">
+<!--
+  Autor: Orlando Orellana
+  Licenciado en Economía (FCE-UBA)
+  Profesor Adjunto Interino de Cálculo Financiero (FCE-UBA)
+  Unidad: Régimen de Interés Simple
+  Fecha de creación de este material: 16 de agosto de 2026
+  Material de autoría original — cualquier reproducción o modificación
+  que se atribuya la autoría del contenido original constituye una
+  apropiación indebida.
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Régimen de Interés Simple — Cálculo Financiero</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2430;
+    --ink-soft:#5B6570;
+    --paper:#FFFFFF;
+    --paper-alt:#F3F6F5;
+    --paper-deep:#ECF0EE;
+    --gold:#B8862B;
+    --gold-soft:#E8D9B8;
+    --teal:#1F6F6B;
+    --teal-soft:#DCEBEA;
+    --line:#DDE3E0;
+    --line-strong:#B9C2BE;
+    --pastel-gold:#FBF1DC;
+    --pastel-teal:#E3F2F0;
+    --pastel-blue:#E7EEF7;
+    --radius:4px;
+    --serif:'Fraunces', Georgia, serif;
+    --sans:'Source Sans 3', -apple-system, sans-serif;
+    --mono:'Source Sans 3', -apple-system, sans-serif;
+  }
+  /* ---------- temas alternativos para distintos entornos de luminosidad ---------- */
+  html[data-theme="oscuro"]{
+    --ink:#EDEFF3; --ink-soft:#9FB0C3; --paper:#12202F; --paper-alt:#1B2B3D; --paper-deep:#0E1826;
+    --gold:#D9B24C; --gold-soft:#4A3F22; --teal:#5FC4B8; --teal-soft:#173A38;
+    --line:#28394C; --line-strong:#3C5066;
+    --pastel-gold:#3A3221; --pastel-teal:#16302D; --pastel-blue:#1A2A3E;
+  }
+  html[data-theme="contraste"]{
+    --ink:#000000; --ink-soft:#2E2E2E; --paper:#FFFFFF; --paper-alt:#EFEFEF; --paper-deep:#E2E2E2;
+    --gold:#7A5900; --gold-soft:#FFE6A0; --teal:#00594E; --teal-soft:#CBEAE4;
+    --line:#A6A6A6; --line-strong:#707070;
+    --pastel-gold:#FFEFC2; --pastel-teal:#CFEEE8; --pastel-blue:#D6E4F5;
+  }
+  html[data-theme="sepia"]{
+    --ink:#3B2F22; --ink-soft:#70604A; --paper:#F6EFDD; --paper-alt:#EFE4C9; --paper-deep:#E6D8B7;
+    --gold:#9C6B26; --gold-soft:#E6CC93; --teal:#5C7B67; --teal-soft:#DCE5D3;
+    --line:#DDCEA5; --line-strong:#C6B285;
+    --pastel-gold:#F1E1B5; --pastel-teal:#DEE8D6; --pastel-blue:#E1E6EA;
+  }
+  *{box-sizing:border-box; font-feature-settings:"zero" 0; font-variant-numeric:normal;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:0 28px;}
+
+  /* ---------- selector de apariencia ---------- */
+  .theme-switcher{
+    position:fixed; top:16px; right:16px; z-index:150; display:flex; align-items:center; gap:9px;
+    background:var(--paper); border:1px solid var(--line-strong); border-radius:20px; padding:7px 12px 7px 14px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.15);
+  }
+  .theme-switcher-label{
+    font-family:var(--mono); font-size:9.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft);
+  }
+  .theme-swatch{
+    width:20px; height:20px; border-radius:50%; border:2px solid transparent; cursor:pointer; padding:0;
+    background:linear-gradient(135deg, var(--swatch-bg) 50%, var(--swatch-accent) 50%);
+    transition:border-color .15s, transform .15s;
+  }
+  .theme-swatch:hover{transform:scale(1.12);}
+  .theme-swatch.active{border-color:var(--ink);}
+  @media (max-width:640px){
+    .theme-switcher{top:10px; right:10px; padding:6px 8px;}
+    .theme-switcher-label{display:none;}
+  }
+
+  /* ===== HERO ===== */
+  header.hero{
+    border-bottom:1px solid var(--line);
+    padding:64px 0 48px;
+    background:var(--paper);
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin:0 0 18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--gold);display:inline-block;}
+  h1.title{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(2.3rem,5vw,3.4rem);
+    line-height:1.05;
+    margin:0 0 14px;
+    letter-spacing:-.01em;
+  }
+  h1.title em{font-style:italic;font-weight:500;color:var(--teal);}
+  .subtitle{
+    font-size:1.08rem;
+    color:var(--ink-soft);
+    max-width:56ch;
+    margin:0 0 8px;
+  }
+  .nodo-tag{
+    display:inline-block;
+    margin-top:18px;
+    font-family:var(--mono);
+    font-size:13px;
+    background:var(--paper);
+    border:1px solid var(--line-strong);
+    padding:5px 12px;
+    border-radius:999px;
+    color:var(--ink-soft);
+  }
+  .nodo-tag b{color:var(--ink);}
+
+  /* ===== LIVE LEDGER (signature element) ===== */
+  .ledger{
+    margin:40px 0 0;
+    border:1px solid var(--line-strong);
+    background:var(--paper);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .ledger-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    padding:16px 20px;
+    background:var(--ink);
+    color:var(--paper-alt);
+  }
+  .ledger-head h3{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:1.05rem;
+    margin:0;
+    color:#fff;
+  }
+  .ledger-head span{font-family:var(--mono);font-size:11.5px;color:var(--gold-soft);letter-spacing:.06em;}
+  .ledger-controls{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:0;
+    border-bottom:1px solid var(--line);
+  }
+  .ctrl{
+    padding:16px 20px;
+    border-right:1px solid var(--line);
+  }
+  .ctrl:last-child{border-right:none;}
+  .ctrl label{
+    display:block;
+    font-family:var(--mono);
+    font-size:9.5px;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:var(--ink-soft);
+    margin-bottom:8px;
+    white-space:nowrap;
+  }
+  .ctrl .val{font-family:var(--mono);color:var(--teal);font-weight:600;}
+  .ctrl input[type=range]{width:100%;accent-color:var(--gold);}
+  .ledger-intro{
+    padding:16px 20px;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+  }
+  .ledger-intro p{
+    margin:0 0 8px;
+    font-size:.92rem;
+    color:var(--ink-soft);
+    max-width:none;
+  }
+  .ledger-intro p:first-child{white-space:nowrap;}
+  @media (max-width:640px){
+    .ledger-intro p:first-child{white-space:normal;}
+  }
+  .ledger-intro p:last-child{margin-bottom:0;}
+  .ledger-intro ul.intro-list{
+    margin:0 0 10px;
+    padding-left:20px;
+    font-size:.92rem;
+    color:var(--ink-soft);
+    max-width:70ch;
+  }
+  .ledger-intro ul.intro-list li{margin-bottom:3px;}
+  .ledger-result{
+    padding:22px 20px 26px;
+    background:var(--paper-alt);
+  }
+  .ledger-sims{
+    padding:22px 20px 26px;
+    background:var(--paper);
+    border-top:1px solid var(--line);
+  }
+  .formula-line{
+    font-family:var(--mono);
+    font-size:14px;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .result-big{
+    font-family:var(--mono);
+    font-size:2.1rem;
+    font-weight:600;
+    color:var(--ink);
+  }
+  .result-big small{
+    font-family:var(--sans);
+    font-size:.95rem;
+    font-weight:500;
+    color:var(--ink-soft);
+    margin-left:8px;
+  }
+  .period-strip{
+    margin-top:18px;
+    display:flex;
+    gap:3px;
+    align-items:flex-end;
+    height:70px;
+  }
+  .period-bar{
+    flex:1;
+    background:var(--teal-soft);
+    border-top:2px solid var(--teal);
+    position:relative;
+    min-width:4px;
+    transition:height .15s ease;
+  }
+
+  /* ===== SECTIONS / ACCORDION ===== */
+  main{padding:8px 0 100px;}
+  .section-block{
+    border-bottom:1px solid var(--line);
+  }
+  .section-toggle{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:26px 0;
+    background:none;
+    border:none;
+    text-align:left;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .section-toggle .num{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--gold);
+    min-width:26px;
+  }
+  .section-toggle h2{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:1.5rem;
+    margin:0;
+    flex:1;
+    color:var(--ink);
+  }
+  .section-toggle .chev{
+    font-family:var(--mono);
+    color:var(--ink-soft);
+    font-size:18px;
+    transition:transform .25s ease;
+  }
+  .section-block.open .chev{transform:rotate(45deg);}
+  .section-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .35s ease;
+  }
+  .section-body-inner{
+    padding:0 0 34px 44px;
+    max-width:64ch;
+  }
+  .section-block.open .section-body{max-height:30000px;}
+
+  .section-body-inner p{margin:0 0 16px;color:var(--ink);}
+  .section-body-inner p.soft{color:var(--ink-soft);}
+  .callout{
+    border-left:3px solid var(--gold);
+    background:var(--pastel-gold);
+    padding:14px 18px;
+    margin:18px 0;
+    font-size:.96rem;
+    border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .callout b{color:var(--ink);}
+  .plain-intro{
+    font-style:italic;
+    color:var(--ink-soft);
+    border-left:3px solid var(--teal);
+    padding:2px 0 2px 16px;
+    margin:0 0 14px;
+    font-size:.97rem;
+  }
+  .plain-intro b{font-style:normal; color:var(--ink);}
+  .ped-license{font-style:italic; color:var(--teal);}
+  .prereq-block{
+    padding:0 0 34px;
+    margin-bottom:8px;
+    border-bottom:1px solid var(--line);
+  }
+  .prereq-tag{
+    display:inline-block;
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink);
+    background:var(--pastel-gold);
+    border:1px solid var(--gold);
+    border-radius:20px;
+    padding:6px 14px;
+    margin:0 0 14px;
+  }
+  .prereq-block h2{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:1.4rem;
+    margin:0 0 18px;
+    color:var(--ink);
+  }
+  .prereq-block p{margin:0 0 16px; color:var(--ink);}
+  .prereq-block p.soft{color:var(--ink-soft);}
+  .formula-box{
+    background:var(--pastel-teal);
+    color:var(--ink);
+    padding:22px 26px;
+    border-radius:var(--radius);
+    margin:20px 0;
+    text-align:center;
+    font-size:1.15rem;
+    overflow-x:auto;
+    border:1px solid var(--line-strong);
+  }
+  .formula-box mjx-container{
+    color:var(--ink) !important;
+  }
+  .formula-box mjx-container[jax="CHTML"][display="true"]{
+    margin:0 !important;
+  }
+  .formula-box .label{
+    display:block;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--teal);
+    margin-bottom:10px;
+  }
+  .notation-compare{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin:18px 0 6px;
+  }
+  .notation-col{
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    padding:18px 16px 14px;
+    text-align:center;
+    background:var(--pastel-blue);
+  }
+  .notation-col:last-child{background:var(--pastel-gold);}
+  .notation-tag{
+    display:block;
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--teal);
+    margin-bottom:10px;
+  }
+  @media (max-width:640px){
+    .notation-compare{grid-template-columns:1fr;}
+  }
+  .num-inputs{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin-top:18px;
+    padding-top:16px;
+    border-top:1px dashed var(--line-strong);
+  }
+  .num-field label{
+    display:block;
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .num-field .num-wrap{
+    display:flex;
+    align-items:center;
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    background:#fff;
+    overflow:hidden;
+  }
+  .num-field .num-wrap span{
+    padding:8px 10px;
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--ink-soft);
+    background:var(--paper-alt);
+    border-right:1px solid var(--line-strong);
+  }
+  .num-field .num-wrap span.suffix{
+    border-right:none;
+    border-left:1px solid var(--line-strong);
+  }
+  .num-field input[type=number],
+  .num-field input[type=text]{
+    border:none;
+    outline:none;
+    padding:8px 10px;
+    font-family:var(--mono);
+    font-size:14px;
+    width:100%;
+    text-align:center;
+    color:var(--ink);
+    background:transparent;
+  }
+  .num-field input[type=number]::-webkit-inner-spin-button{opacity:.5;}
+
+  /* ===== ALWAYS-VISIBLE MULTI-SIMULATOR BLOCK ===== */
+  .sim-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin:26px 0 20px;
+  }
+  .sim-card{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px 18px 14px;
+    background:var(--paper);
+  }
+  .sim-card.full{grid-column:1 / -1;}
+  .sim-card h4{
+    font-family:var(--serif);
+    font-size:1.02rem;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .sim-card p.sim-desc{
+    font-size:.86rem;
+    color:var(--ink-soft);
+    margin:0 0 16px;
+  }
+  .chart{
+    display:flex;
+    align-items:flex-end;
+    gap:4px;
+    height:110px;
+    padding:0 2px;
+  }
+  .chart-col{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    align-items:center;
+    height:100%;
+    position:relative;
+  }
+  .chart-bar{
+    width:100%;
+    max-width:34px;
+    border-radius:2px 2px 0 0;
+    background:var(--teal-soft);
+    border-top:2px solid var(--teal);
+    transition:height .15s ease;
+    position:relative;
+  }
+  .chart-bar.gold{background:var(--gold-soft);border-top-color:var(--gold);}
+  .chart-bar .bar-value{
+    position:absolute;
+    left:0;right:0;
+    top:5px;
+    font-family:var(--mono);
+    font-size:9px;
+    font-weight:600;
+    color:var(--ink);
+    text-align:center;
+    line-height:1.15;
+    pointer-events:none;
+    white-space:nowrap;
+    overflow:hidden;
+    padding:0 1px;
+  }
+  .chart-bar .bar-value.outside{
+    top:auto;
+    bottom:100%;
+    margin-bottom:3px;
+    color:var(--ink-soft);
+  }
+  .chart-bar .stack-top{
+    position:absolute;
+    left:0;right:0;bottom:100%;
+    border-radius:2px 2px 0 0;
+    background:var(--gold-soft);
+    border-top:2px solid var(--gold);
+  }
+  .chart-bar .stack-top .bar-value{top:4px;}
+  .chart-axis{
+    display:flex;
+    gap:4px;
+    padding:0 2px;
+    margin-top:6px;
+    border-top:1px solid var(--line-strong);
+    padding-top:6px;
+  }
+  .chart-axis span{
+    flex:1;
+    text-align:center;
+    font-family:var(--mono);
+    font-size:10px;
+    color:var(--ink-soft);
+  }
+  .chart-legend{
+    display:flex;
+    gap:16px;
+    margin-top:12px;
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--ink-soft);
+  }
+  .chart-legend .dot{
+    display:inline-block;
+    width:9px;height:9px;
+    border-radius:2px;
+    margin-right:5px;
+    vertical-align:middle;
+  }
+  .flow-labels{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    padding:0 2px;
+  }
+  .flow-labels .flabel{
+    text-align:center;
+    font-size:.72rem;
+    color:var(--ink-soft);
+    line-height:1.3;
+  }
+  .flow-labels .flabel b{display:block;color:var(--ink);font-size:.76rem;}
+  @media (max-width:640px){
+    .sim-grid{grid-template-columns:1fr;}
+    .num-inputs{grid-template-columns:1fr;}
+  }
+    list-style:none;
+    margin:16px 0;
+    padding:0;
+    border-top:1px solid var(--line);
+  }
+  .glossary li{
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+    display:grid;
+    grid-template-columns:64px 1fr;
+    gap:16px;
+  }
+  .glossary .sym{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:1.2rem;
+    color:var(--teal);
+  }
+  .glossary .def{font-size:.95rem;color:var(--ink-soft);}
+  .glossary .def b{color:var(--ink);font-weight:600;}
+
+  .steps{counter-reset:step;margin:20px 0;}
+  .step{
+    position:relative;
+    padding:0 0 22px 38px;
+    border-left:1px solid var(--line);
+    margin-left:10px;
+  }
+  .step:last-child{border-left:1px solid transparent;padding-bottom:0;}
+  .step::before{
+    counter-increment:step;
+    content:counter(step);
+    position:absolute;
+    left:-11px;
+    top:0;
+    width:22px;height:22px;
+    border-radius:50%;
+    background:var(--paper);
+    border:1px solid var(--teal);
+    color:var(--teal);
+    font-family:var(--mono);
+    font-size:12px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .step h4{margin:0 0 6px;font-family:var(--serif);font-weight:600;font-size:1.05rem;}
+  .step p{margin:0;font-size:.95rem;color:var(--ink-soft);}
+
+  table.data{
+    width:100%;
+    border-collapse:collapse;
+    margin:18px 0;
+    font-family:var(--mono);
+    font-size:.86rem;
+  }
+  table.data caption{
+    text-align:left;
+    font-family:var(--sans);
+    font-size:.85rem;
+    color:var(--ink-soft);
+    margin-bottom:8px;
+    caption-side:top;
+  }
+  table.data th{
+    text-align:right;
+    padding:8px 10px;
+    background:var(--ink);
+    color:var(--paper-alt);
+    font-weight:500;
+  }
+  table.data th:first-child, table.data td:first-child{text-align:left;}
+  table.data td{
+    text-align:right;
+    padding:7px 10px;
+    border-bottom:1px solid var(--line);
+  }
+  table.data tr:hover td{background:var(--paper-alt);}
+
+  .example-card{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px 22px;
+    margin:20px 0;
+    background:var(--paper);
+  }
+  .example-card .ex-tag{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--gold);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+  }
+  .example-card h4{
+    font-family:var(--serif);
+    font-size:1.1rem;
+    margin:6px 0 12px;
+    font-weight:600;
+  }
+
+  .placeholder-card{
+    border:1px dashed var(--line-strong);
+    border-radius:var(--radius);
+    padding:26px;
+    text-align:center;
+    color:var(--ink-soft);
+    background:var(--paper-alt);
+  }
+  .placeholder-card .icon{font-size:1.6rem;margin-bottom:8px;display:block;}
+  .placeholder-card b{color:var(--ink);}
+
+  /* ===== Indicadores RIS ===== */
+  .indic-card{
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    padding:26px 26px 28px;
+    background:var(--paper);
+  }
+  .indic-title{font-family:var(--serif); font-weight:600; font-size:1.25rem; margin:0 0 4px;}
+  .indic-sub{color:var(--ink-soft); font-size:.92rem; margin:0 0 20px;}
+  .indic-tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:20px;
+  }
+  .indic-tab{
+    font-family:var(--mono);
+    font-size:12.5px;
+    padding:8px 14px;
+    border-radius:20px;
+    border:1px solid var(--line-strong);
+    background:var(--paper);
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:background .15s,color .15s,border-color .15s;
+  }
+  .indic-tab:hover{border-color:var(--teal);}
+  .indic-tab.active{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .indic-fields{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:22px;
+  }
+  .indic-field label{
+    display:block;
+    font-family:var(--mono);
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .indic-field .indic-wrap{
+    display:flex;
+    align-items:center;
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    background:#fff;
+    overflow:hidden;
+  }
+  .indic-field .indic-wrap span{
+    padding:8px 8px;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-soft);
+    background:var(--paper-alt);
+    border-right:1px solid var(--line-strong);
+  }
+  .indic-field input{
+    border:none;
+    outline:none;
+    padding:8px 8px;
+    font-family:var(--mono);
+    font-size:14px;
+    width:100%;
+    text-align:center;
+    color:var(--ink);
+    background:transparent;
+  }
+  .indic-field.is-target .indic-wrap{
+    background:var(--pastel-gold);
+    border-color:var(--gold);
+  }
+  .indic-field.is-target input{
+    color:var(--gold);
+    font-weight:600;
+  }
+  .indic-field.is-target input::placeholder{color:var(--gold); opacity:.7;}
+  .indic-prompt{
+    color:var(--ink-soft);
+    font-size:.92rem;
+    font-style:italic;
+    padding:14px 0;
+  }
+  .indic-result{
+    background:var(--pastel-teal);
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    padding:18px 20px;
+    margin-bottom:22px;
+  }
+  .indic-result .k{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); margin-bottom:6px;}
+  .indic-result .v{font-family:var(--mono); font-size:1.8rem; font-weight:600; color:var(--ink);}
+  .indic-steps-title{font-family:var(--serif); font-weight:600; font-size:1rem; margin:0 0 10px;}
+  .indic-chart{
+    display:flex;
+    align-items:flex-end;
+    gap:3px;
+    height:70px;
+    margin-top:18px;
+  }
+  .indic-select{
+    width:100%;
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    background:#fff;
+    font-family:var(--mono);
+    font-size:14px;
+    padding:9px 8px;
+    color:var(--ink);
+  }
+  .indic-sync-box{
+    border-radius:var(--radius);
+    padding:16px 18px;
+    margin:18px 0;
+    font-size:.92rem;
+  }
+  .indic-sync-box.ok{background:var(--pastel-teal); border:1px solid var(--teal);}
+  .indic-sync-box.warn{background:var(--pastel-gold); border:1px solid var(--gold);}
+  .indic-sync-box .indic-sync-title{font-weight:700; color:var(--ink); margin-bottom:6px;}
+  .indic-strategy-btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
+  .indic-strategy-btn{
+    font-family:var(--mono);
+    font-size:12px;
+    padding:9px 16px;
+    border-radius:20px;
+    border:1px solid var(--gold);
+    background:#fff;
+    color:var(--ink);
+    cursor:pointer;
+    transition:background .15s,color .15s;
+  }
+  .indic-strategy-btn:hover{background:var(--gold); color:#fff;}
+  .indic-strategy-btn.chosen{background:var(--gold); color:#fff;}
+  .indic-chart .bar{
+    flex:1;
+    background:var(--teal-soft);
+    border-top:2px solid var(--teal);
+    min-width:4px;
+  }
+  @media (max-width:640px){
+    .indic-fields{grid-template-columns:1fr 1fr;}
+  }
+
+  .app-embed{
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    overflow-x:auto;
+    overflow-y:visible;
+    max-width:none;
+    margin-left:-70px;
+    margin-right:-70px;
+  }
+  @media (max-width:760px){
+    .app-embed{margin-left:0;margin-right:0;}
+  }
+  .app-embed-head{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px;
+    padding:14px 28px;
+    background:var(--paper-alt);
+    border-bottom:1px solid var(--line-strong);
+    font-size:.92rem;
+    text-align:center;
+  }
+  .app-embed-head b{color:var(--ink);}
+  .app-embed-tag{
+    font-family:var(--mono);
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--teal);
+    background:var(--pastel-teal);
+    border:1px solid var(--line-strong);
+    border-radius:20px;
+    padding:3px 10px;
+  }
+  .app-embed > div.te1, .app-embed > div.te2{
+    padding:8px 0 20px;
+  }
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:26px 0 60px;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-soft);
+    text-align:center;
+  }
+
+  .author-credit{
+    margin-top:26px;
+    padding-top:14px;
+    border-top:1px solid var(--line);
+    text-align:center;
+  }
+  .author-credit .name{
+    font-family:var(--serif);
+    font-size:15px;
+    font-weight:500;
+    margin:0;
+    color:var(--ink);
+  }
+  .author-credit .role{
+    font-size:11px;
+    color:var(--ink-soft);
+    margin:4px 0 0;
+  }
+
+  @media (max-width:640px){
+    .ledger-controls{grid-template-columns:1fr;}
+    .ctrl{border-right:none;border-bottom:1px solid var(--line);}
+    .section-body-inner{padding-left:0;}
+    .glossary li{grid-template-columns:44px 1fr;}
+  }
+
+/* ===== Apps embebidas: tasas equivalentes ===== */
+
+.te1{
+  --ink:#FAF6EC; --ink2:#F3EEE0;
+  --parchment:#1B2430; --parchment-dim:#5B6570;
+  --gold:#B8862B; --gold-bright:#9C6B26;
+  --teal:#1F6F6B; --teal-dim:#164F4B;
+  --rust:#A97158; --rust-dim:#7A4F3D;
+  --line:#DDE3E0;
+  --bg-grad1:#E3F2F0; --bg-grad2:#FBF1DC;
+  --result-bg:#F3F6F5;
+  --err:#B85C46;
+  --hint-bg: rgba(184,134,43,0.08); --hint-border: rgba(184,134,43,0.3);
+  --btn-text:#1B2430;
+}
+
+/* Claro — fondo papel claro con texto oscuro */
+/* Esmeralda — oscuro con tinte verde */
+/* Vino — oscuro con tinte borgoña */
+.te1 *{box-sizing:border-box;transition:background-color .25s ease, border-color .25s ease, color .25s ease;}
+.te1{
+  margin:0;
+  background:var(--ink);
+  color:var(--parchment);
+  font-family:'Source Sans 3',-apple-system,sans-serif;
+  padding:0 0 80px 0;
+  font-variant-numeric: normal;
+  font-feature-settings: "zero" 0, "ss01" 0, "ss02" 0;
+  -webkit-font-feature-settings: "zero" 0, "ss01" 0, "ss02" 0;
+  transition: background-color .25s ease, color .25s ease;
+}
+.te1 .wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+
+.te1 header{padding:52px 28px 32px 40px;max-width:1120px;margin:0 auto;background:var(--bg-grad1);border-bottom:1px solid var(--line);}
+@media(max-width:480px){
+  .te1 header{padding:32px 18px 22px 18px;}
+  .te1 .card-section{padding:0 18px;}
+  .te1 .card{padding:22px 18px 20px 18px;}
+}
+.te1 .eyebrow{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:11.5px;letter-spacing:0.22em;
+  color:var(--gold-bright);text-transform:uppercase;margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.te1 .eyebrow::before{content:"";width:22px;height:1px;background:var(--gold-bright);display:inline-block;}
+.te1 h1{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,40px);
+  line-height:1.14;margin:0 0 14px 0;letter-spacing:-0.01em;
+}
+.te1 h1 em{font-style:italic;color:var(--gold-bright);font-weight:500;}
+.te1 .sub{font-size:15px;color:var(--parchment-dim);max-width:680px;line-height:1.6;}
+.te1 .install-hint{
+  margin-top:18px;padding:10px 14px;background:var(--hint-bg);
+  border:1px solid var(--hint-border);border-radius:2px;
+  font-size:12.5px;color:var(--gold-bright);max-width:680px;line-height:1.5;
+}
+.te1 .install-hint b{color:var(--parchment);}
+
+.te1 .card-section{max-width:1120px;margin:40px auto 0 auto;padding:0 28px;}
+.te1 .card{border:1px solid var(--line);background:var(--ink2);padding:30px 30px 26px 30px;}
+.te1 .card-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border:1px solid var(--gold);color:var(--gold-bright);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:12px;margin-right:10px;
+}
+.te1 .card-title{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:20px;font-weight:600;
+  display:flex;align-items:center;margin-bottom:4px;
+}
+.te1 .card-desc{font-size:13px;color:var(--parchment-dim);margin:0 0 22px 34px;}
+
+.te1 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 26px;}
+@media(max-width:760px){.te1 .grid{grid-template-columns:1fr;}}
+.te1 .field{transition:opacity .15s ease;}
+.te1 .field.disabled{opacity:0.35;pointer-events:none;}
+.te1 .field label{
+  display:flex;align-items:baseline;gap:6px;
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:10.5px;letter-spacing:0.05em;
+  text-transform:uppercase;color:var(--parchment-dim);margin-bottom:7px;
+}
+.te1 .field label .num{color:var(--gold-bright);font-weight:600;}
+.te1 .field select, .te1 .field input{
+  width:100%;background:var(--ink);border:1px solid var(--line);color:var(--parchment);
+  padding:12px 10px;font-family:'Source Sans 3',-apple-system,sans-serif;font-size:16px;border-radius:1px;
+  min-height:44px;text-align:center;
+}
+.te1 .field select:focus, .te1 .field input:focus{outline:none;border-color:var(--gold);}
+.te1 .field .hint{font-size:11px;color:var(--parchment-dim);margin-top:5px;font-style:italic;}
+.te1 .field.indent{padding-left:18px;border-left:2px solid var(--line);}
+
+.te1 .pct-wrap{position:relative;}
+.te1 .pct-wrap input{
+  padding-right:36px;text-align:center;font-variant-numeric:normal;
+  font-feature-settings:"zero" 0;-webkit-font-feature-settings:"zero" 0;
+}
+.te1 .pct-wrap .pct-suffix{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  color:var(--gold-bright);font-family:'Source Sans 3',-apple-system,sans-serif;
+  font-size:15px;font-weight:600;pointer-events:none;
+}
+
+.te1 .run-row{margin-top:28px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
+.te1 button#calc{
+  background:var(--gold);color:var(--btn-text);border:none;padding:15px 30px;
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:13px;letter-spacing:0.1em;
+  text-transform:uppercase;font-weight:600;cursor:pointer;transition:background .15s ease;
+  min-height:48px;-webkit-tap-highlight-color:transparent;
+}
+.te1 button#calc:hover{background:var(--gold-bright);}
+.te1 .err{font-family:'Source Sans 3',-apple-system,sans-serif;font-size:12px;color:var(--err);}
+
+.te1 .result-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;}
+@media(max-width:760px){.te1 .result-grid{grid-template-columns:1fr;}}
+.te1 .result-box{border:1px solid var(--gold);background:var(--bg-grad2);padding:22px 24px;}
+.te1 .result-box .lbl{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-weight:700;font-size:10.5px;letter-spacing:0.1em;color:var(--gold-bright);text-transform:uppercase;margin-bottom:8px;}
+.te1 .result-box .val{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-size:30px;font-weight:700;color:var(--parchment);}
+.te1 .subresults{display:flex;flex-direction:column;gap:10px;}
+.te1 .subresults .row{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 0;font-size:13px;}
+.te1 .subresults .row span:first-child{color:var(--parchment-dim);}
+.te1 .subresults .row span:last-child{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-weight:700;}
+
+.te1 .formula-block{
+  margin-top:18px;padding:14px 16px;background:rgba(0,0,0,0.25);border-left:2px solid var(--gold);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-size:13px;line-height:1.9;color:var(--parchment-dim);white-space:pre-wrap;
+}
+
+.te1 footer{max-width:1120px;margin:50px auto 0 auto;padding:20px 28px 0 28px;border-top:1px solid var(--line);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:11px;color:var(--parchment-dim);}
+
+@media(max-width:480px){
+  }
+
+
+.te2{
+  --ink:#FAF6EC; --ink2:#F3EEE0;
+  --parchment:#1B2430; --parchment-dim:#5B6570;
+  --gold:#B8862B; --gold-bright:#9C6B26;
+  --teal:#1F6F6B; --teal-dim:#164F4B;
+  --rust:#A97158; --rust-dim:#7A4F3D;
+  --line:#DDE3E0;
+  --bg-grad1:#E3F2F0; --bg-grad2:#FBF1DC;
+  --result-bg:#F3F6F5;
+  --err:#B85C46;
+  --hint-bg: rgba(184,134,43,0.08); --hint-border: rgba(184,134,43,0.3);
+  --btn-text:#1B2430;
+}
+
+/* Claro — fondo papel claro con texto oscuro */
+/* Esmeralda — oscuro con tinte verde */
+/* Vino — oscuro con tinte borgoña */
+.te2 *{box-sizing:border-box;transition:background-color .25s ease, border-color .25s ease, color .25s ease;}
+.te2{
+  margin:0;
+  background:var(--ink);
+  color:var(--parchment);
+  font-family:'Source Sans 3',-apple-system,sans-serif;
+  padding:0 0 80px 0;
+  font-variant-numeric: normal;
+  font-feature-settings: "zero" 0, "ss01" 0, "ss02" 0;
+  -webkit-font-feature-settings: "zero" 0, "ss01" 0, "ss02" 0;
+  transition: background-color .25s ease, color .25s ease;
+}
+.te2 .wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+
+.te2 header{padding:52px 28px 32px 40px;max-width:1120px;margin:0 auto;background:var(--bg-grad1);border-bottom:1px solid var(--line);}
+@media(max-width:480px){
+  .te2 header{padding:32px 18px 22px 18px;}
+  .te2 .card-section{padding:0 18px;}
+  .te2 .card{padding:22px 18px 20px 18px;}
+}
+.te2 .eyebrow{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:11.5px;letter-spacing:0.22em;
+  color:var(--gold-bright);text-transform:uppercase;margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.te2 .eyebrow::before{content:"";width:22px;height:1px;background:var(--gold-bright);display:inline-block;}
+.te2 h1{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,40px);
+  line-height:1.14;margin:0 0 14px 0;letter-spacing:-0.01em;
+}
+.te2 h1 em{font-style:italic;color:var(--gold-bright);font-weight:500;}
+.te2 .sub{font-size:15px;color:var(--parchment-dim);max-width:680px;line-height:1.6;}
+.te2 .install-hint{
+  margin-top:18px;padding:10px 14px;background:var(--hint-bg);
+  border:1px solid var(--hint-border);border-radius:2px;
+  font-size:12.5px;color:var(--gold-bright);max-width:680px;line-height:1.5;
+}
+.te2 .install-hint b{color:var(--parchment);}
+
+.te2 .card-section{max-width:1120px;margin:40px auto 0 auto;padding:0 28px;}
+.te2 .card{border:1px solid var(--line);background:var(--ink2);padding:30px 30px 26px 30px;}
+.te2 .card-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border:1px solid var(--gold);color:var(--gold-bright);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:12px;margin-right:10px;
+}
+.te2 .card-title{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:20px;font-weight:600;
+  display:flex;align-items:center;margin-bottom:4px;
+}
+.te2 .card-desc{font-size:13px;color:var(--parchment-dim);margin:0 0 22px 34px;}
+
+.te2 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 26px;}
+@media(max-width:760px){.te2 .grid{grid-template-columns:1fr;}}
+.te2 .field{transition:opacity .15s ease;}
+.te2 .field.disabled{opacity:0.35;pointer-events:none;}
+.te2 .field label{
+  display:flex;align-items:baseline;gap:6px;
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:10.5px;letter-spacing:0.05em;
+  text-transform:uppercase;color:var(--parchment-dim);margin-bottom:7px;
+}
+.te2 .field label .num{color:var(--gold-bright);font-weight:600;}
+.te2 .field select, .te2 .field input{
+  width:100%;background:var(--ink);border:1px solid var(--line);color:var(--parchment);
+  padding:12px 10px;font-family:'Source Sans 3',-apple-system,sans-serif;font-size:16px;border-radius:1px;
+  min-height:44px;text-align:center;
+}
+.te2 .field select:focus, .te2 .field input:focus{outline:none;border-color:var(--gold);}
+.te2 .field .hint{font-size:11px;color:var(--parchment-dim);margin-top:5px;font-style:italic;}
+.te2 .field.indent{padding-left:18px;border-left:2px solid var(--line);}
+
+.te2 .pct-wrap{position:relative;}
+.te2 .pct-wrap input{
+  padding-right:36px;text-align:center;font-variant-numeric:normal;
+  font-feature-settings:"zero" 0;-webkit-font-feature-settings:"zero" 0;
+}
+.te2 .pct-wrap .pct-suffix{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  color:var(--gold-bright);font-family:'Source Sans 3',-apple-system,sans-serif;
+  font-size:15px;font-weight:600;pointer-events:none;
+}
+
+.te2 .run-row{margin-top:28px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
+.te2 button#calc{
+  background:var(--gold);color:var(--btn-text);border:none;padding:15px 30px;
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:13px;letter-spacing:0.1em;
+  text-transform:uppercase;font-weight:600;cursor:pointer;transition:background .15s ease;
+  min-height:48px;-webkit-tap-highlight-color:transparent;
+}
+.te2 button#calc:hover{background:var(--gold-bright);}
+.te2 .err{font-family:'Source Sans 3',-apple-system,sans-serif;font-size:12px;color:var(--err);}
+
+.te2 .result-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;}
+@media(max-width:760px){.te2 .result-grid{grid-template-columns:1fr;}}
+.te2 .result-box{border:1px solid var(--gold);background:var(--bg-grad2);padding:22px 24px;}
+.te2 .result-box .lbl{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-weight:700;font-size:10.5px;letter-spacing:0.1em;color:var(--gold-bright);text-transform:uppercase;margin-bottom:8px;}
+.te2 .result-box .val{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-size:30px;font-weight:700;color:var(--parchment);}
+.te2 .subresults{display:flex;flex-direction:column;gap:10px;}
+.te2 .subresults .row{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 0;font-size:13px;}
+.te2 .subresults .row span:first-child{color:var(--parchment-dim);}
+.te2 .subresults .row span:last-child{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-weight:700;}
+
+.te2 .formula-block{
+  margin-top:18px;padding:14px 16px;background:rgba(0,0,0,0.25);border-left:2px solid var(--gold);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-size:13px;line-height:1.9;color:var(--parchment-dim);white-space:pre-wrap;
+}
+
+.te2 footer{max-width:1120px;margin:50px auto 0 auto;padding:20px 28px 0 28px;border-top:1px solid var(--line);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:11px;color:var(--parchment-dim);}
+
+@media(max-width:480px){
+  }
+
+</style>
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('ris_theme');
+    if(t) document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+</head>
+<body>
+
+<div class="theme-switcher" id="theme-switcher" role="group" aria-label="Elegir apariencia">
+  <span class="theme-switcher-label">Apariencia</span>
+  <button class="theme-swatch" type="button" data-theme="default" style="--swatch-bg:#FFFFFF; --swatch-accent:#B8862B" title="Por defecto" aria-label="Tema por defecto"></button>
+  <button class="theme-swatch" type="button" data-theme="oscuro" style="--swatch-bg:#12202F; --swatch-accent:#D9B24C" title="Oscuro (poca luz)" aria-label="Tema oscuro"></button>
+  <button class="theme-swatch" type="button" data-theme="contraste" style="--swatch-bg:#FFFFFF; --swatch-accent:#000000" title="Alto contraste (luz brillante)" aria-label="Tema de alto contraste"></button>
+  <button class="theme-swatch" type="button" data-theme="sepia" style="--swatch-bg:#F6EFDD; --swatch-accent:#9C6B26" title="Sepia (lectura prolongada)" aria-label="Tema sepia"></button>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Cálculo Financiero &middot; Sistemas de Capitalización</p>
+    <h1 class="title">Régimen de <em>Interés Simple</em></h1>
+    <p class="subtitle">Cómo se genera a partir de un único capital (financiero) otro capital (financiero) también único en el futuro bajo las condiciones contractuales de una Ley Financiera, en este caso esa ley se corresponde con la de un Régimen de Interés Simple. La relación entre ambos capitales (financieros) no será cualquier tipo de relación, será la RELACIÓN DE CAPITALES EQUIVALENTES en términos financieros.</p>
+    <span class="nodo-tag">Nodo <b>A.1</b> — operación financiera pura</span>
+
+    <div class="ledger">
+      <div class="ledger-head">
+        <h3>Simulador de la función monto</h3>
+        <span>LEY DE PROYECCIÓN FINANCIERA — RIS</span>
+      </div>
+
+      <div class="ledger-intro">
+        <p>Un mismo simulador, varias vistas: cargá C₀, i y n acá abajo y mirá cómo se actualizan en simultáneo:</p>
+        <ul class="intro-list">
+          <li>el capital final,</li>
+          <li>la amortización,</li>
+          <li>el devengamiento,</li>
+          <li>el pago de intereses, y</li>
+          <li>los movimientos físicos de dinero.</li>
+        </ul>
+        <p>El eje inferior de cada gráfico da cuenta del tiempo (marca el período) — el tiempo es una variable clave para todo análisis financiero y es por ello que conviene tenerlo siempre presente.</p>
+      </div>
+
+      <div class="ledger-controls">
+        <div class="ctrl">
+          <label>Capital inicial (C₀) — <span class="val" id="c0Val">1.000</span></label>
+          <input type="range" id="c0" min="100" max="10000" step="100" value="1000">
+        </div>
+        <div class="ctrl">
+          <label>Tasa de interés periódica <span style="text-transform:none;">(i)</span> — <span class="val" id="iVal">2%</span></label>
+          <input type="range" id="i" min="0.5" max="15" step="0.5" value="2">
+        </div>
+        <div class="ctrl">
+          <label>Plazo expresado en períodos <span style="text-transform:none;">(n)</span> — <span class="val" id="nVal">5</span></label>
+          <input type="range" id="n" min="1" max="24" step="1" value="5">
+        </div>
+      </div>
+      <div class="ledger-result">
+        <div class="formula-line" id="formulaLine">C₅ = 1.000 · (1 + 0,02 · 5)</div>
+        <div class="result-big" id="resultBig">1.100,00 <small>capital final (C<sub>n</sub>)</small></div>
+        <div class="period-strip" id="periodStrip"></div>
+
+        <div class="num-inputs">
+          <div class="num-field">
+            <label>Capital inicial</label>
+            <div class="num-wrap"><span>C₀</span><input type="text" inputmode="decimal" id="c0Num" value="1.000"></div>
+          </div>
+          <div class="num-field">
+            <label>Tasa periódica</label>
+            <div class="num-wrap"><span>i</span><input type="text" inputmode="decimal" id="iNum" value="2"><span class="suffix">%</span></div>
+          </div>
+          <div class="num-field">
+            <label>Plazo en períodos</label>
+            <div class="num-wrap"><span>n</span><input type="text" inputmode="decimal" id="nNum" value="5"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ledger-sims">
+        <div class="sim-grid">
+          <div class="sim-card">
+            <h4>Amortización del capital</h4>
+            <p class="sim-desc">El préstamo (C₀) se devuelve en un único pago, al finalizar la operación. En todos los períodos anteriores, la amortización es cero.</p>
+            <div class="chart" id="chartAmort"></div>
+            <div class="chart-axis" id="axisAmort"></div>
+          </div>
+
+          <div class="sim-card">
+            <h4>Devengamiento de intereses</h4>
+            <p class="sim-desc">A diferencia de la amortización, el interés se va generando período a período — aunque todavía no se cobre.</p>
+            <div class="chart" id="chartDeveng"></div>
+            <div class="chart-axis" id="axisDeveng"></div>
+          </div>
+
+          <div class="sim-card">
+            <h4>Pago de intereses</h4>
+            <p class="sim-desc">El pago de la retribución (a diferencia del devengamiento, que es continuo) ocurre en un único momento: al finalizar la operación.</p>
+            <div class="chart" id="chartPago"></div>
+            <div class="chart-axis" id="axisPago"></div>
+          </div>
+
+          <div class="sim-card">
+            <h4>Movimientos físicos de dinero</h4>
+            <p class="sim-desc">En toda la operación solo hay 2 movimientos reales de dinero: el préstamo al inicio, y un único movimiento final que combina amortización + pago de intereses.</p>
+            <div class="chart" id="chartFlujo"></div>
+            <div class="chart-axis" id="axisFlujo"></div>
+            <div class="flow-labels" id="flowLabels"></div>
+            <div class="chart-legend">
+              <span><i class="dot" style="background:var(--teal-soft);border-bottom:2px solid var(--teal);"></i>Amortización</span>
+              <span><i class="dot" style="background:var(--gold-soft);border-bottom:2px solid var(--gold);"></i>Intereses</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="prereq-block">
+    <p class="prereq-tag">Antes de empezar — contenido de materias previas</p>
+    <h2>¿Qué es una función financiera?</h2>
+    <p class="plain-intro">En criollo: antes de meternos con la fórmula del RIS, pensemos qué es "una fórmula" en general.</p>
+    <p class="plain-intro">Es como una receta de cocina: tenés ingredientes (los datos que ponés), un método (cómo los combinás) y un plato final (el resultado). En cálculo financiero es exactamente igual, solo que a los ingredientes los llamamos "variables independientes" y al plato final "variable dependiente".</p>
+    <p>Formalmente, toda función matemática —y toda fórmula financiera que van a ver en la materia— tiene la misma estructura: <b>variables independientes</b> (los datos de entrada) que se articulan mediante una <b>estructura algebraica</b> (el método de cálculo), para producir una <b>variable dependiente</b> (el resultado).</p>
+    <p>Por ejemplo, con las variables x, y, z combinadas como x·(1 + y·z), obtenemos una variable dependiente f(x; y; z) = x·(1 + y·z).</p>
+    <p>Cuando lleguemos a la fórmula del RIS, van a reconocer esta misma estructura: C₀, i y n son los "ingredientes", y Cₙ es el "plato final".</p>
+    <p class="soft">Si esta forma estructurada de pensar —variables independientes, estructura algebraica, variable dependiente— les recuerda a materias previas como Análisis Matemático o Álgebra que ya han cursado, es porque allí se han empleado frecuentemente.</p>
+    <p class="soft">Cálculo Financiero no inventa una lógica nueva: aplica esta misma lógica de funciones a un caso concreto, el de las operaciones financieras.</p>
+  </div>
+
+  <!-- 1 -->
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">01</span>
+      <h2>Introducción: el contexto de certeza y su incidencia en las operaciones financieras</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">En criollo: pensá intuitivamente en alguien que necesita efectivo/dinero/plata ahora y no la tiene, y en otra persona que sí la tiene pero no precisa utilizarla en este momento. Las 2 personas pueden ponerse de acuerdo para que la segunda persona le preste a la primera, con la condición de que se lo devuelva más adelante — y, de yapa, un poco más de lo que le prestó, como "premio" por haberle hecho el favor de esperar.</p>
+        <p>Toda operación financiera es, en esencia, un intercambio de capitales: alguien (el <b>prestamista</b>) cede poder de compra hoy, y a cambio recibe en el futuro una devolución de parte de quien lo recibió (el <b>prestatario</b>). Esa devolución debe restituir el capital prestado más una retribución por el servicio financiero brindado.</p>
+
+        <p class="plain-intro">En criollo: nadie te regala la plata. Si te prestaron, tenés que devolver todo lo que te dieron — ni un peso menos — y además pagar "algo más" por el favor de haber podido usar esa plata antes de tenerla vos. Ese "algo más" no aparece recién al final: se va generando de a poquito, día a día, aunque recién lo pagues cuando termina el préstamo.</p>
+        <div class="callout">
+          <b>Un préstamo no es un regalo.</b> Por eso el capital prestado tiene que devolverse en su totalidad — a esa devolución del capital se la llama, técnicamente, <b>amortización</b>. Y como tampoco es un regalo el servicio que brinda el prestamista (anticipar poder de compra), ese servicio también debe ser retribuido. De acá surgen dos elementos distintos a tener presentes: el <b>devengamiento</b> de esa retribución (se va generando a medida que transcurre el tiempo, aunque todavía no se pague) y el <b>pago de intereses</b> propiamente dicho, que es el nombre técnico que recibe el momento en que esa retribución efectivamente se cobra por parte del prestamista.
+        </div>
+
+        <p class="plain-intro">En criollo: para poder estudiar esto de forma ordenada, vamos a suponer por ahora que todo el mundo cumple lo pactado, como si fuera un contrato firmado que nadie rompe. Nada de sorpresas ni de gente que no paga — eso lo vemos más adelante, en otras materias. Acá nos interesa entender la lógica matemática "de libro".</p>
+        <p>Para poder estudiar la lógica matemática detrás de estas operaciones, en esta unidad —y en gran parte de la materia— trabajamos en un <b>contexto de certeza</b>.</p>
+        <div class="callout">
+          <b>Contexto de certeza, en términos técnicos:</b> se asume que todo lo que las partes acuerdan queda firmado en un contrato, y ese contrato se cumple exactamente como fue pactado. No hay incumplimientos, no hay sorpresas: el capital, la tasa y el plazo son datos ciertos desde el momento cero.
+        </div>
+        <p class="soft">Esto no significa que el riesgo no exista en la realidad —de hecho, más adelante vamos a mencionarlo brevemente sólo para marcar la diferencia— sino que, para poder aislar y entender la lógica matemática pura de la capitalización, empezamos por el escenario más simple posible.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">02</span>
+      <h2>El punto de partida: una operación financiera pura</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">En criollo: el Régimen de Interés Simple es, de todos los regímenes que van a ver en la materia, el más "amigable" — el que tiene menos vueltas.</p>
+        <p>El Régimen de Interés Simple que vamos a desarrollar en esta unidad corresponde a lo que llamamos el <b>Nodo A.1</b>: la versión más simple y "de libro" de una operación financiera.</p>
+        <p>Es una <b>operación financiera pura</b> porque resuelve exclusivamente la relación entre tres variables —capital, tasa de interés y tiempo— sin ninguna otra fricción de la realidad. No hay impuestos sobre los intereses, no hay comisiones, no hay moneda extranjera ni seguros: solo el vínculo matemático entre lo que se presta, la tasa pactada y el tiempo que transcurre.</p>
+        <p class="soft">Más adelante, en otras unidades de la materia —como cuando trabajen con sistemas de amortización— van a ver cómo esta misma lógica pura se va acercando a las complejidades propias de la realidad, incorporando de a un elemento genuino por vez. Tener esto presente desde ahora les va a servir como mapa: cada vez que en unidades futuras aparezca una fórmula "más compleja", van a poder reconocer que en el fondo sigue siendo esta misma lógica, con una capa más de realidad encima.</p>
+
+        <p>Para construir los pilares del marco teórico de Cálculo Financiero se presentan <b>5 regímenes formales</b>: el régimen de interés simple (el que estamos viendo en esta unidad), el régimen de interés compuesto, el régimen de descuento simple bancario, el régimen de descuento simple matemático/racional y el régimen de descuento compuesto.</p>
+
+        <p class="plain-intro">En criollo: para no complicarnos de entrada con todos los detalles de la realidad, vamos a partir de un "mundo simplificado" — como cuando en física primero se estudia sin fricción y después se va agregando la fricción real. Estas son las reglas de ese mundo simplificado:</p>
+        <p>Los 5 regímenes formales se construyen sobre el mismo conjunto de <b>6 supuestos simplificadores</b> de la operación financiera:</p>
+        <ul class="glossary">
+          <li><span class="sym">1.</span> <span class="def"><b>Contexto de certeza</b> — la operación se pacta mediante un contrato que se entiende que se va a cumplir en tiempo y forma.</span></li>
+          <li><span class="sym">2.</span> <span class="def"><b>Única tasa periódica</b> — una misma tasa de interés rige toda la vigencia del financiamiento, sin cambios en el medio.</span></li>
+          <li><span class="sym">3.</span> <span class="def"><b>Única prestación y única contraprestación</b> — la operación está constituida por 2 movimientos de dinero: uno al comienzo y otro al final.</span></li>
+          <li><span class="sym">4.</span> <span class="def"><b>Única Ley Financiera</b> — rige el comportamiento en el tiempo de los capitales financieros que se consideran equivalentes entre sí.</span></li>
+          <li><span class="sym">5.</span> <span class="def"><b>Duración de "n" períodos</b> — la operación tiene un plazo definido y conocido desde el inicio.</span></li>
+          <li><span class="sym">6.</span> <span class="def"><b>Los precios no pueden cambiar</b> — no se contempla inflación ni variación de precios durante la operación.</span></li>
+        </ul>
+        <p class="soft">El Régimen de Interés Simple que vamos a ver en esta unidad cumple los 6 supuestos a la vez — por eso decimos que es una operación financiera pura.</p>
+
+        <div class="callout">
+          <b>Otra forma de leer el supuesto 2 (única tasa):</b> esto no significa que estas fórmulas solo sirvan para casos tan simples con una única tasa de interés. Con algunas modificaciones menores una vez dominado este marco teórico, se pueden adaptar las fórmulas para utilizarlas en operaciones más complejas, como por ejemplo para varias tasas de interés.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">03</span>
+      <h2>Definición y fórmula del RIS</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p>El Régimen de Interés Simple se caracteriza por una regla clave: el proceso de capitalización —es decir, el momento en que los intereses devengados se transforman en capital— ocurre <b>una única vez</b>, al finalizar la operación. Durante todo el plazo, la deuda inicial no se modifica: los intereses se van devengando período a período, pero se pagan todos juntos al final.</p>
+
+        <div class="callout">
+          <b>Antes de ver la fórmula, una aclaración sobre la nomenclatura.</b> Las fórmulas financieras suelen escribirse con notación minimalista (una sola letra por variable). Eso tiene ventajas y desventajas.<br><br>
+          <b>Ventajas:</b> es más rápido de escribir y de leer, pero para quien ya domina la materia.<br>
+          <b>Desventajas:</b> para quien recién está aprendiendo queda información implícita que no siempre se nota a simple vista.<br><br>
+          POR ESO AL PRINCIPIO vamos a mostrar la misma fórmula con las dos notaciones equivalentes, la minimalista y la otra con más detalles.
+        </div>
+
+        <div class="notation-compare">
+          <div class="notation-col">
+            <span class="notation-tag">Uso y costumbre de expertos</span>
+            \[ C_n = C_0 \cdot (1 + i \cdot n) \]
+          </div>
+          <div class="notation-col">
+            <span class="notation-tag">En etapa de formación</span>
+            \[ C_n = C_0 \cdot (1 + i_{\text{periódica}} \cdot n_{\text{en períodos}}) \]
+          </div>
+        </div>
+        <p class="soft">La segunda forma deja explícito algo que la primera da por sentado: <b>i</b> y <b>n</b> tienen que estar expresados en la misma unidad de tiempo (sincronía). Si la tasa es mensual, "n" tiene que contar meses; si la tasa es anual, "n" tiene que contar años. Esa relación de sincronicidad entre el plazo de aplicación de la tasa y el plazo de duración de la operación es una condición necesaria para que la fórmula sea válida, aunque en la notación de uso experto quede implícita.</p>
+
+        <ul class="glossary">
+          <li><span class="sym">C₀:</span> <span class="def"><b>Capital inicial</b> — el préstamo, en el momento cero de la operación.</span></li>
+          <li><span class="sym">i:</span> <span class="def"><b>Tasa de interés periódica</b> — la compensación relativa que recibe el prestamista por cada período que cede el capital. Puede expresarse como % o como tanto por uno (ej. 10% = 0,10).</span></li>
+          <li><span class="sym">n:</span> <span class="def"><b>Cantidad de períodos</b> — el plazo de la operación, medido en la misma unidad de tiempo a la que se refiere la tasa.</span></li>
+          <li><span class="sym">Cₙ:</span> <span class="def"><b>Capital final o monto</b> — lo que el prestatario restituye al prestamista al finalizar: el capital inicial más todos los intereses devengados.</span></li>
+        </ul>
+
+        <div class="formula-box">
+          <span class="label">Ley de proyección financiera — RIS (uso y costumbre de expertos)</span>
+          \[ C_n = C_0 \cdot (1 + i \cdot n) \]
+          <span class="label" style="margin-top:16px;">En etapa de formación</span>
+          \[ C_n = C_0 \cdot (1 + i_{\text{periódica}} \cdot n_{\text{en períodos}}) \]
+        </div>
+
+        <p class="soft">Esta fórmula genera, a partir de un capital inicial, una "familia" de capitales considerados equivalentes en términos financieros: C₀ hoy vale lo mismo que Cₙ dentro de n períodos, siempre que se respete la tasa i pactada.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">04</span>
+      <h2>Deducción paso a paso</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p>¿De dónde sale exactamente esa fórmula? Se puede reconstruir siguiendo cuatro características de cómo funciona el RIS:</p>
+
+        <div class="steps">
+          <div class="step">
+            <h4>El préstamo se devuelve en un único pago</h4>
+            <p>La amortización del capital es única, y se efectúa recién al finalizar la operación financiera.</p>
+          </div>
+          <div class="step">
+            <h4>La deuda inicial no se modifica durante la operación</h4>
+            <p>El capital sobre el cual se calcula el interés de cada período sigue siendo siempre C₀ — a diferencia de lo que podría ocurrir en un régimen de interés compuesto.</p>
+          </div>
+          <div class="step">
+            <h4>Los intereses se devengan período a período</h4>
+            <p>En cada período, el interés devengado es siempre el mismo: <span style="font-family:var(--mono)">Iₜ = C₀ · i · 1</span> (donde el 1 da cuenta del plazo de 1 período), porque siempre se aplica la tasa sobre el mismo capital inicial durante todo el período.</p>
+          </div>
+          <div class="step">
+            <h4>Todos los intereses se pagan juntos, al final</h4>
+            <p>Sumando los n intereses periódicos (todos iguales a C₀ · i · 1) se obtiene el total de intereses devengados en toda la operación (igual a C₀ · i · n).</p>
+          </div>
+        </div>
+
+        <p>Formalmente, el monto final se compone del capital más la suma de todos los intereses periódicos:</p>
+        <div class="formula-box" style="font-size:.9rem;">
+          \[ \begin{aligned}
+          C_n &= C_0 + \text{Interés devengado en los "n" períodos} \\
+          C_n &= C_0 + \text{Interés devengado en 1° período} + \text{Interés devengado en 2° período} + \dots + \text{Interés devengado en n° período} \\
+          C_n &= C_0 + C_0 \cdot i \cdot 1 + C_0 \cdot i \cdot 1 + \dots + C_0 \cdot i \cdot 1 \\
+          C_n &= C_0 + C_0 \cdot i \cdot n
+          \end{aligned} \]
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">05</span>
+      <h2>Ejemplos: cómo se comporta la función monto</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p>Los siguientes tres ejemplos muestran qué pasa con Cₙ cuando dejamos fijas dos variables y hacemos variar la tercera. Podés usar el simulador de arriba para reproducir cualquiera de estos casos vos mismo.</p>
+
+        <div class="example-card">
+          <span class="ex-tag">Ejemplo 1</span>
+          <h4>Variando el capital inicial (C₀)</h4>
+          <p class="soft">n = 5 períodos, i = 2% — el capital final crece en proporción directa a C₀.</p>
+          <table class="data">
+            <thead><tr><th>C₀</th><th>i</th><th>n</th><th>Cₙ</th></tr></thead>
+            <tbody>
+              <tr><td>100</td><td>2%</td><td>5</td><td>110</td></tr>
+              <tr><td>300</td><td>2%</td><td>5</td><td>330</td></tr>
+              <tr><td>500</td><td>2%</td><td>5</td><td>550</td></tr>
+              <tr><td>700</td><td>2%</td><td>5</td><td>770</td></tr>
+              <tr><td>1.000</td><td>2%</td><td>5</td><td>1.100</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="example-card">
+          <span class="ex-tag">Ejemplo 2</span>
+          <h4>Variando el plazo (n)</h4>
+          <p class="soft">C₀ = 100, i = 2% — el capital final crece de forma lineal a medida que aumenta el plazo.</p>
+          <table class="data">
+            <thead><tr><th>C₀</th><th>i</th><th>n</th><th>Cₙ</th></tr></thead>
+            <tbody>
+              <tr><td>100</td><td>2%</td><td>1</td><td>102</td></tr>
+              <tr><td>100</td><td>2%</td><td>3</td><td>106</td></tr>
+              <tr><td>100</td><td>2%</td><td>5</td><td>110</td></tr>
+              <tr><td>100</td><td>2%</td><td>7</td><td>114</td></tr>
+              <tr><td>100</td><td>2%</td><td>10</td><td>120</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="example-card">
+          <span class="ex-tag">Ejemplo 3</span>
+          <h4>Variando la tasa de interés (i)</h4>
+          <p class="soft">C₀ = 100, n = 5 — el capital final también crece de forma lineal respecto de la tasa.</p>
+          <table class="data">
+            <thead><tr><th>C₀</th><th>n</th><th>i</th><th>Cₙ</th></tr></thead>
+            <tbody>
+              <tr><td>100</td><td>5</td><td>1%</td><td>105</td></tr>
+              <tr><td>100</td><td>5</td><td>3%</td><td>115</td></tr>
+              <tr><td>100</td><td>5</td><td>5%</td><td>125</td></tr>
+              <tr><td>100</td><td>5</td><td>7%</td><td>135</td></tr>
+              <tr><td>100</td><td>5</td><td>10%</td><td>150</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p class="soft">En los tres casos el crecimiento es <b>lineal</b> — es justamente esa linealidad la que distingue al interés simple del interés compuesto, donde el crecimiento es exponencial porque cada período capitaliza sobre un capital que ya incluye los intereses anteriores.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">06</span>
+      <h2>Sincronicidad entre la tasa y el plazo: qué hacer cuando no coinciden</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p>Ya vimos que la fórmula del RIS exige que <b>i</b> y <b>n</b> estén expresados en la misma unidad de tiempo (sincronía). Pero en la práctica, los datos de un ejercicio no siempre vienen así de "prolijos": es común que te den una tasa en una unidad de tiempo y un plazo en otra distinta. Cuando eso pasa, hay <b>2 cursos de acción</b> posibles para lograr la sincronicidad.</p>
+
+        <div class="example-card">
+          <span class="ex-tag">Curso de acción 1</span>
+          <h4>Adecuar el plazo a la unidad de la tasa</h4>
+          <p>Se deja la tasa tal cual está dada, y se reexpresa el plazo de la operación en la misma unidad de tiempo que la tasa.</p>
+          <p class="soft"><b>Ejemplo:</b> tasa de interés nominal bimestral del 20%, plazo de la operación de 1 cuatrimestre. Como la tasa es bimestral, expresamos el plazo en bimestres: 1 cuatrimestre equivale a 2 bimestres. Ya sincronizados, podemos aplicar directamente la fórmula del RIS con i = 20% (bimestral) y n = 2 (bimestres).</p>
+        </div>
+
+        <div class="example-card">
+          <span class="ex-tag">Curso de acción 2</span>
+          <h4>Adecuar la tasa a la unidad del plazo (equivalencia financiera de tasas)</h4>
+          <p>Se deja el plazo tal cual está dado, y en cambio se transforma la tasa en su <b>tasa equivalente</b> en la unidad de tiempo del plazo — una técnica que se llama equivalencia financiera de tasas.</p>
+          <p class="soft"><b>Ejemplo:</b> tasa de interés nominal bimestral del 20%, plazo de la operación de 2 cuatrimestres. Como el plazo está en cuatrimestres, en vez de tocar el plazo, calculamos la tasa nominal <b>cuatrimestral equivalente</b> a esa tasa bimestral del 20%. Ya sincronizados, aplicamos la fórmula del RIS con i = 40% (cuatrimestral) y n = 2 (cuatrimestres).</p>
+        </div>
+
+        <div class="callout">
+          <b>Una aclaración importante sobre el tipo de tasa en RIS:</b> en el Régimen de Interés Simple únicamente existen tasas de interés de tipo <b>nominal</b>. Esto es distinto en otros regímenes: en el Régimen de Interés Compuesto (que van a ver más adelante), conviven tasas de tipo nominal y tasas de tipo <b>efectiva</b>. Tenerlo presente desde ahora evita confusiones cuando lleguen a esa unidad.
+        </div>
+
+        <div class="callout">
+          <b>Cómo pensar la equivalencia de tasas nominales en RIS:</b> la relación cuantitativa entre tasas de interés nominales dentro del Régimen de Interés Simple es una relación <b>proporcional lineal</b>, ni más ni menos que una regla de 3 simple.<br><br>
+          El razonamiento intuitivo: si una tasa de interés nominal <b>anual</b> tiene un quantum del 24%, su equivalente en formato tasa de interés nominal <b>mensual</b> es la doceava parte de ese valor (porque un año tiene 12 meses), es decir, 24% ÷ 12 = <b>1% mensual</b>.<br><br>
+          Antes de usar la calculadora de abajo, sería aconsejable razonar el resultado esperado con esta regla de 3 simple, y después verificarlo con la herramienta.
+        </div>
+
+        <div class="app-embed">
+          <div class="app-embed-head">
+            <b>Calculadora de tasas equivalentes — versión RIS</b>
+            <span class="app-embed-tag">restringida a este régimen</span>
+          </div>
+          <div class="te1">
+
+
+<header>
+  <div class="eyebrow">Motor de equivalencia financiera · versión Régimen de Interés Simple</div>
+  <h1>Tasas equivalentes dentro del Régimen de Interés Simple</h1>
+  <div class="sub">Ingresá la tasa que conocés con su plazo, y obtené la tasa nominal equivalente en el plazo que necesites, con la fórmula aplicada.</div>
+  <div class="install-hint" style="margin-top:16px;">Esta versión está <b>restringida al Régimen de Interés Simple</b>: solo admite tasas de interés de tipo nominal, que es la única que existe en este régimen. A medida que avancen por las demás unidades de la materia, van a encontrar una versión ampliada de esta misma calculadora, con los demás regímenes y tipos de tasa habilitados.</div>
+  <div class="install-hint" style="margin-top:10px;">La opción <b>"Tasa de Rentabilidad"</b> aparece deshabilitada: por uso y costumbre, la estructura matemática del Régimen de Interés Simple no se emplea para generar tasas de rentabilidad.</div>
+  <div class="install-hint" style="margin-top:10px;">En esta etapa de la materia, el único resultado que van a poder interpretar con lo visto hasta ahora es el que aparece como <b>"TASA EQUIVALENTE PEDIDA: TASA DE INTERÉS NOMINAL para el plazo ingresado en el campo Plazo de la tasa a obtener (Régimen de Interés Simple)"</b>. Los demás resultados posibles de esta calculadora corresponden a contenido de unidades que todavía no vieron.</div>
+</header>
+
+<!-- ============================================================ -->
+<!-- 1. TASA CONOCIDA / DATO -->
+<!-- ============================================================ -->
+<div class="card-section">
+  <div class="card">
+    <div class="card-title"><span class="card-num">1</span>Tasa conocida / dato</div>
+    <div class="card-desc">La tasa que ya tenés, con su régimen, tipo, carácter y plazos.</div>
+    <div class="grid">
+
+      <div class="field">
+        <label><span class="num">1</span>Tipo de régimen de la tasa dato</label>
+        <select id="te1_d_regimen">
+          <option selected>Régimen de Interés Simple</option>
+          <option disabled>Régimen de Interés Compuesto</option>
+          <option disabled>Régimen de Descuento Simple Bancario</option>
+          <option disabled>Régimen de Descuento Compuesto</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label><span class="num">2</span>Tipo de la tasa dato</label>
+        <select id="te1_d_tipo">
+          <option selected>Tasa de Interés</option>
+          <option disabled>Tasa de Descuento</option>
+          <option disabled>Tasa de Rentabilidad</option>
+        </select>
+        <div class="hint">"Rentabilidad" se interpreta como el rendimiento efectivo (igual tratamiento matemático que una tasa de interés).</div>
+      </div>
+
+      <div class="field">
+        <label><span class="num">3</span>Carácter de la tasa dato</label>
+        <select id="te1_d_caracter">
+          <option>Nominal</option>
+          <option>Efectiva</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Valor de la tasa dato (%)</label>
+        <div class="pct-wrap">
+          <input type="text" id="te1_d_valor" value="24" inputmode="decimal" autocomplete="off">
+          <span class="pct-suffix">%</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label><span class="num">4</span>Plazo de la tasa dato</label>
+        <select id="te1_d_plazo">
+          <option>Anual</option>
+          <option>Semestral</option>
+          <option>Cuatrimestral</option>
+          <option>Trimestral</option>
+          <option>Bimestral</option>
+          <option>Mensual</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+      <div class="field indent" id="te1_d_plazo_dias_wrap">
+        <label><span class="num">5</span>Plazo en días de la tasa dato</label>
+        <input type="number" id="te1_d_plazo_dias" value="45" min="1" step="1">
+        <div class="hint">Solo números enteros positivos.</div>
+      </div>
+
+      <div class="field" id="te1_d_capitalizacion_wrap">
+        <label><span class="num">6</span>Plazo de capitalización/actualización de la tasa nominal</label>
+        <select id="te1_d_capitalizacion">
+          <option>Anual</option>
+          <option>Semestral</option>
+          <option>Cuatrimestral</option>
+          <option>Trimestral</option>
+          <option selected>Mensual</option>
+          <option>Bimestral</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+      <div class="field indent" id="te1_d_capitalizacion_dias_wrap">
+        <label><span class="num">7</span>Plazo en días de la capitalización/actualización</label>
+        <input type="number" id="te1_d_capitalizacion_dias" value="30" min="1" step="1">
+        <div class="hint">Solo números enteros positivos.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 2. PLAZO DE LA OPERACIÓN -->
+<!-- ============================================================ -->
+<div class="card-section">
+  <div class="card">
+    <div class="card-title"><span class="card-num">2</span>Plazo de la operación financiera</div>
+    <div class="card-desc">El plazo n para el cual se calcula la equivalencia (aplica a ambas tasas, dato y a obtener).</div>
+    <div class="grid">
+      <div class="field">
+        <label>Plazo n</label>
+        <input type="number" id="te1_op_n" value="90" step="0.0001">
+      </div>
+      <div class="field">
+        <label>Unidad del plazo</label>
+        <select id="te1_op_unidad">
+          <option>Año</option>
+          <option>Semestre</option>
+          <option>Cuatrimestre</option>
+          <option>Trimestre</option>
+          <option>Bimestre</option>
+          <option>Mes</option>
+          <option selected>Día</option>
+        </select>
+        <div class="hint">"Día" usa base comercial de 360 días/año.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 3. TASA A OBTENER -->
+<!-- ============================================================ -->
+<div class="card-section">
+  <div class="card">
+    <div class="card-title"><span class="card-num">3</span>Tasa a obtener</div>
+    <div class="card-desc">Régimen, tipo, carácter y plazo de la tasa equivalente que querés calcular.</div>
+    <div class="grid">
+
+      <div class="field">
+        <label>Régimen de la tasa a obtener</label>
+        <select id="te1_t_regimen">
+          <option selected>Régimen de Interés Simple</option>
+          <option disabled>Régimen de Interés Compuesto</option>
+          <option disabled>Régimen de Descuento Simple Bancario</option>
+          <option disabled>Régimen de Descuento Compuesto</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Tipo de la tasa a obtener</label>
+        <select id="te1_t_tipo">
+          <option selected>Tasa de Interés</option>
+          <option disabled>Tasa de Descuento</option>
+          <option disabled>Tasa de Rentabilidad</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Carácter de la tasa a obtener</label>
+        <select id="te1_t_caracter">
+          <option>Efectiva</option>
+          <option selected>Nominal</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Plazo de la tasa a obtener</label>
+        <select id="te1_t_plazo">
+          <option selected>Anual</option>
+          <option>Semestral</option>
+          <option>Cuatrimestral</option>
+          <option>Trimestral</option>
+          <option>Bimestral</option>
+          <option>Mensual</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+      <div class="field indent" id="te1_t_plazo_dias_wrap">
+        <label>Plazo en días de la tasa a obtener</label>
+        <input type="number" id="te1_t_plazo_dias" value="45" min="1" step="1">
+        <div class="hint">Solo números enteros positivos.</div>
+      </div>
+
+      <div class="field" id="te1_t_capitalizacion_wrap">
+        <label>Plazo de capitalización/actualización deseada</label>
+        <select id="te1_t_capitalizacion">
+          <option>Anual</option>
+          <option>Semestral</option>
+          <option>Cuatrimestral</option>
+          <option>Trimestral</option>
+          <option>Bimestral</option>
+          <option selected>Mensual</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+      <div class="field indent" id="te1_t_capitalizacion_dias_wrap">
+        <label>Plazo en días de la capitalización/actualización deseada</label>
+        <input type="number" id="te1_t_capitalizacion_dias" value="30" min="1" step="1">
+        <div class="hint">Solo números enteros positivos.</div>
+      </div>
+
+    </div>
+    <div class="run-row">
+      <button id="te1_calc">Calcular equivalencia →</button>
+      <span class="err" id="te1_errBox"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 4. RESULTADO -->
+<!-- ============================================================ -->
+<div class="card-section">
+  <div class="card">
+    <div class="card-title"><span class="card-num">4</span>Resultado</div>
+    <div class="card-desc">Tasa equivalente y fórmula aplicada.</div>
+    <div class="grid" style="margin-bottom:22px;">
+      <div class="field">
+        <label>Decimales a mostrar</label>
+        <select id="te1_decimales">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="8">8</option>
+        </select>
+      </div>
+    </div>
+    <div class="result-grid">
+      <div class="result-box">
+        <div class="lbl" id="te1_r_label">Tasa equivalente pedida</div>
+        <div class="val" id="te1_r_final">—</div>
+        <div class="formula-block" id="te1_r_formula"></div>
+      </div>
+      <div class="subresults">
+        <div class="row"><span>Tasa pivote i (efectiva anual, interés compuesto)</span><span id="te1_r_pivot">—</span></div>
+        <div class="row"><span>Plazo de la tasa dato (períodos/año, py_bt)</span><span id="te1_r_pybt">—</span></div>
+        <div class="row"><span>Plazo de capitalización dato (py_bc)</span><span id="te1_r_pybc">—</span></div>
+        <div class="row"><span>Plazo de la operación en años (n)</span><span id="te1_r_nyears">—</span></div>
+        <div class="row"><span>Tasa anual equivalente en régimen deseado</span><span id="te1_r_ann">—</span></div>
+        <div class="row"><span>Plazo de la tasa a obtener (períodos/año, py_bt_t)</span><span id="te1_r_pybtt">—</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>MOTOR: régimen pivote = interés compuesto efectivo anual (i). Toda tasa dato se normaliza a i según su régimen, tipo, carácter y plazos; desde i se deriva la tasa pedida en la hoja "3. Tasa a obtener", reexpresada en su plazo/capitalización, para el mismo plazo de operación n.</footer>
+
+
+          </div>
+        </div>
+        <div class="app-embed" style="margin-top:18px;">
+          <div class="app-embed-head">
+            <b>Calculadora de tasas equivalentes — versión completa</b>
+            <span class="app-embed-tag">los 5 regímenes formales</span>
+          </div>
+          <div class="te2">
+
+
+<header>
+  <div class="eyebrow">Motor de equivalencia financiera</div>
+  <h1>Cálculo Financiero: Aplicación para la determinación de una tasa equivalente a partir de otra conocida</h1>
+  <div class="sub">Ingresá la tasa que conocés con su régimen, tipo, carácter y plazos exactos — y obtené la tasa equivalente en el régimen, tipo, carácter y plazo que necesites, con la fórmula aplicada.</div>
+  <div class="install-hint">📲 Para usarla como app: abrí este archivo en Safari (iPhone/iPad) o Chrome (Android) y elegí <b>Compartir → Agregar a pantalla de inicio</b>.</div>
+</header>
+
+<!-- ============================================================ -->
+<!-- 1. TASA CONOCIDA / DATO -->
+<!-- ============================================================ -->
+<div class="card-section">
+  <div class="card">
+    <div class="card-title"><span class="card-num">1</span>Tasa conocida / dato</div>
+    <div class="card-desc">La tasa que ya tenés, con su régimen, tipo, carácter y plazos.</div>
+    <div class="grid">
+
+      <div class="field">
+        <label><span class="num">1</span>Tipo de régimen de la tasa dato</label>
+        <select id="te2_d_regimen">
+          <option>Régimen de Interés Simple</option>
+          <option selected>Régimen de Interés Compuesto</option>
+          <option>Régimen de Descuento Simple Bancario</option>
+          <option>Régimen de Descuento Compuesto</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label><span class="num">2</span>Tipo de la tasa dato</label>
+        <select id="te2_d_tipo">
+          <option>Tasa de Interés</option>
+          <option>Tasa de Descuento</option>
+          <option>Tasa de Rentabilidad</option>
+        </select>
+        <div class="hint">"Rentabilidad" se interpreta como el rendimiento efectivo (igual tratamiento matemático que una tasa de interés).</div>
+      </div>
+
+      <div class="field">
+        <label><span class="num">3</span>Carácter de la tasa dato</label>
+        <select id="te2_d_caracter">
+          <option>Nominal</option>
+          <option>Efectiva</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Valor de la tasa dato (%)</label>
+        <div class="pct-wrap">
+          <input type="text" id="te2_d_valor" value="24" inputmode="decimal" autocomplete="off">
+          <span class="pct-suffix">%</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label><span class="num">4</span>Plazo de la tasa dato</label>
+        <select id="te2_d_plazo">
+          <option>Anual</option>
+          <option>Semestral</option>
+          <option>Cuatrimestral</option>
+          <option>Trimestral</option>
+          <option>Bimestral</option>
+          <option>Mensual</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+      <div class="field indent" id="te2_d_plazo_dias_wrap">
+        <label><span class="num">5</span>Plazo en días de la tasa dato</label>
+        <input type="number" id="te2_d_plazo_dias" value="45" min="1" step="1">
+        <div class="hint">Solo números enteros positivos.</div>
+      </div>
+
+      <div class="field" id="te2_d_capitalizacion_wrap">
+        <label><span class="num">6</span>Plazo de capitalización/actualización de la tasa nominal</label>
+        <select id="te2_d_capitalizacion">
+          <option>Anual</option>
+          <option>Semestral</option>
+          <option>Cuatrimestral</option>
+          <option>Trimestral</option>
+          <option selected>Mensual</option>
+          <option>Bimestral</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+      <div class="field indent" id="te2_d_capitalizacion_dias_wrap">
+        <label><span class="num">7</span>Plazo en días de la capitalización/actualización</label>
+        <input type="number" id="te2_d_capitalizacion_dias" value="30" min="1" step="1">
+        <div class="hint">Solo números enteros positivos.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 2. PLAZO DE LA OPERACIÓN -->
+<!-- ============================================================ -->
+<div class="card-section">
+  <div class="card">
+    <div class="card-title"><span class="card-num">2</span>Plazo de la operación financiera</div>
+    <div class="card-desc">El plazo n para el cual se calcula la equivalencia (aplica a ambas tasas, dato y a obtener).</div>
+    <div class="grid">
+      <div class="field">
+        <label>Plazo n</label>
+        <input type="number" id="te2_op_n" value="90" step="0.0001">
+      </div>
+      <div class="field">
+        <label>Unidad del plazo</label>
+        <select id="te2_op_unidad">
+          <option>Año</option>
+          <option>Semestre</option>
+          <option>Cuatrimestre</option>
+          <option>Trimestre</option>
+          <option>Bimestre</option>
+          <option>Mes</option>
+          <option selected>Día</option>
+        </select>
+        <div class="hint">"Día" usa base comercial de 360 días/año.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 3. TASA A OBTENER -->
+<!-- ============================================================ -->
+<div class="card-section">
+  <div class="card">
+    <div class="card-title"><span class="card-num">3</span>Tasa a obtener</div>
+    <div class="card-desc">Régimen, tipo, carácter y plazo de la tasa equivalente que querés calcular.</div>
+    <div class="grid">
+
+      <div class="field">
+        <label>Régimen de la tasa a obtener</label>
+        <select id="te2_t_regimen">
+          <option>Régimen de Interés Simple</option>
+          <option>Régimen de Interés Compuesto</option>
+          <option>Régimen de Descuento Simple Bancario</option>
+          <option selected>Régimen de Descuento Compuesto</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Tipo de la tasa a obtener</label>
+        <select id="te2_t_tipo">
+          <option>Tasa de Interés</option>
+          <option selected>Tasa de Descuento</option>
+          <option>Tasa de Rentabilidad</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Carácter de la tasa a obtener</label>
+        <select id="te2_t_caracter">
+          <option selected>Efectiva</option>
+          <option>Nominal</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Plazo de la tasa a obtener</label>
+        <select id="te2_t_plazo">
+          <option selected>Anual</option>
+          <option>Semestral</option>
+          <option>Cuatrimestral</option>
+          <option>Trimestral</option>
+          <option>Bimestral</option>
+          <option>Mensual</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+      <div class="field indent" id="te2_t_plazo_dias_wrap">
+        <label>Plazo en días de la tasa a obtener</label>
+        <input type="number" id="te2_t_plazo_dias" value="45" min="1" step="1">
+        <div class="hint">Solo números enteros positivos.</div>
+      </div>
+
+      <div class="field" id="te2_t_capitalizacion_wrap">
+        <label>Plazo de capitalización/actualización deseada</label>
+        <select id="te2_t_capitalizacion">
+          <option>Anual</option>
+          <option>Semestral</option>
+          <option>Cuatrimestral</option>
+          <option>Trimestral</option>
+          <option>Bimestral</option>
+          <option selected>Mensual</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+      <div class="field indent" id="te2_t_capitalizacion_dias_wrap">
+        <label>Plazo en días de la capitalización/actualización deseada</label>
+        <input type="number" id="te2_t_capitalizacion_dias" value="30" min="1" step="1">
+        <div class="hint">Solo números enteros positivos.</div>
+      </div>
+
+    </div>
+    <div class="run-row">
+      <button id="te2_calc">Calcular equivalencia →</button>
+      <span class="err" id="te2_errBox"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 4. RESULTADO -->
+<!-- ============================================================ -->
+<div class="card-section">
+  <div class="card">
+    <div class="card-title"><span class="card-num">4</span>Resultado</div>
+    <div class="card-desc">Tasa equivalente y fórmula aplicada.</div>
+    <div class="grid" style="margin-bottom:22px;">
+      <div class="field">
+        <label>Decimales a mostrar</label>
+        <select id="te2_decimales">
+          <option value="0">0</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4" selected>4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="8">8</option>
+        </select>
+      </div>
+    </div>
+    <div class="result-grid">
+      <div class="result-box">
+        <div class="lbl" id="te2_r_label">Tasa equivalente pedida</div>
+        <div class="val" id="te2_r_final">—</div>
+        <div class="formula-block" id="te2_r_formula"></div>
+      </div>
+      <div class="subresults">
+        <div class="row"><span>Tasa pivote i (efectiva anual, interés compuesto)</span><span id="te2_r_pivot">—</span></div>
+        <div class="row"><span>Plazo de la tasa dato (períodos/año, py_bt)</span><span id="te2_r_pybt">—</span></div>
+        <div class="row"><span>Plazo de capitalización dato (py_bc)</span><span id="te2_r_pybc">—</span></div>
+        <div class="row"><span>Plazo de la operación en años (n)</span><span id="te2_r_nyears">—</span></div>
+        <div class="row"><span>Tasa anual equivalente en régimen deseado</span><span id="te2_r_ann">—</span></div>
+        <div class="row"><span>Plazo de la tasa a obtener (períodos/año, py_bt_t)</span><span id="te2_r_pybtt">—</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>MOTOR: régimen pivote = interés compuesto efectivo anual (i). Toda tasa dato se normaliza a i según su régimen, tipo, carácter y plazos; desde i se deriva la tasa pedida en la hoja "3. Tasa a obtener", reexpresada en su plazo/capitalización, para el mismo plazo de operación n.</footer>
+
+
+          </div>
+        </div>
+        <p class="soft" style="margin-top:10px;">A medida que avancen por las demás unidades de la materia, la versión completa se va a ir enriqueciendo con las tasas propias de cada nuevo régimen, hasta cubrir la equivalencia de tasas entre los 5 regímenes formales.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">07</span>
+      <h2>Indicadores RIS</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="soft">Determinación de indicadores para una operación sencilla en RIS — cargá los datos del enunciado tal como te los dan, la app revisa si están sincronizados y despeja la incógnita, mostrándote el paso a paso.</p>
+
+        <div class="indic-card">
+          <p class="indic-title">¿Qué estás buscando?</p>
+          <p class="indic-sub">Pensá el ejercicio y elegí abajo qué es lo que te piden averiguar.</p>
+
+          <div class="indic-tabs">
+            <button class="indic-tab" data-var="c0" type="button">Averiguar C₀</button>
+            <button class="indic-tab active" data-var="cn" type="button">Averiguar Cₙ</button>
+            <button class="indic-tab" data-var="i" type="button">Averiguar i</button>
+            <button class="indic-tab" data-var="n" type="button">Averiguar n</button>
+          </div>
+
+          <p class="indic-prompt" id="indic-start-prompt">Elegí arriba qué estás buscando en tu ejercicio — recién ahí se van a habilitar los datos para cargar.</p>
+
+          <div id="indic-fields-wrap" style="display:none;">
+            <div class="indic-fields" style="grid-template-columns:1fr 1fr;">
+              <div class="indic-field" id="indic-field-c0">
+                <label>Capital inicial (C₀)</label>
+                <div class="indic-wrap"><span>C₀</span><input type="text" inputmode="decimal" id="indic-c0" placeholder="ej. 1.000"></div>
+              </div>
+              <div class="indic-field" id="indic-field-cn">
+                <label>Capital final (Cₙ)</label>
+                <div class="indic-wrap"><span>Cₙ</span><input type="text" inputmode="decimal" id="indic-cn" placeholder="ej. 1.100"></div>
+              </div>
+            </div>
+
+            <div class="indic-fields" style="grid-template-columns:1fr 1fr;margin-top:2px;">
+              <div class="indic-field" id="indic-field-i">
+                <label>Tasa dato (i) — valor y plazo propio</label>
+                <div class="indic-wrap"><span>i</span><input type="text" inputmode="decimal" id="indic-i" placeholder="ej. 2"><span style="border-right:none;border-left:1px solid var(--line-strong);">%</span></div>
+              </div>
+              <div class="indic-field">
+                <label>Plazo de la tasa dato</label>
+                <select id="indic-i-unidad" class="indic-select">
+                  <option>Anual</option><option>Semestral</option><option>Cuatrimestral</option>
+                  <option>Trimestral</option><option selected>Bimestral</option><option>Mensual</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="indic-fields" style="grid-template-columns:1fr 1fr;margin-top:2px;">
+              <div class="indic-field" id="indic-field-n">
+                <label>Plazo de la operación (n)</label>
+                <div class="indic-wrap"><span>n</span><input type="text" inputmode="decimal" id="indic-n" placeholder="ej. 5"></div>
+              </div>
+              <div class="indic-field">
+                <label>Unidad del plazo de la operación</label>
+                <select id="indic-n-unidad" class="indic-select">
+                  <option>Anual</option><option>Semestral</option><option>Cuatrimestral</option>
+                  <option>Trimestral</option><option>Bimestral</option><option selected>Mensual</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div id="indic-sync-area"></div>
+          <div id="indic-result-area"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Cálculo Financiero — Material interactivo · Unidad: Régimen de Interés Simple (Nodo A.1)
+  <div class="author-credit">
+    <p class="name">Orlando Orellana</p>
+    <p class="role">Licenciado en Economía (FCE-UBA)</p>
+    <p class="role">Profesor Adjunto Interino de Cálculo Financiero — FCE-UBA</p>
+  </div>
+</footer>
+
+<script>
+  // Accordion
+  document.querySelectorAll('[data-toggle]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      btn.closest('[data-section]').classList.toggle('open');
+    });
+  });
+
+  // Live ledger simulator
+  const c0Input = document.getElementById('c0');
+  const iInput = document.getElementById('i');
+  const nInput = document.getElementById('n');
+  const c0Num = document.getElementById('c0Num');
+  const iNum = document.getElementById('iNum');
+  const nNum = document.getElementById('nNum');
+  const c0Val = document.getElementById('c0Val');
+  const iVal = document.getElementById('iVal');
+  const nVal = document.getElementById('nVal');
+  const formulaLine = document.getElementById('formulaLine');
+  const resultBig = document.getElementById('resultBig');
+  const periodStrip = document.getElementById('periodStrip');
+
+  function fmt(x, dec){
+    return x.toLocaleString('es-AR', {minimumFractionDigits:dec, maximumFractionDigits:dec});
+  }
+
+  // Parses a Spanish-formatted number string. Comma is always the decimal
+  // separator when present ("1.500,50" -> 1500.5). When only dots appear,
+  // groups of exactly 3 digits are treated as thousands ("1.500" -> 1500),
+  // but a single short trailing group ("7.5") is treated as a decimal point
+  // — this avoids values jumping unexpectedly when someone types a decimal
+  // with a dot out of habit.
+  function parseEsNumber(str){
+    if(typeof str !== 'string') return NaN;
+    let s = str.trim();
+    if(s === '') return NaN;
+    if(s.includes(',')){
+      s = s.replace(/\./g,'').replace(',', '.');
+      return parseFloat(s);
+    }
+    if(s.includes('.')){
+      const parts = s.split('.');
+      const tailGroupsAreThousands = parts.length > 1 && parts.slice(1).every(p => p.length === 3);
+      if(tailGroupsAreThousands){
+        return parseFloat(s.replace(/\./g,''));
+      }
+      return parseFloat(s);
+    }
+    return parseFloat(s);
+  }
+
+  // Compact currency label for inside bars (no decimals, es-AR grouping)
+  function fmtCompact(x){
+    return Math.round(x).toLocaleString('es-AR');
+  }
+
+  // Builds a simple bar chart with a period axis inside a container
+  function renderBars(chartEl, axisEl, values, periods, opts){
+    opts = opts || {};
+    const maxVal = Math.max(...values, 0.0001);
+    chartEl.innerHTML = '';
+    axisEl.innerHTML = '';
+    values.forEach((v, idx)=>{
+      const col = document.createElement('div');
+      col.className = 'chart-col';
+      const bar = document.createElement('div');
+      bar.className = 'chart-bar' + (opts.gold ? ' gold' : '');
+      const h = maxVal > 0 ? Math.max(v>0?4:0, (v/maxVal)*90) : 0;
+      bar.style.height = h + 'px';
+      bar.title = `Período ${periods[idx]}: ${fmt(v,2)}`;
+
+      const label = document.createElement('span');
+      label.className = 'bar-value' + (h < 24 ? ' outside' : '');
+      label.textContent = fmtCompact(v);
+      bar.appendChild(label);
+
+      col.appendChild(bar);
+      chartEl.appendChild(col);
+
+      const lab = document.createElement('span');
+      lab.textContent = periods[idx];
+      axisEl.appendChild(lab);
+    });
+  }
+
+  function renderFlow(chartEl, axisEl, labelsEl, c0, totalInt, n){
+    chartEl.innerHTML = '';
+    if(axisEl) axisEl.innerHTML = '';
+    labelsEl.innerHTML = '';
+    const maxVal = Math.max(c0, c0+totalInt);
+
+    for(let t = 0; t <= n; t++){
+      const col = document.createElement('div');
+      col.className = 'chart-col';
+
+      if(t === 0){
+        // Préstamo
+        const bar = document.createElement('div');
+        bar.className = 'chart-bar';
+        const h = Math.max(4,(c0/maxVal)*90);
+        bar.style.height = h+'px';
+        bar.title = `Período 0 — Préstamo: ${fmt(c0,2)}`;
+        const lbl = document.createElement('span');
+        lbl.className = 'bar-value' + (h < 24 ? ' outside' : '');
+        lbl.textContent = fmtCompact(c0);
+        bar.appendChild(lbl);
+        col.appendChild(bar);
+      } else if(t === n){
+        // Amortización + intereses (apilado)
+        const bar = document.createElement('div');
+        bar.className = 'chart-bar';
+        const hAmort = Math.max(4,(c0/maxVal)*90);
+        bar.style.height = hAmort+'px';
+        const lblAmort = document.createElement('span');
+        lblAmort.className = 'bar-value' + (hAmort < 24 ? ' outside' : '');
+        lblAmort.textContent = fmtCompact(c0);
+        bar.appendChild(lblAmort);
+
+        const stackTop = document.createElement('div');
+        stackTop.className = 'stack-top';
+        const hInt = Math.max(4,(totalInt/maxVal)*90);
+        stackTop.style.height = hInt+'px';
+        const lblInt = document.createElement('span');
+        lblInt.className = 'bar-value' + (hInt < 24 ? ' outside' : '');
+        lblInt.textContent = fmtCompact(totalInt);
+        stackTop.appendChild(lblInt);
+        bar.appendChild(stackTop);
+
+        bar.title = `Período ${n} — Amortización: ${fmt(c0,2)} + Intereses: ${fmt(totalInt,2)}`;
+        col.appendChild(bar);
+      } else {
+        // Período intermedio: sin movimiento de dinero
+        const bar = document.createElement('div');
+        bar.className = 'chart-bar';
+        bar.style.height = '2px';
+        bar.style.background = 'var(--line-strong)';
+        bar.style.borderTop = 'none';
+        bar.title = `Período ${t} — sin movimiento de dinero`;
+        col.appendChild(bar);
+      }
+      chartEl.appendChild(col);
+
+      if(axisEl){
+        const ax = document.createElement('span');
+        ax.textContent = t;
+        axisEl.appendChild(ax);
+      }
+    }
+
+    const l0 = document.createElement('div');
+    l0.className = 'flabel';
+    l0.innerHTML = `<b>Momento 0</b>Préstamo`;
+    const l2 = document.createElement('div');
+    l2.className = 'flabel';
+    l2.innerHTML = `<b>Momento n</b>Amortización + Intereses`;
+    labelsEl.appendChild(l0);
+    labelsEl.appendChild(l2);
+  }
+
+  // Recalculates everything EXCEPT the text currently being typed into the numeric fields
+  function recalc(){
+    const c0 = parseFloat(c0Input.value);
+    const i = parseFloat(iInput.value)/100;
+    const n = parseInt(nInput.value);
+
+    c0Val.textContent = fmt(c0,0);
+    iVal.textContent = (i*100).toLocaleString('es-AR')+'%';
+    nVal.textContent = n;
+
+    const cn = c0 * (1 + i*n);
+    const totalInt = c0*i*n;
+
+    formulaLine.textContent = `Cₙ = ${fmt(c0,0)} · (1 + ${i.toFixed(3).replace('.',',')} · ${n})`;
+    resultBig.innerHTML = `${fmt(cn,2)} <small>capital final (C<sub>n</sub>)</small>`;
+
+    // period strip (hero)
+    periodStrip.innerHTML = '';
+    const maxVal = c0 * (1 + i*n);
+    for(let t=0;t<=n;t++){
+      const val = c0 * (1 + i*t);
+      const h = Math.max(6, (val/maxVal)*70);
+      const bar = document.createElement('div');
+      bar.className = 'period-bar';
+      bar.style.height = h+'px';
+      bar.title = `Período ${t}: ${fmt(val,2)}`;
+      periodStrip.appendChild(bar);
+    }
+
+    // periods array 1..n for the 3 per-period simulators
+    const periods = [];
+    for(let t=1;t<=n;t++) periods.push(t);
+
+    // Amortización: 0 en todos los períodos salvo el último = C0
+    const amortVals = periods.map(t => t===n ? c0 : 0);
+    renderBars(document.getElementById('chartAmort'), document.getElementById('axisAmort'), amortVals, periods);
+
+    // Devengamiento: C0*i en cada período (constante en RIS)
+    const devengVals = periods.map(()=> c0*i);
+    renderBars(document.getElementById('chartDeveng'), document.getElementById('axisDeveng'), devengVals, periods, {gold:true});
+
+    // Pago de intereses: 0 en todos los períodos salvo el último = C0*i*n
+    const pagoVals = periods.map(t => t===n ? totalInt : 0);
+    renderBars(document.getElementById('chartPago'), document.getElementById('axisPago'), pagoVals, periods, {gold:true});
+
+    // Movimientos físicos de dinero
+    renderFlow(document.getElementById('chartFlujo'), document.getElementById('axisFlujo'), document.getElementById('flowLabels'), c0, totalInt, n);
+  }
+
+  // Reformats the numeric fields to canonical es-AR display (punto de miles, coma decimal)
+  function syncNumFields(){
+    const c0 = parseFloat(c0Input.value);
+    const i = parseFloat(iInput.value);
+    const n = parseInt(nInput.value);
+    c0Num.value = fmt(c0,0);
+    iNum.value = fmt(i,1);
+    nNum.value = String(n);
+  }
+
+  function clamp(val, min, max){ return Math.min(max, Math.max(min, val)); }
+
+  // Sliders drive the numeric fields
+  [c0Input, iInput, nInput].forEach(el=>el.addEventListener('input', ()=>{ syncNumFields(); recalc(); }));
+
+  // Numeric fields drive the sliders while typing (without reformatting the field mid-keystroke)
+  c0Num.addEventListener('input', ()=>{
+    const parsed = parseEsNumber(c0Num.value);
+    if(!isNaN(parsed)){
+      c0Input.value = clamp(parsed, parseFloat(c0Input.min), parseFloat(c0Input.max));
+      recalc();
+    }
+  });
+  iNum.addEventListener('input', ()=>{
+    const parsed = parseEsNumber(iNum.value);
+    if(!isNaN(parsed)){
+      iInput.value = clamp(parsed, parseFloat(iInput.min), parseFloat(iInput.max));
+      recalc();
+    }
+  });
+  nNum.addEventListener('input', ()=>{
+    const parsed = parseEsNumber(nNum.value);
+    if(!isNaN(parsed)){
+      nInput.value = clamp(Math.round(parsed), parseInt(nInput.min), parseInt(nInput.max));
+      recalc();
+    }
+  });
+
+  // On blur, reformat the field to the canonical es-AR display
+  [c0Num, iNum, nNum].forEach(el=>el.addEventListener('blur', syncNumFields));
+
+  syncNumFields();
+  recalc();
+
+  // ---- selector de apariencia ----
+  function applyTheme(theme){
+    if(theme === 'default'){ document.documentElement.removeAttribute('data-theme'); }
+    else{ document.documentElement.setAttribute('data-theme', theme); }
+    document.querySelectorAll('.theme-swatch').forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
+    try{ localStorage.setItem('ris_theme', theme); }catch(e){}
+  }
+  document.querySelectorAll('.theme-swatch').forEach(b => {
+    b.addEventListener('click', () => applyTheme(b.dataset.theme));
+  });
+  let savedTheme = 'default';
+  try{ savedTheme = localStorage.getItem('ris_theme') || 'default'; }catch(e){}
+  applyTheme(savedTheme);
+
+
+/* ===== Indicadores RIS: enunciado -> sincronía -> despeje de las 4 variables ===== */
+(function(){
+  const fields = {
+    c0: document.getElementById('indic-c0'),
+    i:  document.getElementById('indic-i'),
+    n:  document.getElementById('indic-n'),
+    cn: document.getElementById('indic-cn')
+  };
+  const boxes = {
+    c0: document.getElementById('indic-field-c0'),
+    i:  document.getElementById('indic-field-i'),
+    n:  document.getElementById('indic-field-n'),
+    cn: document.getElementById('indic-field-cn')
+  };
+  const unidadI = document.getElementById('indic-i-unidad');
+  const unidadN = document.getElementById('indic-n-unidad');
+  const tabs = Array.from(document.querySelectorAll('.indic-tab[data-var]'));
+  const syncArea = document.getElementById('indic-sync-area');
+  const resultArea = document.getElementById('indic-result-area');
+  const fieldsWrap = document.getElementById('indic-fields-wrap');
+  const startPrompt = document.getElementById('indic-start-prompt');
+  const varLabel = {c0:'C₀', i:'i', n:'n', cn:'Cₙ'};
+  let target = null;
+  let started = false;
+
+  // períodos por año — misma tabla que usa la calculadora de tasas equivalentes
+  const PY = {'Anual':1,'Semestral':2,'Cuatrimestral':3,'Trimestral':4,'Bimestral':6,'Mensual':12};
+
+  // estrategia elegida cuando no hay sincronía: null | 'plazo' | 'tasa'
+  let strategy = null;
+
+  function readRaw(key){ return fields[key].value.trim(); }
+  function readNum(key){
+    const raw = readRaw(key);
+    if(raw === '') return null;
+    const v = parseEsNumber(raw);
+    return isNaN(v) ? null : v;
+  }
+
+  function setActiveTab(key){
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.var === key));
+    Object.keys(boxes).forEach(k => boxes[k].classList.toggle('is-target', k === key));
+  }
+
+  function revealFields(){
+    if(!started){
+      started = true;
+      fieldsWrap.style.display = '';
+      startPrompt.style.display = 'none';
+    }
+  }
+
+  function setTarget(newTarget){
+    revealFields();
+    const old = target;
+    if(old !== null) fields[old].disabled = false;
+    target = newTarget;
+    strategy = null;
+    fields[target].value = '';
+    fields[target].disabled = true;
+    fields[target].placeholder = '?';
+    setActiveTab(target);
+    recompute();
+  }
+
+  tabs.forEach(btn => {
+    btn.addEventListener('click', () => setTarget(btn.dataset.var));
+  });
+
+  ['c0','i','n','cn'].forEach(key => {
+    fields[key].addEventListener('input', (e) => {
+      if(key === target) return;
+      if(e.target.value.trim() === ''){
+        setTarget(key);
+      } else {
+        strategy = null;
+        recompute();
+      }
+    });
+    fields[key].addEventListener('blur', () => {
+      if(key === target) return;
+      const v = readNum(key);
+      if(v !== null){
+        if(key === 'i') fields[key].value = fmt(v,1);
+        else if(key === 'n') fields[key].value = fmt(v,0);
+        else fields[key].value = fmt(v,0);
+      }
+    });
+  });
+  [unidadI, unidadN].forEach(sel => sel.addEventListener('change', () => { strategy = null; recompute(); }));
+
+  // Convierte el valor de una tasa nominal periódica de una unidad a otra (relación proporcional lineal de RIS)
+  function convertirTasa(valorPct, unidadOrigen, unidadDestino){
+    return valorPct * (PY[unidadOrigen] / PY[unidadDestino]);
+  }
+  // Convierte un plazo (cantidad de períodos) de una unidad a otra
+  function convertirPlazo(valorPlazo, unidadOrigen, unidadDestino){
+    return valorPlazo * (PY[unidadDestino] / PY[unidadOrigen]);
+  }
+
+  function buildStepsFinal(c0, iPct, n, computedValue){
+    const i = iPct/100;
+    if(target === 'cn'){
+      return [
+        {t:'Partimos de la fórmula del RIS', c:'\\[ C_n = C_0 \\cdot (1 + i \\cdot n) \\]'},
+        {t:'Reemplazamos los datos ya sincronizados', c:`\\[ C_n = ${fmt(c0,0)} \\cdot (1 + ${fmt(i,3).replace('.',',')} \\cdot ${fmt(n,0)}) \\]`},
+        {t:'Resolvemos', c:`\\[ C_n = ${fmt(computedValue,2)} \\]`}
+      ];
+    }
+    if(target === 'c0'){
+      return [
+        {t:'Partimos de la fórmula del RIS', c:'\\[ C_n = C_0 \\cdot (1 + i \\cdot n) \\]'},
+        {t:'Despejamos C₀ dividiendo ambos lados por (1 + i·n)', c:'\\[ C_0 = \\dfrac{C_n}{1 + i \\cdot n} \\]'},
+        {t:'Reemplazamos los datos ya sincronizados', c:`\\[ C_0 = \\dfrac{${fmt(readNum('cn'),0)}}{1 + ${fmt(i,3).replace('.',',')} \\cdot ${fmt(n,0)}} \\]`},
+        {t:'Resolvemos', c:`\\[ C_0 = ${fmt(computedValue,2)} \\]`}
+      ];
+    }
+    if(target === 'i'){
+      return [
+        {t:'Partimos de la fórmula del RIS', c:'\\[ C_n = C_0 \\cdot (1 + i \\cdot n) \\]'},
+        {t:'Despejamos i', c:'\\[ i = \\dfrac{\\frac{C_n}{C_0} - 1}{n} \\]'},
+        {t:'Reemplazamos los datos y resolvemos', c:`\\[ i = \\dfrac{\\frac{${fmt(readNum('cn'),0)}}{${fmt(c0,0)}} - 1}{${fmt(n,0)}} = ${fmt(computedValue*100,2)}\\% \\]`}
+      ];
+    }
+    return [
+      {t:'Partimos de la fórmula del RIS', c:'\\[ C_n = C_0 \\cdot (1 + i \\cdot n) \\]'},
+      {t:'Despejamos n', c:'\\[ n = \\dfrac{\\frac{C_n}{C_0} - 1}{i} \\]'},
+      {t:'Reemplazamos los datos y resolvemos', c:`\\[ n = \\dfrac{\\frac{${fmt(readNum('cn'),0)}}{${fmt(c0,0)}} - 1}{${fmt(i,3).replace('.',',')}} = ${fmt(computedValue,2)} \\]`}
+    ];
+  }
+
+  function renderFinal(c0, iPct, n){
+    const i = iPct/100;
+    let computedValue;
+    if(target === 'cn'){ computedValue = c0*(1+i*n); fields.cn.value = fmt(computedValue,2); }
+    else if(target === 'c0'){ computedValue = readNum('cn')/(1+i*n); fields.c0.value = fmt(computedValue,2); }
+    else if(target === 'i'){ computedValue = n!==0 ? (readNum('cn')/c0 - 1)/n : NaN; fields.i.value = fmt(computedValue*100,2); }
+    else { computedValue = i!==0 ? (readNum('cn')/c0 - 1)/i : NaN; fields.n.value = fmt(computedValue,2); }
+
+    if(!isFinite(computedValue)){
+      resultArea.innerHTML = `<p class="indic-prompt">No se pudo calcular ${varLabel[target]} con esos datos — revisá los valores cargados.</p>`;
+      return;
+    }
+    const displayVal = target === 'i' ? `${fmt(computedValue*100,2)}%` : fmt(computedValue,2);
+    const steps = buildStepsFinal(c0, iPct, n, computedValue);
+    let stepsHtml = '<div class="steps">';
+    steps.forEach(s => {
+      stepsHtml += `<div class="step"><h4>${s.t}</h4><div class="formula-box" style="text-align:left;font-size:.95rem;margin:8px 0 0;">${s.c}</div></div>`;
+    });
+    stepsHtml += '</div>';
+
+    const nRounded = Math.round(target === 'n' ? computedValue : n);
+    const c0ForChart = target === 'c0' ? computedValue : c0;
+    const iForChart = target === 'i' ? computedValue : i;
+    let chartHtml = '';
+    if(nRounded > 0 && nRounded <= 60 && isFinite(c0ForChart) && isFinite(iForChart)){
+      const cnForChart = c0ForChart*(1+iForChart*nRounded);
+      chartHtml = '<div class="indic-chart">';
+      for(let t=0;t<=nRounded;t++){
+        const val = c0ForChart*(1+iForChart*t);
+        const h = Math.max(4,(val/cnForChart)*66);
+        chartHtml += `<div class="bar" style="height:${h}px" title="Período ${t}: ${fmt(val,2)}"></div>`;
+      }
+      chartHtml += '</div>';
+    }
+
+    resultArea.innerHTML = `
+      <div class="indic-result">
+        <div class="k">Resultado — ${varLabel[target]}</div>
+        <div class="v">${displayVal}</div>
+        ${chartHtml}
+      </div>
+      <p class="indic-steps-title">Cómo se llega a este resultado</p>
+      ${stepsHtml}
+    `;
+    if(window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise([resultArea]);
+  }
+
+  function recompute(){
+    if(!started) return;
+    const c0 = readNum('c0'), iPct = readNum('i'), n = readNum('n'), cn = readNum('cn');
+    const known = {c0, i: iPct, n, cn};
+    const requiredKeys = Object.keys(known).filter(k => k !== target);
+    const allKnown = requiredKeys.every(k => known[k] !== null);
+
+    if(!allKnown){
+      syncArea.innerHTML = '';
+      resultArea.innerHTML = `<p class="indic-prompt">Completá los otros 3 datos para que la app despeje ${varLabel[target]}.</p>`;
+      return;
+    }
+
+    const uI = unidadI.value, uN = unidadN.value;
+
+    // Etapa 2, caso "incógnita = i": el valor de i se desconoce, pero su unidad (la elegida en
+    // "Plazo de la tasa dato") sigue siendo un dato — si no coincide con la unidad del plazo de
+    // la operación, hay que sincronizar el plazo antes de poder despejar i en esa unidad.
+    if(target === 'i'){
+      if(uI === uN){
+        syncArea.innerHTML = `<div class="indic-sync-box ok"><div class="indic-sync-title">✓ Hay sincronía</div>El plazo de la operación ya está expresado en la misma unidad que le pediste a la tasa (${uI}). Se puede despejar i directamente.</div>`;
+        renderFinal(c0, null, n);
+      } else {
+        const nConvertido = convertirPlazo(n, uN, uI);
+        syncArea.innerHTML = `<div class="indic-sync-box warn"><div class="indic-sync-title">⚠ No hay sincronía</div>Pediste la tasa en <b>${uI}</b>, pero el plazo de la operación está en <b>${uN}</b>. Para poder despejar i en la unidad pedida, convertimos el plazo: <b>n(${uI}) = ${fmt(nConvertido,2)}</b>.</div>`;
+        renderFinal(c0, null, nConvertido);
+      }
+      return;
+    }
+
+    // Etapa 2, caso "incógnita = n": el valor de n se desconoce, pero su unidad (la elegida en
+    // "Unidad del plazo de la operación") sigue siendo un dato — si no coincide con la unidad de
+    // la tasa dato, hay que sincronizar la tasa antes de poder despejar n en esa unidad.
+    if(target === 'n'){
+      if(uI === uN){
+        syncArea.innerHTML = `<div class="indic-sync-box ok"><div class="indic-sync-title">✓ Hay sincronía</div>La tasa ya está expresada en la misma unidad en la que pedís el plazo (${uN}). Se puede despejar n directamente.</div>`;
+        renderFinal(c0, iPct, null);
+      } else {
+        const iConvertido = convertirTasa(iPct, uI, uN);
+        syncArea.innerHTML = `<div class="indic-sync-box warn"><div class="indic-sync-title">⚠ No hay sincronía</div>La tasa está en <b>${uI}</b>, pero pediste el plazo en <b>${uN}</b>. Para poder despejar n en la unidad pedida, convertimos la tasa: <b>i(${uN}) = ${fmt(iConvertido,2)}%</b>.</div>`;
+        renderFinal(c0, iConvertido, null);
+      }
+      return;
+    }
+
+    if(uI === uN){
+      syncArea.innerHTML = `<div class="indic-sync-box ok"><div class="indic-sync-title">✓ Hay sincronía</div>La tasa y el plazo de la operación están expresados en la misma unidad (${uI}). Se puede resolver directamente.</div>`;
+      renderFinal(c0, iPct, n);
+      return;
+    }
+
+    // No hay sincronía: mostrar aviso + las 2 estrategias
+    syncArea.innerHTML = `
+      <div class="indic-sync-box warn">
+        <div class="indic-sync-title">⚠ No hay sincronía</div>
+        La tasa dato está en <b>${uI}</b> y el plazo de la operación está en <b>${uN}</b> — no coinciden. Elegí una estrategia para sincronizarlos:
+        <div class="indic-strategy-btns">
+          <button class="indic-strategy-btn ${strategy==='plazo'?'chosen':''}" id="btn-strat-plazo" type="button">Estrategia 1 — Adecuar el plazo a la unidad de la tasa</button>
+          <button class="indic-strategy-btn ${strategy==='tasa'?'chosen':''}" id="btn-strat-tasa" type="button">Estrategia 2 — Generar la tasa equivalente al plazo de la operación</button>
+        </div>
+        <div id="indic-strat-detail" style="margin-top:12px;"></div>
+      </div>
+    `;
+    document.getElementById('btn-strat-plazo').addEventListener('click', () => { strategy = 'plazo'; recompute(); });
+    document.getElementById('btn-strat-tasa').addEventListener('click', () => { strategy = 'tasa'; recompute(); });
+
+    if(!strategy){
+      resultArea.innerHTML = '';
+      return;
+    }
+
+    const detail = document.getElementById('indic-strat-detail');
+    if(strategy === 'plazo'){
+      const nConvertido = convertirPlazo(n, uN, uI);
+      detail.innerHTML = `Convertimos el plazo de la operación ${uN} a ${uI}: <b>n(${uI}) = ${fmt(nConvertido,2)}</b>. Ya sincronizados, resolvemos con i(${uI}) = ${fmt(iPct,2)}% y n(${uI}) = ${fmt(nConvertido,2)}.`;
+      if(window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise([detail]);
+      renderFinal(c0, iPct, nConvertido);
+    } else {
+      const iConvertido = convertirTasa(iPct, uI, uN);
+      detail.innerHTML = `Calculamos la tasa nominal equivalente de ${uI} a ${uN}: <b>i(${uN}) = ${fmt(iConvertido,2)}%</b>. Ya sincronizados, resolvemos con i(${uN}) = ${fmt(iConvertido,2)}% y n(${uN}) = ${fmt(n,2)}.`;
+      if(window.MathJax && window.MathJax.typesetPromise) window.MathJax.typesetPromise([detail]);
+      renderFinal(c0, iConvertido, n);
+    }
+  }
+
+  // Estado inicial: nada elegido todavía, los campos permanecen ocultos hasta que el
+  // alumno elija una pestaña o el botón de carga manual.
+})();
+
+
+(function(){
+
+const $ = id => document.getElementById(id);
+
+
+const PY_RATE = {"Anual":1,"Semestral":2,"Cuatrimestral":3,"Trimestral":4,"Bimestral":6,"Mensual":12};
+const PY_OP   = {"Año":1,"Semestre":2,"Cuatrimestre":3,"Trimestre":4,"Bimestre":6,"Mes":12,"Día":360};
+
+function pyRate(unit, dias){
+  if(unit === "Otro") return 360/parseFloat(dias||360);
+  return PY_RATE[unit];
+}
+function pyOp(unit){ return PY_OP[unit]; }
+
+function mechanicOf(regimenStr){ return regimenStr.includes("Compuesto") ? "compound" : "simple"; }
+function natureOf(tipoStr){ return tipoStr === "Tasa de Descuento" ? "discount" : "interest"; }
+
+// ---- régimen simple => Nominal forzado; tipo Rentabilidad => Efectiva forzado (prioridad si ambas aplican) ----
+function updateCaracterConstraint(regimenId, tipoId, caracterId){
+  const isSimple = $(regimenId).value.includes("Simple");
+  const isRentabilidad = $(tipoId).value === "Tasa de Rentabilidad";
+  const sel = $(caracterId);
+  const efectivaOpt = Array.from(sel.options).find(o => o.text === "Efectiva");
+  const nominalOpt   = Array.from(sel.options).find(o => o.text === "Nominal");
+
+  if(isRentabilidad){
+    // "Tasa de Rentabilidad" siempre es una tasa efectiva: Nominal deshabilitada
+    nominalOpt.disabled = true;
+    efectivaOpt.disabled = false;
+    if(sel.value === "Nominal") sel.value = "Efectiva";
+  } else if(isSimple){
+    // régimen simple: única capitalización, solo admite Nominal
+    efectivaOpt.disabled = true;
+    nominalOpt.disabled = false;
+    if(sel.value === "Efectiva") sel.value = "Nominal";
+  } else {
+    efectivaOpt.disabled = false;
+    nominalOpt.disabled = false;
+  }
+}
+function refreshRegimenConstraints(){
+  updateCaracterConstraint('te1_d_regimen','te1_d_tipo','te1_d_caracter');
+  updateCaracterConstraint('te1_t_regimen','te1_t_tipo','te1_t_caracter');
+  updateTipoConstraint('te1_d_regimen','te1_d_tipo');
+  updateTipoConstraint('te1_t_regimen','te1_t_tipo');
+}
+
+// ---- régimen de interés => Tasa de Descuento deshabilitada; régimen de descuento => Tasa de Interés/Rentabilidad deshabilitadas ----
+function updateTipoConstraint(regimenId, tipoId){
+  const regimen = $(regimenId).value;
+  const sel = $(tipoId);
+  const isInteres = regimen.includes("Interés");
+  const isDescuento = regimen.includes("Descuento");
+  const optDescuento = Array.from(sel.options).find(o => o.text === "Tasa de Descuento");
+  const optInteres   = Array.from(sel.options).find(o => o.text === "Tasa de Interés");
+  const optRenta     = Array.from(sel.options).find(o => o.text === "Tasa de Rentabilidad");
+
+  optDescuento.disabled = isInteres;
+  optInteres.disabled   = isDescuento;
+  optRenta.disabled     = true; // versión restringida a RIS: la Tasa de Rentabilidad queda siempre deshabilitada
+
+  if(isInteres && sel.value === "Tasa de Descuento"){
+    sel.value = "Tasa de Interés";
+  }
+  if(isDescuento && sel.value !== "Tasa de Descuento"){
+    sel.value = "Tasa de Descuento";
+  }
+  if(sel.value === "Tasa de Rentabilidad"){
+    sel.value = "Tasa de Interés";
+  }
+}
+$('te1_d_regimen').addEventListener('change', ()=>{ refreshRegimenConstraints(); refreshConditionals(); });
+$('te1_t_regimen').addEventListener('change', ()=>{ refreshRegimenConstraints(); refreshConditionals(); });
+$('te1_d_tipo').addEventListener('change', ()=>{ refreshRegimenConstraints(); refreshConditionals(); });
+$('te1_t_tipo').addEventListener('change', ()=>{ refreshRegimenConstraints(); refreshConditionals(); });
+
+// ---- conditional field enabling ----
+function refreshConditionals(){
+  const dSimple = $('te1_d_regimen').value.includes("Simple");
+  const dNominal = $('te1_d_caracter').value === "Nominal" && !dSimple;
+  $('te1_d_capitalizacion_wrap').classList.toggle('disabled', !dNominal);
+  const dOtroPlazo = $('te1_d_plazo').value === "Otro";
+  $('te1_d_plazo_dias_wrap').classList.toggle('disabled', !dOtroPlazo);
+  const dOtroCap = $('te1_d_capitalizacion').value === "Otro";
+  $('te1_d_capitalizacion_dias_wrap').classList.toggle('disabled', !(dNominal && dOtroCap));
+
+  const tSimple = $('te1_t_regimen').value.includes("Simple");
+  const tNominal = $('te1_t_caracter').value === "Nominal" && !tSimple;
+  $('te1_t_capitalizacion_wrap').classList.toggle('disabled', !tNominal);
+  const tOtroPlazo = $('te1_t_plazo').value === "Otro";
+  $('te1_t_plazo_dias_wrap').classList.toggle('disabled', !tOtroPlazo);
+  const tOtroCap = $('te1_t_capitalizacion').value === "Otro";
+  $('te1_t_capitalizacion_dias_wrap').classList.toggle('disabled', !(tNominal && tOtroCap));
+}
+['te1_d_caracter','te1_d_plazo','te1_d_capitalizacion','te1_t_caracter','te1_t_plazo','te1_t_capitalizacion'].forEach(id=>{
+  $(id).addEventListener('change', refreshConditionals);
+});
+
+// integer-only enforcement for día fields
+['te1_d_plazo_dias','te1_d_capitalizacion_dias','te1_t_plazo_dias','te1_t_capitalizacion_dias'].forEach(id=>{
+  $(id).addEventListener('input', e=>{
+    let v = e.target.value.replace(/[^0-9]/g,'');
+    if(v === "" ) { e.target.value = v; return; }
+    v = String(Math.max(1, parseInt(v,10)));
+    e.target.value = v;
+  });
+});
+
+// decimal-number enforcement for "Valor de la tasa dato (%)" — admite coma o punto como separador
+function parseDecimal(str){
+  return parseFloat(String(str).replace(',', '.'));
+}
+$('te1_d_valor').addEventListener('input', e=>{
+  let v = e.target.value;
+  // solo dígitos, un separador decimal (, o .) y un signo negativo inicial opcional
+  v = v.replace(/[^0-9.,-]/g, '');
+  v = v.replace(/(?!^)-/g, '');           // signo "-" solo al inicio
+  const seps = v.match(/[.,]/g);
+  if(seps && seps.length > 1){
+    const first = v.search(/[.,]/);
+    v = v.slice(0, first+1) + v.slice(first+1).replace(/[.,]/g, '');
+  }
+  e.target.value = v;
+});
+
+function fmtPct(x){
+  const d = parseInt($('te1_decimales').value, 10);
+  const pct = (x*100).toLocaleString('es-AR', {minimumFractionDigits:d, maximumFractionDigits:d});
+  return pct + ' %';
+}
+function fmtNum(x, d=6){
+  return x.toLocaleString('es-AR', {minimumFractionDigits:d, maximumFractionDigits:d});
+}
+
+function computePivot(mechanic, nature, r, py_bt, py_bc, isNominal, n_years){
+  if(mechanic==='compound' && nature==='interest'){
+    return isNominal ? Math.pow(1+r*py_bt/py_bc, py_bc)-1 : Math.pow(1+r, py_bt)-1;
+  }
+  if(mechanic==='compound' && nature==='discount'){
+    const d = isNominal ? 1-Math.pow(1-r*py_bt/py_bc, py_bc) : 1-Math.pow(1-r, py_bt);
+    return d/(1-d);
+  }
+  if(mechanic==='simple' && nature==='interest'){
+    const is_annual = r*py_bt;
+    return Math.pow(1+is_annual*n_years, 1/n_years)-1;
+  }
+  // simple & discount
+  const ds_annual = r*py_bt;
+  return Math.pow(1-ds_annual*n_years, -1/n_years)-1;
+}
+
+function annualInTarget(mechanic, nature, i, n_years){
+  if(mechanic==='compound' && nature==='interest') return i;
+  if(mechanic==='compound' && nature==='discount') return i/(1+i);
+  if(mechanic==='simple' && nature==='interest') return (Math.pow(1+i,n_years)-1)/n_years;
+  return (1-Math.pow(1+i,-n_years))/n_years; // simple & discount
+}
+
+function reexpress(mechanic, nature, ann, py_bt_t, py_bc_t, isNominal){
+  if(mechanic==='compound' && nature==='interest'){
+    return isNominal ? (py_bc_t/py_bt_t)*(Math.pow(1+ann,1/py_bc_t)-1) : Math.pow(1+ann,1/py_bt_t)-1;
+  }
+  if(mechanic==='compound' && nature==='discount'){
+    return isNominal ? (py_bc_t/py_bt_t)*(1-Math.pow(1-ann,1/py_bc_t)) : 1-Math.pow(1-ann,1/py_bt_t);
+  }
+  return ann/py_bt_t; // simple: nominal = efectiva
+}
+
+function formulaText(mechanic, nature, isNominal){
+  if(mechanic==='compound' && nature==='interest')
+    return isNominal ? "r = (py_bc_t/py_bt_t) · [(1+i)^(1/py_bc_t) − 1]" : "r = (1+i)^(1/py_bt_t) − 1";
+  if(mechanic==='compound' && nature==='discount')
+    return isNominal ? "r = (py_bc_t/py_bt_t) · [1 − (1−d)^(1/py_bc_t)]" : "r = 1 − (1−d)^(1/py_bt_t)";
+  if(mechanic==='simple' && nature==='interest')
+    return "r = i_s / py_bt_t   donde i_s = [(1+i)^n − 1] / n   (nominal = efectiva, régimen lineal)";
+  return "r = d_s / py_bt_t   donde d_s = [1 − (1+i)^(−n)] / n   (nominal = efectiva, régimen lineal)";
+}
+
+function calcular(){
+  $('te1_errBox').textContent = "";
+  try{
+    // ---- dato ----
+    const d_mech = mechanicOf($('te1_d_regimen').value);
+    const d_nat  = natureOf($('te1_d_tipo').value);
+    const d_isNom = $('te1_d_caracter').value === "Nominal";
+    const r = parseDecimal($('te1_d_valor').value)/100;
+    if(isNaN(r)) throw new Error("Ingresá un valor numérico válido para la tasa dato (admite coma o punto decimal).");
+    const py_bt = pyRate($('te1_d_plazo').value, $('te1_d_plazo_dias').value);
+    const py_bc = d_isNom ? pyRate($('te1_d_capitalizacion').value, $('te1_d_capitalizacion_dias').value) : null;
+
+    if($('te1_d_plazo').value==="Otro" && (!$('te1_d_plazo_dias').value || parseInt($('te1_d_plazo_dias').value)<1))
+      throw new Error("Ingresá un plazo en días válido (entero positivo) para la tasa dato.");
+    if(d_isNom && $('te1_d_capitalizacion').value==="Otro" && (!$('te1_d_capitalizacion_dias').value || parseInt($('te1_d_capitalizacion_dias').value)<1))
+      throw new Error("Ingresá un plazo en días válido (entero positivo) para la capitalización de la tasa dato.");
+
+    // ---- operación ----
+    const n = parseFloat($('te1_op_n').value);
+    const n_years = n / pyOp($('te1_op_unidad').value);
+
+    // ---- pivote ----
+    const i = computePivot(d_mech, d_nat, r, py_bt, py_bc, d_isNom, n_years);
+
+    // ---- deseada ----
+    const t_mech = mechanicOf($('te1_t_regimen').value);
+    const t_nat  = natureOf($('te1_t_tipo').value);
+    const t_isNom = $('te1_t_caracter').value === "Nominal";
+    const py_bt_t = pyRate($('te1_t_plazo').value, $('te1_t_plazo_dias').value);
+    const py_bc_t = t_isNom ? pyRate($('te1_t_capitalizacion').value, $('te1_t_capitalizacion_dias').value) : null;
+
+    if($('te1_t_plazo').value==="Otro" && (!$('te1_t_plazo_dias').value || parseInt($('te1_t_plazo_dias').value)<1))
+      throw new Error("Ingresá un plazo en días válido (entero positivo) para la tasa a obtener.");
+    if(t_isNom && $('te1_t_capitalizacion').value==="Otro" && (!$('te1_t_capitalizacion_dias').value || parseInt($('te1_t_capitalizacion_dias').value)<1))
+      throw new Error("Ingresá un plazo en días válido (entero positivo) para la capitalización deseada.");
+
+    const ann = annualInTarget(t_mech, t_nat, i, n_years);
+    const final = reexpress(t_mech, t_nat, ann, py_bt_t, py_bc_t || 1, t_isNom);
+
+    // ---- etiqueta combinada de la tasa pedida ----
+    const tipoLbl = $('te1_t_tipo').value.toUpperCase();
+    const caracterLbl = $('te1_t_caracter').value.toUpperCase();
+    const plazoLbl = $('te1_t_plazo').value === "Otro"
+      ? `DE ${parseInt($('te1_t_plazo_dias').value,10)} DÍAS`
+      : $('te1_t_plazo').value.toUpperCase();
+    const regimenLbl = $('te1_t_regimen').value;
+    $('te1_r_label').textContent = `TASA EQUIVALENTE PEDIDA: ${tipoLbl} ${caracterLbl} ${plazoLbl} (${regimenLbl})`;
+
+    // ---- render ----
+    $('te1_r_final').textContent = fmtPct(final);
+    $('te1_r_pivot').textContent = fmtPct(i);
+    $('te1_r_pybt').textContent = fmtNum(py_bt,4);
+    $('te1_r_pybc').textContent = d_isNom ? fmtNum(py_bc,4) : '—';
+    $('te1_r_nyears').textContent = fmtNum(n_years,6) + ' años';
+    $('te1_r_ann').textContent = fmtPct(ann);
+    $('te1_r_pybtt').textContent = fmtNum(py_bt_t,4);
+
+    $('te1_r_formula').textContent =
+`i (pivote) = ${fmtPct(i)}
+tasa anual en régimen deseado = ${fmtPct(ann)}
+${formulaText(t_mech, t_nat, t_isNom)}
+resultado = ${fmtPct(final)}`;
+
+  }catch(err){
+    $('te1_errBox').textContent = err.message;
+    $('te1_r_final').textContent = "—";
+    $('te1_r_formula').textContent = "";
+  }
+}
+
+$('te1_calc').addEventListener('click', calcular);
+$('te1_decimales').addEventListener('change', calcular);
+refreshRegimenConstraints();
+refreshConditionals();
+calcular();
+
+})();
+(function(){
+
+const $ = id => document.getElementById(id);
+
+
+const PY_RATE = {"Anual":1,"Semestral":2,"Cuatrimestral":3,"Trimestral":4,"Bimestral":6,"Mensual":12};
+const PY_OP   = {"Año":1,"Semestre":2,"Cuatrimestre":3,"Trimestre":4,"Bimestre":6,"Mes":12,"Día":360};
+
+function pyRate(unit, dias){
+  if(unit === "Otro") return 360/parseFloat(dias||360);
+  return PY_RATE[unit];
+}
+function pyOp(unit){ return PY_OP[unit]; }
+
+function mechanicOf(regimenStr){ return regimenStr.includes("Compuesto") ? "compound" : "simple"; }
+function natureOf(tipoStr){ return tipoStr === "Tasa de Descuento" ? "discount" : "interest"; }
+
+// ---- régimen simple => Nominal forzado; tipo Rentabilidad => Efectiva forzado (prioridad si ambas aplican) ----
+function updateCaracterConstraint(regimenId, tipoId, caracterId){
+  const isSimple = $(regimenId).value.includes("Simple");
+  const isRentabilidad = $(tipoId).value === "Tasa de Rentabilidad";
+  const sel = $(caracterId);
+  const efectivaOpt = Array.from(sel.options).find(o => o.text === "Efectiva");
+  const nominalOpt   = Array.from(sel.options).find(o => o.text === "Nominal");
+
+  if(isRentabilidad){
+    // "Tasa de Rentabilidad" siempre es una tasa efectiva: Nominal deshabilitada
+    nominalOpt.disabled = true;
+    efectivaOpt.disabled = false;
+    if(sel.value === "Nominal") sel.value = "Efectiva";
+  } else if(isSimple){
+    // régimen simple: única capitalización, solo admite Nominal
+    efectivaOpt.disabled = true;
+    nominalOpt.disabled = false;
+    if(sel.value === "Efectiva") sel.value = "Nominal";
+  } else {
+    efectivaOpt.disabled = false;
+    nominalOpt.disabled = false;
+  }
+}
+function refreshRegimenConstraints(){
+  updateCaracterConstraint('te2_d_regimen','te2_d_tipo','te2_d_caracter');
+  updateCaracterConstraint('te2_t_regimen','te2_t_tipo','te2_t_caracter');
+  updateTipoConstraint('te2_d_regimen','te2_d_tipo');
+  updateTipoConstraint('te2_t_regimen','te2_t_tipo');
+}
+
+// ---- régimen de interés => Tasa de Descuento deshabilitada; régimen de descuento => Tasa de Interés/Rentabilidad deshabilitadas ----
+function updateTipoConstraint(regimenId, tipoId){
+  const regimen = $(regimenId).value;
+  const sel = $(tipoId);
+  const isInteres = regimen.includes("Interés");
+  const isDescuento = regimen.includes("Descuento");
+  const optDescuento = Array.from(sel.options).find(o => o.text === "Tasa de Descuento");
+  const optInteres   = Array.from(sel.options).find(o => o.text === "Tasa de Interés");
+  const optRenta     = Array.from(sel.options).find(o => o.text === "Tasa de Rentabilidad");
+
+  optDescuento.disabled = isInteres;
+  optInteres.disabled   = isDescuento;
+  optRenta.disabled     = isDescuento;
+
+  if(isInteres && sel.value === "Tasa de Descuento"){
+    sel.value = "Tasa de Interés";
+  }
+  if(isDescuento && sel.value !== "Tasa de Descuento"){
+    sel.value = "Tasa de Descuento";
+  }
+}
+$('te2_d_regimen').addEventListener('change', ()=>{ refreshRegimenConstraints(); refreshConditionals(); });
+$('te2_t_regimen').addEventListener('change', ()=>{ refreshRegimenConstraints(); refreshConditionals(); });
+$('te2_d_tipo').addEventListener('change', ()=>{ refreshRegimenConstraints(); refreshConditionals(); });
+$('te2_t_tipo').addEventListener('change', ()=>{ refreshRegimenConstraints(); refreshConditionals(); });
+
+// ---- conditional field enabling ----
+function refreshConditionals(){
+  const dSimple = $('te2_d_regimen').value.includes("Simple");
+  const dNominal = $('te2_d_caracter').value === "Nominal" && !dSimple;
+  $('te2_d_capitalizacion_wrap').classList.toggle('disabled', !dNominal);
+  const dOtroPlazo = $('te2_d_plazo').value === "Otro";
+  $('te2_d_plazo_dias_wrap').classList.toggle('disabled', !dOtroPlazo);
+  const dOtroCap = $('te2_d_capitalizacion').value === "Otro";
+  $('te2_d_capitalizacion_dias_wrap').classList.toggle('disabled', !(dNominal && dOtroCap));
+
+  const tSimple = $('te2_t_regimen').value.includes("Simple");
+  const tNominal = $('te2_t_caracter').value === "Nominal" && !tSimple;
+  $('te2_t_capitalizacion_wrap').classList.toggle('disabled', !tNominal);
+  const tOtroPlazo = $('te2_t_plazo').value === "Otro";
+  $('te2_t_plazo_dias_wrap').classList.toggle('disabled', !tOtroPlazo);
+  const tOtroCap = $('te2_t_capitalizacion').value === "Otro";
+  $('te2_t_capitalizacion_dias_wrap').classList.toggle('disabled', !(tNominal && tOtroCap));
+}
+['te2_d_caracter','te2_d_plazo','te2_d_capitalizacion','te2_t_caracter','te2_t_plazo','te2_t_capitalizacion'].forEach(id=>{
+  $(id).addEventListener('change', refreshConditionals);
+});
+
+// integer-only enforcement for día fields
+['te2_d_plazo_dias','te2_d_capitalizacion_dias','te2_t_plazo_dias','te2_t_capitalizacion_dias'].forEach(id=>{
+  $(id).addEventListener('input', e=>{
+    let v = e.target.value.replace(/[^0-9]/g,'');
+    if(v === "" ) { e.target.value = v; return; }
+    v = String(Math.max(1, parseInt(v,10)));
+    e.target.value = v;
+  });
+});
+
+// decimal-number enforcement for "Valor de la tasa dato (%)" — admite coma o punto como separador
+function parseDecimal(str){
+  return parseFloat(String(str).replace(',', '.'));
+}
+$('te2_d_valor').addEventListener('input', e=>{
+  let v = e.target.value;
+  // solo dígitos, un separador decimal (, o .) y un signo negativo inicial opcional
+  v = v.replace(/[^0-9.,-]/g, '');
+  v = v.replace(/(?!^)-/g, '');           // signo "-" solo al inicio
+  const seps = v.match(/[.,]/g);
+  if(seps && seps.length > 1){
+    const first = v.search(/[.,]/);
+    v = v.slice(0, first+1) + v.slice(first+1).replace(/[.,]/g, '');
+  }
+  e.target.value = v;
+});
+
+function fmtPct(x){
+  const d = parseInt($('te2_decimales').value, 10);
+  const pct = (x*100).toLocaleString('es-AR', {minimumFractionDigits:d, maximumFractionDigits:d});
+  return pct + ' %';
+}
+function fmtNum(x, d=6){
+  return x.toLocaleString('es-AR', {minimumFractionDigits:d, maximumFractionDigits:d});
+}
+
+function computePivot(mechanic, nature, r, py_bt, py_bc, isNominal, n_years){
+  if(mechanic==='compound' && nature==='interest'){
+    return isNominal ? Math.pow(1+r*py_bt/py_bc, py_bc)-1 : Math.pow(1+r, py_bt)-1;
+  }
+  if(mechanic==='compound' && nature==='discount'){
+    const d = isNominal ? 1-Math.pow(1-r*py_bt/py_bc, py_bc) : 1-Math.pow(1-r, py_bt);
+    return d/(1-d);
+  }
+  if(mechanic==='simple' && nature==='interest'){
+    const is_annual = r*py_bt;
+    return Math.pow(1+is_annual*n_years, 1/n_years)-1;
+  }
+  // simple & discount
+  const ds_annual = r*py_bt;
+  return Math.pow(1-ds_annual*n_years, -1/n_years)-1;
+}
+
+function annualInTarget(mechanic, nature, i, n_years){
+  if(mechanic==='compound' && nature==='interest') return i;
+  if(mechanic==='compound' && nature==='discount') return i/(1+i);
+  if(mechanic==='simple' && nature==='interest') return (Math.pow(1+i,n_years)-1)/n_years;
+  return (1-Math.pow(1+i,-n_years))/n_years; // simple & discount
+}
+
+function reexpress(mechanic, nature, ann, py_bt_t, py_bc_t, isNominal){
+  if(mechanic==='compound' && nature==='interest'){
+    return isNominal ? (py_bc_t/py_bt_t)*(Math.pow(1+ann,1/py_bc_t)-1) : Math.pow(1+ann,1/py_bt_t)-1;
+  }
+  if(mechanic==='compound' && nature==='discount'){
+    return isNominal ? (py_bc_t/py_bt_t)*(1-Math.pow(1-ann,1/py_bc_t)) : 1-Math.pow(1-ann,1/py_bt_t);
+  }
+  return ann/py_bt_t; // simple: nominal = efectiva
+}
+
+function formulaText(mechanic, nature, isNominal){
+  if(mechanic==='compound' && nature==='interest')
+    return isNominal ? "r = (py_bc_t/py_bt_t) · [(1+i)^(1/py_bc_t) − 1]" : "r = (1+i)^(1/py_bt_t) − 1";
+  if(mechanic==='compound' && nature==='discount')
+    return isNominal ? "r = (py_bc_t/py_bt_t) · [1 − (1−d)^(1/py_bc_t)]" : "r = 1 − (1−d)^(1/py_bt_t)";
+  if(mechanic==='simple' && nature==='interest')
+    return "r = i_s / py_bt_t   donde i_s = [(1+i)^n − 1] / n   (nominal = efectiva, régimen lineal)";
+  return "r = d_s / py_bt_t   donde d_s = [1 − (1+i)^(−n)] / n   (nominal = efectiva, régimen lineal)";
+}
+
+function calcular(){
+  $('te2_errBox').textContent = "";
+  try{
+    // ---- dato ----
+    const d_mech = mechanicOf($('te2_d_regimen').value);
+    const d_nat  = natureOf($('te2_d_tipo').value);
+    const d_isNom = $('te2_d_caracter').value === "Nominal";
+    const r = parseDecimal($('te2_d_valor').value)/100;
+    if(isNaN(r)) throw new Error("Ingresá un valor numérico válido para la tasa dato (admite coma o punto decimal).");
+    const py_bt = pyRate($('te2_d_plazo').value, $('te2_d_plazo_dias').value);
+    const py_bc = d_isNom ? pyRate($('te2_d_capitalizacion').value, $('te2_d_capitalizacion_dias').value) : null;
+
+    if($('te2_d_plazo').value==="Otro" && (!$('te2_d_plazo_dias').value || parseInt($('te2_d_plazo_dias').value)<1))
+      throw new Error("Ingresá un plazo en días válido (entero positivo) para la tasa dato.");
+    if(d_isNom && $('te2_d_capitalizacion').value==="Otro" && (!$('te2_d_capitalizacion_dias').value || parseInt($('te2_d_capitalizacion_dias').value)<1))
+      throw new Error("Ingresá un plazo en días válido (entero positivo) para la capitalización de la tasa dato.");
+
+    // ---- operación ----
+    const n = parseFloat($('te2_op_n').value);
+    const n_years = n / pyOp($('te2_op_unidad').value);
+
+    // ---- pivote ----
+    const i = computePivot(d_mech, d_nat, r, py_bt, py_bc, d_isNom, n_years);
+
+    // ---- deseada ----
+    const t_mech = mechanicOf($('te2_t_regimen').value);
+    const t_nat  = natureOf($('te2_t_tipo').value);
+    const t_isNom = $('te2_t_caracter').value === "Nominal";
+    const py_bt_t = pyRate($('te2_t_plazo').value, $('te2_t_plazo_dias').value);
+    const py_bc_t = t_isNom ? pyRate($('te2_t_capitalizacion').value, $('te2_t_capitalizacion_dias').value) : null;
+
+    if($('te2_t_plazo').value==="Otro" && (!$('te2_t_plazo_dias').value || parseInt($('te2_t_plazo_dias').value)<1))
+      throw new Error("Ingresá un plazo en días válido (entero positivo) para la tasa a obtener.");
+    if(t_isNom && $('te2_t_capitalizacion').value==="Otro" && (!$('te2_t_capitalizacion_dias').value || parseInt($('te2_t_capitalizacion_dias').value)<1))
+      throw new Error("Ingresá un plazo en días válido (entero positivo) para la capitalización deseada.");
+
+    const ann = annualInTarget(t_mech, t_nat, i, n_years);
+    const final = reexpress(t_mech, t_nat, ann, py_bt_t, py_bc_t || 1, t_isNom);
+
+    // ---- etiqueta combinada de la tasa pedida ----
+    const tipoLbl = $('te2_t_tipo').value.toUpperCase();
+    const caracterLbl = $('te2_t_caracter').value.toUpperCase();
+    const plazoLbl = $('te2_t_plazo').value === "Otro"
+      ? `DE ${parseInt($('te2_t_plazo_dias').value,10)} DÍAS`
+      : $('te2_t_plazo').value.toUpperCase();
+    const regimenLbl = $('te2_t_regimen').value;
+    $('te2_r_label').textContent = `TASA EQUIVALENTE PEDIDA: ${tipoLbl} ${caracterLbl} ${plazoLbl} (${regimenLbl})`;
+
+    // ---- render ----
+    $('te2_r_final').textContent = fmtPct(final);
+    $('te2_r_pivot').textContent = fmtPct(i);
+    $('te2_r_pybt').textContent = fmtNum(py_bt,4);
+    $('te2_r_pybc').textContent = d_isNom ? fmtNum(py_bc,4) : '—';
+    $('te2_r_nyears').textContent = fmtNum(n_years,6) + ' años';
+    $('te2_r_ann').textContent = fmtPct(ann);
+    $('te2_r_pybtt').textContent = fmtNum(py_bt_t,4);
+
+    $('te2_r_formula').textContent =
+`i (pivote) = ${fmtPct(i)}
+tasa anual en régimen deseado = ${fmtPct(ann)}
+${formulaText(t_mech, t_nat, t_isNom)}
+resultado = ${fmtPct(final)}`;
+
+  }catch(err){
+    $('te2_errBox').textContent = err.message;
+    $('te2_r_final').textContent = "—";
+    $('te2_r_formula').textContent = "";
+  }
+}
+
+$('te2_calc').addEventListener('click', calcular);
+$('te2_decimales').addEventListener('change', calcular);
+refreshRegimenConstraints();
+refreshConditionals();
+calcular();
+
+})();
+</script>
+
+</body>
+</html>
