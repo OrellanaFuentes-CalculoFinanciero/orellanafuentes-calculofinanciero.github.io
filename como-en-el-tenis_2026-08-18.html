@@ -1,0 +1,2409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="author" content="Orlando Orellana">
+<meta name="date" content="2026-08-18">
+<!--
+  Autor: Orlando Orellana
+  Licenciado en Economía (FCE-UBA)
+  Profesor Adjunto Interino de Cálculo Financiero (FCE-UBA)
+  Unidad: Como en el tenis, trabajemos juntos para reducir los errores no forzados
+  Fecha de creación de este material: 18 de agosto de 2026
+  Material de autoría original — cualquier reproducción o modificación
+  que se atribuya la autoría del contenido original constituye una
+  apropiación indebida.
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Como en el tenis, trabajemos juntos para reducir los errores no forzados — Cálculo Financiero</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" defer crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2430;
+    --ink-soft:#5B6570;
+    --paper:#FFFFFF;
+    --paper-alt:#F3F6F5;
+    --paper-deep:#ECF0EE;
+    --gold:#B8862B;
+    --gold-soft:#E8D9B8;
+    --teal:#1F6F6B;
+    --teal-soft:#DCEBEA;
+    --line:#DDE3E0;
+    --line-strong:#B9C2BE;
+    --pastel-gold:#FBF1DC;
+    --pastel-teal:#E3F2F0;
+    --pastel-blue:#E7EEF7;
+    --pastel-rust:#EBA99B;
+    --rust:#A8462F;
+    --radius:4px;
+    --serif:'Fraunces', Georgia, serif;
+    --sans:'Source Sans 3', -apple-system, sans-serif;
+    --mono:'Source Sans 3', -apple-system, sans-serif;
+  }
+  /* ---------- temas alternativos para distintos entornos de luminosidad ---------- */
+  html[data-theme="oscuro"]{
+    --ink:#EDEFF3; --ink-soft:#9FB0C3; --paper:#12202F; --paper-alt:#1B2B3D; --paper-deep:#0E1826;
+    --gold:#D9B24C; --gold-soft:#4A3F22; --teal:#5FC4B8; --teal-soft:#173A38;
+    --line:#28394C; --line-strong:#3C5066;
+    --pastel-gold:#3A3221; --pastel-teal:#16302D; --pastel-blue:#1A2A3E; --pastel-rust:#4A2A20;
+  }
+  html[data-theme="contraste"]{
+    --ink:#000000; --ink-soft:#2E2E2E; --paper:#FFFFFF; --paper-alt:#EFEFEF; --paper-deep:#E2E2E2;
+    --gold:#7A5900; --gold-soft:#FFE6A0; --teal:#00594E; --teal-soft:#CBEAE4;
+    --line:#A6A6A6; --line-strong:#707070;
+    --pastel-gold:#FFEFC2; --pastel-teal:#CFEEE8; --pastel-blue:#D6E4F5; --pastel-rust:#F0A594;
+  }
+  html[data-theme="sepia"]{
+    --ink:#3B2F22; --ink-soft:#70604A; --paper:#F6EFDD; --paper-alt:#EFE4C9; --paper-deep:#E6D8B7;
+    --gold:#9C6B26; --gold-soft:#E6CC93; --teal:#5C7B67; --teal-soft:#DCE5D3;
+    --line:#DDCEA5; --line-strong:#C6B285;
+    --pastel-gold:#F1E1B5; --pastel-teal:#DEE8D6; --pastel-blue:#E1E6EA; --pastel-rust:#DE9F8C;
+  }
+  *{box-sizing:border-box; font-feature-settings:"zero" 0; font-variant-numeric:normal;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:0 28px;}
+
+  /* ---------- selector de apariencia ---------- */
+  .theme-switcher{
+    position:fixed; top:16px; right:16px; z-index:150; display:flex; align-items:center; gap:9px;
+    background:var(--paper); border:1px solid var(--line-strong); border-radius:20px; padding:7px 12px 7px 14px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.15);
+  }
+  .theme-switcher-label{
+    font-family:var(--mono); font-size:9.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft);
+  }
+  .theme-swatch{
+    width:20px; height:20px; border-radius:50%; border:2px solid transparent; cursor:pointer; padding:0;
+    background:linear-gradient(135deg, var(--swatch-bg) 50%, var(--swatch-accent) 50%);
+    transition:border-color .15s, transform .15s;
+  }
+  .theme-swatch:hover{transform:scale(1.12);}
+  .theme-swatch.active{border-color:var(--ink);}
+  @media (max-width:640px){
+    .theme-switcher{top:10px; right:10px; padding:6px 8px;}
+    .theme-switcher-label{display:none;}
+  }
+
+  /* ===== HERO ===== */
+  header.hero{
+    border-bottom:1px solid var(--line);
+    padding:64px 0 48px;
+    background:var(--paper);
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin:0 0 18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--gold);display:inline-block;}
+  h1.title{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(2.3rem,5vw,3.4rem);
+    line-height:1.05;
+    margin:0 0 14px;
+    letter-spacing:-.01em;
+  }
+  h1.title em{font-style:italic;font-weight:500;color:var(--teal);}
+  .subtitle{
+    font-size:1.08rem;
+    color:var(--ink-soft);
+    max-width:56ch;
+    margin:0 0 8px;
+  }
+  .nodo-tag{
+    display:inline-block;
+    margin-top:18px;
+    font-family:var(--mono);
+    font-size:13px;
+    background:var(--paper);
+    border:1px solid var(--line-strong);
+    padding:5px 12px;
+    border-radius:999px;
+    color:var(--ink-soft);
+  }
+  .nodo-tag b{color:var(--ink);}
+
+  /* ===== LIVE LEDGER (signature element) ===== */
+  .ledger{
+    margin:40px 0 0;
+    border:1px solid var(--line-strong);
+    background:var(--paper);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .ledger-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    padding:16px 20px;
+    background:var(--ink);
+    color:var(--paper-alt);
+  }
+  .ledger-head h3{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:1.05rem;
+    margin:0;
+    color:#fff;
+  }
+  .ledger-head span{font-family:var(--mono);font-size:11.5px;color:var(--gold-soft);letter-spacing:.06em;}
+  .ledger-controls{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:0;
+    border-bottom:1px solid var(--line);
+  }
+  .ctrl{
+    padding:16px 20px;
+    border-right:1px solid var(--line);
+  }
+  .ctrl:last-child{border-right:none;}
+  .ctrl label{
+    display:block;
+    font-family:var(--mono);
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--ink-soft);
+    margin-bottom:8px;
+  }
+  .ctrl .val{font-family:var(--mono);color:var(--teal);font-weight:600;}
+  .ctrl input[type=range]{width:100%;accent-color:var(--gold);}
+  .ledger-intro{
+    padding:16px 20px;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+  }
+  .ledger-intro p{
+    margin:0 0 8px;
+    font-size:.92rem;
+    color:var(--ink-soft);
+    max-width:none;
+  }
+  .ledger-intro p:first-child{white-space:nowrap;}
+  @media (max-width:640px){
+    .ledger-intro p:first-child{white-space:normal;}
+  }
+  .ledger-intro p:last-child{margin-bottom:0;}
+  .ledger-intro ul.intro-list{
+    margin:0 0 10px;
+    padding-left:20px;
+    font-size:.92rem;
+    color:var(--ink-soft);
+    max-width:70ch;
+  }
+  .ledger-intro ul.intro-list li{margin-bottom:3px;}
+  .ledger-result{
+    padding:22px 20px 26px;
+    background:var(--paper-alt);
+  }
+  .ledger-sims{
+    padding:22px 20px 26px;
+    background:var(--paper);
+    border-top:1px solid var(--line);
+  }
+  .formula-line{
+    font-family:var(--mono);
+    font-size:14px;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .result-big{
+    font-family:var(--mono);
+    font-size:2.1rem;
+    font-weight:600;
+    color:var(--ink);
+  }
+  .result-big small{
+    font-family:var(--sans);
+    font-size:.95rem;
+    font-weight:500;
+    color:var(--ink-soft);
+    margin-left:8px;
+  }
+  .period-strip{
+    margin-top:18px;
+    display:flex;
+    gap:3px;
+    align-items:flex-end;
+    height:70px;
+  }
+  .period-bar{
+    flex:1;
+    background:var(--teal-soft);
+    border-top:2px solid var(--teal);
+    position:relative;
+    min-width:4px;
+    transition:height .15s ease;
+  }
+
+  /* ===== SECTIONS / ACCORDION ===== */
+  main{padding:8px 0 100px;}
+  .section-block{
+    border-bottom:1px solid var(--line);
+  }
+  .section-toggle{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:26px 0;
+    background:none;
+    border:none;
+    text-align:left;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .section-toggle .num{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--gold);
+    min-width:26px;
+  }
+  .section-toggle h2{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:1.5rem;
+    margin:0;
+    flex:1;
+    color:var(--ink);
+  }
+  .section-toggle .chev{
+    font-family:var(--mono);
+    color:var(--ink-soft);
+    font-size:18px;
+    transition:transform .25s ease;
+  }
+  .section-block.open .chev{transform:rotate(45deg);}
+  .section-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .35s ease;
+  }
+  .section-body-inner{
+    padding:0 0 34px 44px;
+    max-width:64ch;
+  }
+  .section-block.open .section-body{max-height:30000px; overflow:visible;}
+
+  .section-body-inner p{margin:0 0 16px;color:var(--ink);}
+  .section-body-inner ul{margin:0 0 16px;padding-left:22px;color:var(--ink);}
+  .section-body-inner ul li{margin:0 0 8px;}
+  .section-body-inner p.soft{color:var(--ink-soft);}
+  .callout{
+    border-left:3px solid var(--gold);
+    background:var(--pastel-gold);
+    padding:14px 18px;
+    margin:18px 0;
+    font-size:.96rem;
+    border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .callout b{color:var(--ink);}
+  .plain-intro{
+    font-style:italic;
+    color:var(--ink-soft);
+    border-left:3px solid var(--teal);
+    padding:2px 0 2px 16px;
+    margin:0 0 14px;
+    font-size:.97rem;
+  }
+  .plain-intro b{font-style:normal; color:var(--ink);}
+  .ped-license{font-style:italic; color:var(--teal);}
+  .prereq-block{
+    padding:0 0 34px;
+    margin-bottom:8px;
+    border-bottom:1px solid var(--line);
+  }
+  .prereq-tag{
+    display:inline-block;
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink);
+    background:var(--pastel-gold);
+    border:1px solid var(--gold);
+    border-radius:20px;
+    padding:6px 14px;
+    margin:0 0 14px;
+  }
+  .prereq-block h2{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:1.4rem;
+    margin:0 0 18px;
+    color:var(--ink);
+  }
+  .prereq-block p{margin:0 0 16px; color:var(--ink);}
+  .prereq-block p.soft{color:var(--ink-soft);}
+  .formula-box{
+    background:var(--pastel-teal);
+    color:var(--ink);
+    padding:32px 26px;
+    border-radius:var(--radius);
+    margin:20px 0;
+    text-align:center;
+    font-size:1.15rem;
+    line-height:1.9;
+    overflow-x:auto;
+    overflow-y:visible;
+    border:1px solid var(--line-strong);
+  }
+  .formula-box mjx-container{
+    color:var(--ink) !important;
+  }
+  .formula-box mjx-container[jax="CHTML"][display="true"]{
+    margin:0 !important;
+  }
+  .formula-box .label{
+    display:block;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--teal);
+    margin-bottom:10px;
+  }
+  .algebra-steps{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 14px;
+  }
+  .algebra-step{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+  }
+  .algebra-step .step-formula{
+    font-size:1.15rem;
+  }
+  .algebra-step .step-label{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:var(--teal);
+  }
+  .algebra-arrow{
+    font-size:1.2rem;
+    color:var(--ink-soft);
+  }
+  .notation-compare{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin:18px 0 6px;
+  }
+  .notation-col{
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    padding:18px 16px 14px;
+    text-align:center;
+    background:var(--pastel-blue);
+    overflow-x:auto;
+  }
+  .notation-col::-webkit-scrollbar{height:8px;background:#F7F8F7;}
+  .notation-col::-webkit-scrollbar-track{background:#F7F8F7;border-radius:8px;}
+  .notation-col::-webkit-scrollbar-thumb{background:#C9CDCB;border-radius:8px;}
+  .notation-col{scrollbar-width:thin;scrollbar-color:#C9CDCB #F7F8F7;}
+  .notation-col:last-child{background:var(--pastel-gold);}
+  .notation-tag{
+    display:block;
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--teal);
+    margin-bottom:10px;
+  }
+  @media (max-width:640px){
+    .notation-compare{grid-template-columns:1fr;}
+  }
+  .num-inputs{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin-top:18px;
+    padding-top:16px;
+    border-top:1px dashed var(--line-strong);
+  }
+  .num-field label{
+    display:block;
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .num-field .num-wrap{
+    display:flex;
+    align-items:center;
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    background:#fff;
+    overflow:hidden;
+  }
+  .num-field .num-wrap span{
+    padding:8px 10px;
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--ink-soft);
+    background:var(--paper-alt);
+    border-right:1px solid var(--line-strong);
+  }
+  .num-field .num-wrap span.suffix{
+    border-right:none;
+    border-left:1px solid var(--line-strong);
+  }
+  .num-field input[type=number],
+  .num-field input[type=text]{
+    border:none;
+    outline:none;
+    padding:8px 10px;
+    font-family:var(--mono);
+    font-size:14px;
+    width:100%;
+    text-align:center;
+    color:var(--ink);
+    background:transparent;
+  }
+  .num-field input[type=number]::-webkit-inner-spin-button{opacity:.5;}
+
+  /* ===== ALWAYS-VISIBLE MULTI-SIMULATOR BLOCK ===== */
+  .sim-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin:26px 0 20px;
+  }
+  .sim-card{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px 18px 14px;
+    background:var(--paper);
+  }
+  .sim-card.full{grid-column:1 / -1;}
+  .sim-card h4{
+    font-family:var(--serif);
+    font-size:1.02rem;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .sim-card p.sim-desc{
+    font-size:.86rem;
+    color:var(--ink-soft);
+    margin:0 0 16px;
+  }
+  .chart{
+    display:flex;
+    align-items:flex-end;
+    gap:4px;
+    height:110px;
+    padding:0 2px;
+  }
+  .chart-col{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    align-items:center;
+    height:100%;
+    position:relative;
+  }
+  .chart-bar{
+    width:100%;
+    max-width:34px;
+    border-radius:2px 2px 0 0;
+    background:var(--teal-soft);
+    border-top:2px solid var(--teal);
+    transition:height .15s ease;
+    position:relative;
+  }
+  .chart-bar.gold{background:var(--gold-soft);border-top-color:var(--gold);}
+  .chart-bar .bar-value{
+    position:absolute;
+    left:0;right:0;
+    top:5px;
+    font-family:var(--mono);
+    font-size:9px;
+    font-weight:600;
+    color:var(--ink);
+    text-align:center;
+    line-height:1.15;
+    pointer-events:none;
+    white-space:nowrap;
+    overflow:hidden;
+    padding:0 1px;
+  }
+  .chart-bar .bar-value.outside{
+    top:auto;
+    bottom:100%;
+    margin-bottom:3px;
+    color:var(--ink-soft);
+  }
+  .chart-bar .stack-top{
+    position:absolute;
+    left:0;right:0;bottom:100%;
+    border-radius:2px 2px 0 0;
+    background:var(--gold-soft);
+    border-top:2px solid var(--gold);
+  }
+  .chart-bar .stack-top .bar-value{top:4px;}
+  .chart-axis{
+    display:flex;
+    gap:4px;
+    padding:0 2px;
+    margin-top:6px;
+    border-top:1px solid var(--line-strong);
+    padding-top:6px;
+  }
+  .chart-axis span{
+    flex:1;
+    text-align:center;
+    font-family:var(--mono);
+    font-size:10px;
+    color:var(--ink-soft);
+  }
+  .chart-legend{
+    display:flex;
+    gap:16px;
+    margin-top:12px;
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--ink-soft);
+  }
+  .chart-legend .dot{
+    display:inline-block;
+    width:9px;height:9px;
+    border-radius:2px;
+    margin-right:5px;
+    vertical-align:middle;
+  }
+  .flow-labels{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    padding:0 2px;
+  }
+  .flow-labels .flabel{
+    text-align:center;
+    font-size:.72rem;
+    color:var(--ink-soft);
+    line-height:1.3;
+  }
+  .flow-labels .flabel b{display:block;color:var(--ink);font-size:.76rem;}
+  @media (max-width:640px){
+    .sim-grid{grid-template-columns:1fr;}
+    .num-inputs{grid-template-columns:1fr;}
+  }
+    list-style:none;
+    margin:16px 0;
+    padding:0;
+    border-top:1px solid var(--line);
+  }
+  .glossary li{
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+    display:grid;
+    grid-template-columns:64px 1fr;
+    gap:16px;
+  }
+  .glossary .sym{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:1.2rem;
+    color:var(--teal);
+  }
+  .glossary .def{font-size:.95rem;color:var(--ink-soft);}
+  .glossary .def b{color:var(--ink);font-weight:600;}
+
+  .steps{counter-reset:step;margin:20px 0;}
+  .step{
+    position:relative;
+    padding:0 0 22px 38px;
+    border-left:1px solid var(--line);
+    margin-left:10px;
+  }
+  .step:last-child{border-left:1px solid transparent;padding-bottom:0;}
+  .step::before{
+    counter-increment:step;
+    content:counter(step);
+    position:absolute;
+    left:-11px;
+    top:0;
+    width:22px;height:22px;
+    border-radius:50%;
+    background:var(--paper);
+    border:1px solid var(--teal);
+    color:var(--teal);
+    font-family:var(--mono);
+    font-size:12px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .step h4{margin:0 0 6px;font-family:var(--serif);font-weight:600;font-size:1.05rem;}
+  .step p{margin:0;font-size:.95rem;color:var(--ink-soft);}
+
+  table.data{
+    width:100%;
+    border-collapse:collapse;
+    margin:18px 0;
+    font-family:var(--mono);
+    font-size:.86rem;
+  }
+  table.data caption{
+    text-align:left;
+    font-family:var(--sans);
+    font-size:.85rem;
+    color:var(--ink-soft);
+    margin-bottom:8px;
+    caption-side:top;
+  }
+  table.data th{
+    text-align:right;
+    padding:8px 10px;
+    background:var(--ink);
+    color:var(--paper-alt);
+    font-weight:500;
+  }
+  table.data th:first-child, table.data td:first-child{text-align:left;}
+  table.data td{
+    text-align:right;
+    padding:7px 10px;
+    border-bottom:1px solid var(--line);
+  }
+  table.data tr:hover td{background:var(--paper-alt);}
+
+  .example-card{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px 22px;
+    margin:20px 0;
+    background:var(--paper);
+  }
+  .example-card .ex-tag{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--gold);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+  }
+  .example-card h4{
+    font-family:var(--serif);
+    font-size:1.1rem;
+    margin:6px 0 12px;
+    font-weight:600;
+  }
+
+  .placeholder-card{
+    border:1px dashed var(--line-strong);
+    border-radius:var(--radius);
+    padding:26px;
+    text-align:center;
+    color:var(--ink-soft);
+    background:var(--paper-alt);
+  }
+  .placeholder-card .icon{font-size:1.6rem;margin-bottom:8px;display:block;}
+  .placeholder-card b{color:var(--ink);}
+
+  /* ===== Indicadores RIS ===== */
+  .indic-card{
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    padding:26px 26px 28px;
+    background:var(--paper);
+  }
+  .indic-title{font-family:var(--serif); font-weight:600; font-size:1.25rem; margin:0 0 4px;}
+  .indic-sub{color:var(--ink-soft); font-size:.92rem; margin:0 0 20px;}
+  .indic-tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:20px;
+  }
+  .indic-tab{
+    font-family:var(--mono);
+    font-size:12.5px;
+    padding:8px 14px;
+    border-radius:20px;
+    border:1px solid var(--line-strong);
+    background:var(--paper);
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:background .15s,color .15s,border-color .15s;
+  }
+  .indic-tab:hover{border-color:var(--teal);}
+  .indic-tab.active{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .indic-fields{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:22px;
+  }
+  .indic-field label{
+    display:block;
+    font-family:var(--mono);
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .indic-field .indic-wrap{
+    display:flex;
+    align-items:center;
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    background:#fff;
+    overflow:hidden;
+  }
+  .indic-field .indic-wrap span{
+    padding:8px 8px;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-soft);
+    background:var(--paper-alt);
+    border-right:1px solid var(--line-strong);
+  }
+  .indic-field input{
+    border:none;
+    outline:none;
+    padding:8px 8px;
+    font-family:var(--mono);
+    font-size:14px;
+    width:100%;
+    text-align:center;
+    color:var(--ink);
+    background:transparent;
+  }
+  .indic-field.is-target .indic-wrap{
+    background:var(--pastel-gold);
+    border-color:var(--gold);
+  }
+  .indic-field.is-target input{
+    color:var(--gold);
+    font-weight:600;
+  }
+  .indic-field.is-target input::placeholder{color:var(--gold); opacity:.7;}
+  .indic-prompt{
+    color:var(--ink-soft);
+    font-size:.92rem;
+    font-style:italic;
+    padding:14px 0;
+  }
+  .indic-result{
+    background:var(--pastel-teal);
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    padding:18px 20px;
+    margin-bottom:22px;
+  }
+  .indic-result .k{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); margin-bottom:6px;}
+  .indic-result .v{font-family:var(--mono); font-size:1.8rem; font-weight:600; color:var(--ink);}
+  .indic-steps-title{font-family:var(--serif); font-weight:600; font-size:1rem; margin:0 0 10px;}
+  .indic-chart{
+    display:flex;
+    align-items:flex-end;
+    gap:3px;
+    height:70px;
+    margin-top:18px;
+  }
+  .indic-select{
+    width:100%;
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    background:#fff;
+    font-family:var(--mono);
+    font-size:14px;
+    padding:9px 8px;
+    color:var(--ink);
+  }
+  .indic-sync-box{
+    border-radius:var(--radius);
+    padding:16px 18px;
+    margin:18px 0;
+    font-size:.92rem;
+  }
+  .indic-sync-box.ok{background:var(--pastel-teal); border:1px solid var(--teal);}
+  .indic-sync-box.warn{background:var(--pastel-gold); border:1px solid var(--gold);}
+  .indic-sync-box .indic-sync-title{font-weight:700; color:var(--ink); margin-bottom:6px;}
+  .indic-strategy-btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
+  .indic-strategy-btn{
+    font-family:var(--mono);
+    font-size:12px;
+    padding:9px 16px;
+    border-radius:20px;
+    border:1px solid var(--gold);
+    background:#fff;
+    color:var(--ink);
+    cursor:pointer;
+    transition:background .15s,color .15s;
+  }
+  .indic-strategy-btn:hover{background:var(--gold); color:#fff;}
+  .indic-strategy-btn.chosen{background:var(--gold); color:#fff;}
+  .indic-chart .bar{
+    flex:1;
+    background:var(--teal-soft);
+    border-top:2px solid var(--teal);
+    min-width:4px;
+  }
+  @media (max-width:640px){
+    .indic-fields{grid-template-columns:1fr 1fr;}
+  }
+
+  .app-embed{
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    overflow-x:auto;
+    overflow-y:visible;
+    max-width:none;
+    margin-left:-70px;
+    margin-right:-70px;
+  }
+  @media (max-width:760px){
+    .app-embed{margin-left:0;margin-right:0;}
+  }
+  .app-embed-head{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px;
+    padding:14px 28px;
+    background:var(--paper-alt);
+    border-bottom:1px solid var(--line-strong);
+    font-size:.92rem;
+    text-align:center;
+  }
+  .app-embed-head b{color:var(--ink);}
+  .app-embed-tag{
+    font-family:var(--mono);
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--teal);
+    background:var(--pastel-teal);
+    border:1px solid var(--line-strong);
+    border-radius:20px;
+    padding:3px 10px;
+  }
+  .app-embed > div.te1, .app-embed > div.te2{
+    padding:8px 0 20px;
+  }
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:26px 0 60px;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-soft);
+    text-align:center;
+  }
+
+  @media (max-width:640px){
+    .ledger-controls{grid-template-columns:1fr;}
+    .ctrl{border-right:none;border-bottom:1px solid var(--line);}
+    .section-body-inner{padding-left:0;}
+    .glossary li{grid-template-columns:44px 1fr;}
+  }
+
+/* ===== Apps embebidas: tasas equivalentes ===== */
+
+.te1{
+  --ink:#101a24; --ink2:#16222f;
+  --parchment:#efe7d6; --parchment-dim:#c9beaa;
+  --gold:#b98a3d; --gold-bright:#d9ab5c;
+  --teal:#4c8378; --teal-dim:#325850;
+  --rust:#a1503a; --rust-dim:#6e3729;
+  --line: rgba(239,231,214,0.14);
+  --bg-grad1:#1b2836; --bg-grad2:#1a2e2a;
+  --result-bg:#1c1a12;
+  --err:#c96a5a;
+  --hint-bg: rgba(185,138,61,0.1); --hint-border: rgba(185,138,61,0.35);
+  --btn-text:#101a24;
+}
+
+/* Claro — fondo papel claro con texto oscuro */
+/* Esmeralda — oscuro con tinte verde */
+/* Vino — oscuro con tinte borgoña */
+.te1 *{box-sizing:border-box;transition:background-color .25s ease, border-color .25s ease, color .25s ease;}
+.te1{
+  margin:0;
+  background:
+    radial-gradient(ellipse at 20% -10%, var(--bg-grad1) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 0%, var(--bg-grad2) 0%, transparent 45%),
+    var(--ink);
+  color:var(--parchment);
+  font-family:'Source Sans 3',-apple-system,sans-serif;
+  padding:0 0 80px 0;
+  font-variant-numeric: normal;
+  font-feature-settings: "zero" 0, "ss01" 0, "ss02" 0;
+  -webkit-font-feature-settings: "zero" 0, "ss01" 0, "ss02" 0;
+  transition: background-color .25s ease, color .25s ease;
+}
+.te1 .wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+
+.te1 header{padding:52px 28px 32px 40px;max-width:1120px;margin:0 auto;border-bottom:1px solid var(--line);}
+@media(max-width:480px){
+  .te1 header{padding:32px 18px 22px 18px;}
+  .te1 .card-section{padding:0 18px;}
+  .te1 .card{padding:22px 18px 20px 18px;}
+}
+.te1 .eyebrow{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:11.5px;letter-spacing:0.22em;
+  color:var(--gold-bright);text-transform:uppercase;margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.te1 .eyebrow::before{content:"";width:22px;height:1px;background:var(--gold-bright);display:inline-block;}
+.te1 h1{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,40px);
+  line-height:1.14;margin:0 0 14px 0;letter-spacing:-0.01em;
+}
+.te1 h1 em{font-style:italic;color:var(--gold-bright);font-weight:500;}
+.te1 .sub{font-size:15px;color:var(--parchment-dim);max-width:680px;line-height:1.6;}
+.te1 .install-hint{
+  margin-top:18px;padding:10px 14px;background:var(--hint-bg);
+  border:1px solid var(--hint-border);border-radius:2px;
+  font-size:12.5px;color:var(--gold-bright);max-width:680px;line-height:1.5;
+}
+.te1 .install-hint b{color:var(--parchment);}
+
+.te1 .card-section{max-width:1120px;margin:40px auto 0 auto;padding:0 28px;}
+.te1 .card{border:1px solid var(--line);background:var(--ink2);padding:30px 30px 26px 30px;}
+.te1 .card-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border:1px solid var(--gold);color:var(--gold-bright);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:12px;margin-right:10px;
+}
+.te1 .card-title{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:20px;font-weight:600;
+  display:flex;align-items:center;margin-bottom:4px;
+}
+.te1 .card-desc{font-size:13px;color:var(--parchment-dim);margin:0 0 22px 34px;}
+
+.te1 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 26px;}
+@media(max-width:760px){.te1 .grid{grid-template-columns:1fr;}}
+.te1 .field{transition:opacity .15s ease;}
+.te1 .field.disabled{opacity:0.35;pointer-events:none;}
+.te1 .field label{
+  display:flex;align-items:baseline;gap:6px;
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:10.5px;letter-spacing:0.05em;
+  text-transform:uppercase;color:var(--parchment-dim);margin-bottom:7px;
+}
+.te1 .field label .num{color:var(--gold-bright);font-weight:600;}
+.te1 .field select, .te1 .field input{
+  width:100%;background:var(--ink);border:1px solid var(--line);color:var(--parchment);
+  padding:12px 10px;font-family:'Source Sans 3',-apple-system,sans-serif;font-size:16px;border-radius:1px;
+  min-height:44px;text-align:center;
+}
+.te1 .field select:focus, .te1 .field input:focus{outline:none;border-color:var(--gold);}
+.te1 .field .hint{font-size:11px;color:var(--parchment-dim);margin-top:5px;font-style:italic;}
+.te1 .field.indent{padding-left:18px;border-left:2px solid var(--line);}
+
+.te1 .pct-wrap{position:relative;}
+.te1 .pct-wrap input{
+  padding-right:36px;text-align:center;font-variant-numeric:normal;
+  font-feature-settings:"zero" 0;-webkit-font-feature-settings:"zero" 0;
+}
+.te1 .pct-wrap .pct-suffix{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  color:var(--gold-bright);font-family:'Source Sans 3',-apple-system,sans-serif;
+  font-size:15px;font-weight:600;pointer-events:none;
+}
+
+.te1 .run-row{margin-top:28px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
+.te1 button#calc{
+  background:var(--gold);color:var(--btn-text);border:none;padding:15px 30px;
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:13px;letter-spacing:0.1em;
+  text-transform:uppercase;font-weight:600;cursor:pointer;transition:background .15s ease;
+  min-height:48px;-webkit-tap-highlight-color:transparent;
+}
+.te1 button#calc:hover{background:var(--gold-bright);}
+.te1 .err{font-family:'Source Sans 3',-apple-system,sans-serif;font-size:12px;color:var(--err);}
+
+.te1 .result-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;}
+@media(max-width:760px){.te1 .result-grid{grid-template-columns:1fr;}}
+.te1 .result-box{border:1px solid var(--gold);background:var(--result-bg);padding:22px 24px;}
+.te1 .result-box .lbl{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-weight:700;font-size:10.5px;letter-spacing:0.1em;color:var(--gold-bright);text-transform:uppercase;margin-bottom:8px;}
+.te1 .result-box .val{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-size:30px;font-weight:700;color:var(--parchment);}
+.te1 .subresults{display:flex;flex-direction:column;gap:10px;}
+.te1 .subresults .row{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 0;font-size:13px;}
+.te1 .subresults .row span:first-child{color:var(--parchment-dim);}
+.te1 .subresults .row span:last-child{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-weight:700;}
+
+.te1 .formula-block{
+  margin-top:18px;padding:14px 16px;background:rgba(0,0,0,0.25);border-left:2px solid var(--gold);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-size:13px;line-height:1.9;color:var(--parchment-dim);white-space:pre-wrap;
+}
+
+.te1 footer{max-width:1120px;margin:50px auto 0 auto;padding:20px 28px 0 28px;border-top:1px solid var(--line);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:11px;color:var(--parchment-dim);}
+
+@media(max-width:480px){
+  }
+
+
+.te2{
+  --ink:#101a24; --ink2:#16222f;
+  --parchment:#efe7d6; --parchment-dim:#c9beaa;
+  --gold:#b98a3d; --gold-bright:#d9ab5c;
+  --teal:#4c8378; --teal-dim:#325850;
+  --rust:#a1503a; --rust-dim:#6e3729;
+  --line: rgba(239,231,214,0.14);
+  --bg-grad1:#1b2836; --bg-grad2:#1a2e2a;
+  --result-bg:#1c1a12;
+  --err:#c96a5a;
+  --hint-bg: rgba(185,138,61,0.1); --hint-border: rgba(185,138,61,0.35);
+  --btn-text:#101a24;
+}
+
+/* Claro — fondo papel claro con texto oscuro */
+/* Esmeralda — oscuro con tinte verde */
+/* Vino — oscuro con tinte borgoña */
+.te2 *{box-sizing:border-box;transition:background-color .25s ease, border-color .25s ease, color .25s ease;}
+.te2{
+  margin:0;
+  background:
+    radial-gradient(ellipse at 20% -10%, var(--bg-grad1) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 0%, var(--bg-grad2) 0%, transparent 45%),
+    var(--ink);
+  color:var(--parchment);
+  font-family:'Source Sans 3',-apple-system,sans-serif;
+  padding:0 0 80px 0;
+  font-variant-numeric: normal;
+  font-feature-settings: "zero" 0, "ss01" 0, "ss02" 0;
+  -webkit-font-feature-settings: "zero" 0, "ss01" 0, "ss02" 0;
+  transition: background-color .25s ease, color .25s ease;
+}
+.te2 .wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+
+.te2 header{padding:52px 28px 32px 40px;max-width:1120px;margin:0 auto;border-bottom:1px solid var(--line);}
+@media(max-width:480px){
+  .te2 header{padding:32px 18px 22px 18px;}
+  .te2 .card-section{padding:0 18px;}
+  .te2 .card{padding:22px 18px 20px 18px;}
+}
+.te2 .eyebrow{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:11.5px;letter-spacing:0.22em;
+  color:var(--gold-bright);text-transform:uppercase;margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.te2 .eyebrow::before{content:"";width:22px;height:1px;background:var(--gold-bright);display:inline-block;}
+.te2 h1{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,40px);
+  line-height:1.14;margin:0 0 14px 0;letter-spacing:-0.01em;
+}
+.te2 h1 em{font-style:italic;color:var(--gold-bright);font-weight:500;}
+.te2 .sub{font-size:15px;color:var(--parchment-dim);max-width:680px;line-height:1.6;}
+.te2 .install-hint{
+  margin-top:18px;padding:10px 14px;background:var(--hint-bg);
+  border:1px solid var(--hint-border);border-radius:2px;
+  font-size:12.5px;color:var(--gold-bright);max-width:680px;line-height:1.5;
+}
+.te2 .install-hint b{color:var(--parchment);}
+
+.te2 .card-section{max-width:1120px;margin:40px auto 0 auto;padding:0 28px;}
+.te2 .card{border:1px solid var(--line);background:var(--ink2);padding:30px 30px 26px 30px;}
+.te2 .card-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border:1px solid var(--gold);color:var(--gold-bright);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:12px;margin-right:10px;
+}
+.te2 .card-title{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:20px;font-weight:600;
+  display:flex;align-items:center;margin-bottom:4px;
+}
+.te2 .card-desc{font-size:13px;color:var(--parchment-dim);margin:0 0 22px 34px;}
+
+.te2 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 26px;}
+@media(max-width:760px){.te2 .grid{grid-template-columns:1fr;}}
+.te2 .field{transition:opacity .15s ease;}
+.te2 .field.disabled{opacity:0.35;pointer-events:none;}
+.te2 .field label{
+  display:flex;align-items:baseline;gap:6px;
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:10.5px;letter-spacing:0.05em;
+  text-transform:uppercase;color:var(--parchment-dim);margin-bottom:7px;
+}
+.te2 .field label .num{color:var(--gold-bright);font-weight:600;}
+.te2 .field select, .te2 .field input{
+  width:100%;background:var(--ink);border:1px solid var(--line);color:var(--parchment);
+  padding:12px 10px;font-family:'Source Sans 3',-apple-system,sans-serif;font-size:16px;border-radius:1px;
+  min-height:44px;text-align:center;
+}
+.te2 .field select:focus, .te2 .field input:focus{outline:none;border-color:var(--gold);}
+.te2 .field .hint{font-size:11px;color:var(--parchment-dim);margin-top:5px;font-style:italic;}
+.te2 .field.indent{padding-left:18px;border-left:2px solid var(--line);}
+
+.te2 .pct-wrap{position:relative;}
+.te2 .pct-wrap input{
+  padding-right:36px;text-align:center;font-variant-numeric:normal;
+  font-feature-settings:"zero" 0;-webkit-font-feature-settings:"zero" 0;
+}
+.te2 .pct-wrap .pct-suffix{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  color:var(--gold-bright);font-family:'Source Sans 3',-apple-system,sans-serif;
+  font-size:15px;font-weight:600;pointer-events:none;
+}
+
+.te2 .run-row{margin-top:28px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
+.te2 button#calc{
+  background:var(--gold);color:var(--btn-text);border:none;padding:15px 30px;
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:13px;letter-spacing:0.1em;
+  text-transform:uppercase;font-weight:600;cursor:pointer;transition:background .15s ease;
+  min-height:48px;-webkit-tap-highlight-color:transparent;
+}
+.te2 button#calc:hover{background:var(--gold-bright);}
+.te2 .err{font-family:'Source Sans 3',-apple-system,sans-serif;font-size:12px;color:var(--err);}
+
+.te2 .result-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;}
+@media(max-width:760px){.te2 .result-grid{grid-template-columns:1fr;}}
+.te2 .result-box{border:1px solid var(--gold);background:var(--result-bg);padding:22px 24px;}
+.te2 .result-box .lbl{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-weight:700;font-size:10.5px;letter-spacing:0.1em;color:var(--gold-bright);text-transform:uppercase;margin-bottom:8px;}
+.te2 .result-box .val{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-size:30px;font-weight:700;color:var(--parchment);}
+.te2 .subresults{display:flex;flex-direction:column;gap:10px;}
+.te2 .subresults .row{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 0;font-size:13px;}
+.te2 .subresults .row span:first-child{color:var(--parchment-dim);}
+.te2 .subresults .row span:last-child{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-weight:700;}
+
+.te2 .formula-block{
+  margin-top:18px;padding:14px 16px;background:rgba(0,0,0,0.25);border-left:2px solid var(--gold);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-size:13px;line-height:1.9;color:var(--parchment-dim);white-space:pre-wrap;
+}
+
+.te2 footer{max-width:1120px;margin:50px auto 0 auto;padding:20px 28px 0 28px;border-top:1px solid var(--line);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:11px;color:var(--parchment-dim);}
+
+@media(max-width:480px){
+  }
+
+/* ===== Patrón tutor: texto breve + boton para expandir el detalle ===== */
+.tutor-block{ margin:18px 0; }
+.tutor-brief{ margin:0 0 10px; }
+.tutor-toggle{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:.03em;
+  color:var(--teal);
+  background:var(--pastel-teal);
+  border:1px solid var(--teal);
+  border-radius:20px;
+  padding:7px 14px;
+  cursor:pointer;
+  transition:background .15s;
+}
+.tutor-toggle:hover{ background:var(--teal); color:#fff; }
+.tutor-toggle .chev{ transition:transform .25s ease; }
+.tutor-block.open > .tutor-toggle .chev{ transform:rotate(45deg); }
+.tutor-detail{
+  max-height:0;
+  overflow-x:visible;
+  overflow-y:hidden;
+  transition:max-height .35s ease;
+}
+.tutor-block.open > .tutor-detail{ max-height:6000px; }
+.tutor-detail-inner{
+  margin-top:14px;
+  padding:16px 20px;
+  background:var(--paper-alt);
+  border-left:3px solid var(--teal);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tutor-detail-inner p:last-child{ margin-bottom:0; }
+
+/* ===== Bloque puente (galletas -> finanzas) ===== */
+.bridge-block{
+  background:var(--pastel-gold);
+  border:1px solid var(--gold);
+  border-radius:var(--radius);
+  padding:24px 28px;
+  margin:24px 0;
+}
+.bridge-block h4{ font-family:var(--serif); font-size:1.1rem; margin:0 0 10px; color:var(--ink); }
+
+/* ===== Mini calculadora de precio ===== */
+.price-calc{
+  border:1px solid var(--line-strong);
+  border-radius:var(--radius);
+  padding:24px 26px;
+  margin:22px 0;
+  background:var(--paper);
+}
+.price-calc .pc-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+.price-calc label{
+  display:block; font-family:var(--mono); font-size:10.5px; text-transform:uppercase;
+  letter-spacing:.06em; color:var(--ink-soft); margin-bottom:6px;
+}
+.price-calc .pc-wrap{
+  display:flex; align-items:center; border:1px solid var(--line-strong);
+  border-radius:var(--radius); background:#fff; overflow:hidden;
+}
+.price-calc .pc-wrap span{
+  padding:8px; font-family:var(--mono); font-size:12px; color:var(--ink-soft);
+  background:var(--paper-alt); border-right:1px solid var(--line-strong);
+}
+.price-calc input, .price-calc select{
+  border:none; outline:none; padding:9px 8px; font-family:var(--mono);
+  font-size:14px; width:100%; text-align:center; color:var(--ink); background:transparent;
+}
+.price-calc select{ text-align:left; }
+.price-calc .pc-result{
+  background:var(--pastel-teal); border:1px solid var(--teal); border-radius:var(--radius);
+  padding:16px 20px; margin-top:6px; text-align:center;
+}
+.price-calc .pc-result .k{ font-family:var(--mono); font-size:11px; text-transform:uppercase; color:var(--ink-soft); margin-bottom:4px; }
+.price-calc .pc-result .v{ font-family:var(--mono); font-size:1.6rem; font-weight:600; color:var(--ink); }
+
+
+/* ===== Pie de autoría ===== */
+.author-credit{
+  margin-top:26px;
+  padding-top:14px;
+  border-top:1px solid var(--line);
+  text-align:center;
+}
+.author-credit .name{
+  font-family:var(--serif);
+  font-size:15px;
+  font-weight:500;
+  margin:0;
+  color:var(--ink);
+}
+.author-credit .role{
+  font-size:11px;
+  color:var(--ink-soft);
+  margin:4px 0 0;
+}
+</style>
+<body>
+
+<div class="theme-switcher" id="theme-switcher" role="group" aria-label="Elegir apariencia">
+  <span class="theme-switcher-label">Apariencia</span>
+  <button class="theme-swatch" type="button" data-theme="default" style="--swatch-bg:#FFFFFF; --swatch-accent:#B8862B" title="Por defecto" aria-label="Tema por defecto"></button>
+  <button class="theme-swatch" type="button" data-theme="oscuro" style="--swatch-bg:#12202F; --swatch-accent:#D9B24C" title="Oscuro (poca luz)" aria-label="Tema oscuro"></button>
+  <button class="theme-swatch" type="button" data-theme="contraste" style="--swatch-bg:#FFFFFF; --swatch-accent:#000000" title="Alto contraste (luz brillante)" aria-label="Tema de alto contraste"></button>
+  <button class="theme-swatch" type="button" data-theme="sepia" style="--swatch-bg:#F6EFDD; --swatch-accent:#9C6B26" title="Sepia (lectura prolongada)" aria-label="Tema sepia"></button>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Cálculo Financiero</p>
+    <h1 class="title">Como en el tenis, trabajemos juntos para reducir los <em>errores no forzados</em></h1>
+    <p class="subtitle">El conocimiento es una construcción colectiva intergeneracional y vos formás parte de esa construcción.</p>
+  </div>
+</header>
+
+
+<main class="wrap">
+
+  <div style="text-align:center; margin:0 0 44px;">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Parte A</p>
+    <h2 style="font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:8px 0 0; color:var(--ink);">La base de casi todo: cuando en la simpleza hay profundidad</h2>
+  </div>
+
+  <!-- 1 -->
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">A.1</span>
+      <h2>Un problema cotidiano</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Todos compramos productos casi todos los días. Sin embargo, pocas veces nos detenemos a pensar cómo se determina exactamente el importe que debemos pagar. Aunque parezca una operación muy sencilla, detrás existe un procedimiento lógico que después vamos a poder expresar con un algoritmo matemático.</p>
+        <p>La pregunta que nos va a ocupar toda esta sección es una sola:</p>
+        <div class="callout">
+          <b>¿Cómo se determina el importe total de una compra?</b>
+        </div>
+        <p class="soft">Para concentrarnos únicamente en el razonamiento —sin distraernos con la variedad de un negocio real— vamos a imaginar un comercio que vende un único producto: galletas.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">A.2</span>
+      <h2>El precio como importe relativo</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Habitualmente pensamos que el precio representa el importe que paga el cliente. Sin embargo, esa interpretación no siempre es correcta.</p>
+        <p>El precio es, en realidad, un <b>importe de facturación relativo</b>, porque siempre se encuentra asociado a una determinada <b>cantidad de referencia</b> elegida por el comerciante.</p>
+
+        <table class="data" style="margin:18px 0;">
+          <thead><tr><th>Cantidad de referencia</th><th>Precio</th></tr></thead>
+          <tbody>
+            <tr><td>1 galleta</td><td>$1.000</td></tr>
+            <tr><td>1 docena (12 galletas)</td><td>$12.000</td></tr>
+            <tr><td>1 centenar (100 galletas)</td><td>$95.000</td></tr>
+          </tbody>
+        </table>
+
+        <p class="soft">Observá que el importe cambia junto con la cantidad de referencia. El comerciante decide cuál va a ser esa cantidad, y expresa el precio en función de ella.</p>
+
+        <div class="tutor-block" data-section>
+          <p class="tutor-brief">La cantidad de referencia puede ser una unidad, una docena, un centenar, un kilogramo, un litro, o cualquier otra unidad de comercialización.</p>
+          <button class="tutor-toggle" data-toggle type="button">¿Querés verlo con más detalle? <span class="chev">+</span></button>
+          <div class="tutor-detail">
+            <div class="tutor-detail-inner">
+              <p>Llamamos <b>cantidad de referencia</b> a la cantidad del producto que el comerciante elige para expresar su precio. No hay una única forma "correcta" de elegirla — depende del rubro, la costumbre del mercado, o directamente la conveniencia del vendedor. Por ejemplo:</p>
+              <ul>
+                <li>Las galletas sueltas suelen venderse por unidad o por docena.</li>
+                <li>La carne se vende por kilogramo.</li>
+                <li>La nafta se vende por litro.</li>
+              </ul>
+              <p>Por esta razón, resulta más apropiado hablar de <b>precio asociado a una cantidad de referencia</b> que de "precio unitario" — la palabra "unitario" sugiere que la referencia siempre es "una unidad", y ya vimos que no tiene por qué serlo.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">A.3</span>
+      <h2>¿Cuándo el precio coincide con el importe total?</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">A veces el precio coincide con el importe total de la compra. Eso ocurre únicamente cuando el cliente adquiere exactamente la misma cantidad asociada al precio.</p>
+
+        <div class="example-card">
+          <span class="ex-tag">Cuando coinciden</span>
+          <h4>El cliente compra exactamente una docena</h4>
+          <p>Precio: $12.000 por docena. El cliente compra 1 docena.</p>
+          <p class="soft">1 docena &times; $12.000 por docena = <b>$12.000</b> — acá el precio deja de ser solamente un importe relativo, porque además coincide con el importe total.</p>
+        </div>
+
+        <p>Pero normalmente las cantidades <b>no coinciden</b>. Veamos qué pasa entonces.</p>
+
+        <div class="example-card">
+          <span class="ex-tag">Cuando NO coinciden</span>
+          <h4>El cliente compra 18 galletas</h4>
+          <p>El precio sigue siendo el correspondiente a una docena. Pero el cliente lleva una cantidad distinta: 18 galletas.</p>
+          <p class="soft">Acá el precio conserva su carácter de importe relativo, y va a hacer falta un paso extra antes de poder calcular el importe total.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">A.4</span>
+      <h2>Sincronizar las unidades antes de calcular</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Para poder combinar el precio con la cantidad comprada, ambos tienen que "hablar el mismo idioma" — es decir, estar expresados en la misma cantidad de referencia.</p>
+        <p>El precio está dado <b>por docena</b>. El cliente compró <b>18 galletas</b>. Antes de multiplicar cualquier cosa, hay que expresar esas 18 galletas en la misma unidad que el precio:</p>
+
+        <div class="formula-box">
+          18 galletas equivalen a 1,5 docenas
+        </div>
+
+        <p class="soft">Una precisión sobre el signo que no usamos ahí arriba: 18 galletas y 1,5 docenas no son <b>iguales</b> — dos cosas son iguales cuando son idénticas, y "galleta" y "docena" no son la misma unidad. Lo correcto es decir que 18 galletas <b>equivalen a</b> 1,5 docenas, una vez que homogeneizamos (armonizamos) sus unidades de medida. Vas a ver que en este material usamos "equivale a" (no "=") cada vez que estemos comparando magnitudes que todavía no están expresadas en la misma unidad.</p>
+
+        <p class="soft">Cuando el precio y la cantidad quedan expresados en la misma unidad de referencia, decimos que están <b>sincronizados</b> (o que sus unidades de medida son <b>armónicas</b>). Esta condición es indispensable antes de efectuar cualquier cálculo — recién ahí el precio y la cantidad se pueden combinar de forma válida.</p>
+
+        <div class="tutor-block" data-section>
+          <p class="tutor-brief">Esta idea de "sincronizar antes de calcular" no es exclusiva del precio — la vas a volver a encontrar, con otro nombre, en cada unidad de la materia.</p>
+          <button class="tutor-toggle" data-toggle type="button">¿Por qué esto es tan importante? <span class="chev">+</span></button>
+          <div class="tutor-detail">
+            <div class="tutor-detail-inner">
+              <p>Pensalo con un caso extremo, para que se note el problema: si el precio estuviera dado "por kilogramo" y vos comprás "3 unidades", no hay forma de combinar esos dos números directamente — ni siquiera sabés cuántos kilogramos pesan esas 3 unidades. El precio y la cantidad tienen que estar hablando de <b>la misma cosa</b> antes de poder operar entre ellos.</p>
+              <p>Esta misma exigencia va a reaparecer más adelante, cuando trabajemos con tasas de interés y plazos: una tasa mensual no se puede combinar directamente con un plazo en años, por la misma razón exacta que $12.000 por docena no se puede combinar directamente con 18 galletas. Primero hay que sincronizar; recién después, calcular.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">A.5</span>
+      <h2>Construyendo el algoritmo</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Una vez sincronizadas las unidades, el importe total se obtiene multiplicando el precio (asociado a la cantidad de referencia) por la cantidad adquirida, expresada en esa misma referencia.</p>
+
+        <div class="formula-box">
+          Importe Total = Precio &times; Cantidad
+        </div>
+
+        <div class="example-card">
+          <span class="ex-tag">Aplicación numérica</span>
+          <h4>Volviendo a las 18 galletas</h4>
+          <p>Precio: $12.000 por docena. Cantidad comprada: 18 galletas, que equivalen a 1,5 docenas (ya homogeneizada).</p>
+          <p class="soft">Importe Total = $12.000 &times; 1,5 = <b>$18.000</b></p>
+        </div>
+
+        <p>Probalo vos mismo con la calculadora de abajo — cambiá el precio, la cantidad de referencia, o lo que compra el cliente, y mirá cómo se recalcula todo.</p>
+
+        <div class="price-calc">
+          <div class="pc-row">
+            <div>
+              <label>Precio ($)</label>
+              <div class="pc-wrap"><span>$</span><input type="text" inputmode="decimal" id="pc-precio" value="12.000"></div>
+            </div>
+            <div>
+              <label>Cantidad de referencia</label>
+              <div class="pc-wrap"><input type="text" inputmode="decimal" id="pc-ref-cant" value="1"><span id="pc-ref-unidad-suffix">docena</span></div>
+            </div>
+          </div>
+          <div class="pc-row">
+            <div>
+              <label>Cantidad comprada</label>
+              <div class="pc-wrap"><input type="text" inputmode="decimal" id="pc-compra-cant" value="18"></div>
+            </div>
+            <div>
+              <label>Unidad de la compra</label>
+              <select id="pc-compra-unidad" class="pc-wrap">
+                <option value="1" selected>Galletas (unidad)</option>
+                <option value="12">Docenas</option>
+                <option value="100">Centenas</option>
+              </select>
+            </div>
+          </div>
+          <div class="pc-result">
+            <div class="k">Importe total</div>
+            <div class="v" id="pc-resultado">$18.000,00</div>
+          </div>
+          <p class="soft" style="margin:10px 0 0;font-size:.85rem;" id="pc-detalle"></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">A.6</span>
+      <h2>Una idea más profunda</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Hasta acá construimos un algoritmo muy sencillo, pero extremadamente importante. Ahora demos un paso más: en vez de pensar al precio solamente como "un importe relativo", pensémoslo como un <b>coeficiente de proporcionalidad</b>.</p>
+
+        <div class="bridge-block">
+          <h4>El precio expresa una relación entre dos magnitudes</h4>
+          <p>Por un lado, una <b>cantidad de referencia</b> del producto. Por otro, el <b>importe monetario</b> asociado a esa cantidad. El precio es, ni más ni menos, el coeficiente que vincula esas dos magnitudes — y a partir de esa relación se puede obtener cualquier importe total, aplicando una simple proporcionalidad.</p>
+        </div>
+
+        <p class="soft">Esta interpretación trasciende el ejemplo de las galletas y se convierte en una herramienta conceptual de mucho alcance. Más adelante, en Cálculo Financiero, vamos a encontrar estructuras exactamente análogas — donde una magnitud se relaciona con otra mediante un coeficiente de proporcionalidad, cambiando únicamente el significado económico de las variables involucradas.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">A.7</span>
+      <h2>De las galletas a las finanzas</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Ahora sí, hagamos el puente: en Cálculo Financiero vamos a trabajar con un coeficiente de proporcionalidad que tiene nombre propio: la <b>tasa</b>.</p>
+
+        <p>Pensá en otro ejemplo cotidiano, esta vez uno que sí incorpora el tiempo: <b>alquilar sillas</b> para un evento. A diferencia de comprar galletas, acá el precio no depende solamente de la cantidad de sillas — también depende de <b>cuánto tiempo</b> las tenés.</p>
+
+        <table class="data" style="margin:18px 0;">
+          <thead><tr><th></th><th>¿De qué depende el precio?</th></tr></thead>
+          <tbody>
+            <tr><td>Comprar galletas</td><td>Solo de la cantidad — el tiempo no interviene.</td></tr>
+            <tr><td>Alquilar sillas</td><td>De la cantidad <b>y</b> del tiempo que las usás.</td></tr>
+          </tbody>
+        </table>
+
+        <p>Esa diferencia es la puerta de entrada al concepto de <b>tasa</b>: un coeficiente de proporcionalidad, igual que el precio. Tomemos como referencia la <b>tasa de interés</b> (la que probablemente ya tengas más presente): se la puede pensar como el "precio" del servicio financiero, con la diferencia de que en vez de relacionar una cantidad de producto con un importe, relaciona un <b>capital</b> con su <b>crecimiento</b> a lo largo de una unidad de tiempo.</p>
+        <p class="soft">Ojo: no todas las tasas hacen crecer un capital. Más adelante vas a conocer tasas que, en cambio, lo achican (como la tasa de descuento, que actualiza un capital hacia atrás en el tiempo) — pero eso lo vamos a desarrollar con calma cuando llegue el momento.</p>
+
+        <div class="tutor-block" data-section>
+          <p class="tutor-brief">Precio de un servicio temporal y tasa son, estructuralmente, el mismo tipo de objeto matemático — solo cambia qué magnitudes están relacionando.</p>
+          <button class="tutor-toggle" data-toggle type="button">Ver la comparación completa <span class="chev">+</span></button>
+          <div class="tutor-detail">
+            <div class="tutor-detail-inner">
+              <table class="data">
+                <thead><tr><th>Concepto</th><th>Referencia temporal</th><th>Cantidad de referencia</th><th>Magnitud del coeficiente</th><th>Denominación del coeficiente</th></tr></thead>
+                <tbody>
+                  <tr><td>Precio del alquiler de sillas</td><td>1 día</td><td>10 sillas</td><td>$10.000</td><td>Precio</td></tr>
+                  <tr><td>Tasa de interés</td><td>1 período de tiempo</td><td>$100 de préstamo</td><td>5%</td><td>Tasa (i)</td></tr>
+                  <tr><td>Tasa de descuento</td><td>1 período de tiempo</td><td>$100 de un pagaré</td><td>2%</td><td>Tasa (d)</td></tr>
+                </tbody>
+              </table>
+              <p>De acá en más, cada vez que veas una fórmula nueva en la materia, va a valer la pena preguntarse: ¿qué magnitudes está relacionando este coeficiente? Casi siempre, la respuesta va a conectar con esta misma idea.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">A.8</span>
+      <h2>La variable tiempo: por qué hablamos de "períodos"</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Ya usamos varias veces la palabra "tiempo" — al hablar del alquiler de sillas, de la tasa, del momento en que un capital queda disponible. Antes de seguir, vale la pena detenernos un momento (justamente) a pensar qué es el tiempo, y por qué en Cálculo Financiero casi siempre lo vamos a medir en "períodos".</p>
+
+        <p>El tiempo es una variable <b>continua</b>. Eso quiere decir que está formado por infinitos momentos: entre dos instantes cualesquiera, por más cercanos que parezcan, siempre hay otro instante en el medio. Y esto no depende de si el lapso que estamos mirando es largo o corto — un segundo tiene infinitos momentos, exactamente igual que un siglo.</p>
+
+        <p>Ese carácter continuo trae un problema práctico bastante concreto: si dos personas están conversando y necesitan señalar "un momento" del tiempo para ponerse de acuerdo, ¿cómo hacen? Entre infinitos momentos posibles, no hay forma natural de apuntar a uno solo con precisión.</p>
+
+        <div class="callout">
+          <b>La solución que se adoptó:</b> en vez de intentar señalar un momento puntual dentro de ese continuo infinito, se definió un <b>lapso de tiempo</b> como unidad de medida general, al que se llamó <b>1 período</b>. Dentro de ese período también hay infinitos momentos — pero hay 2 de esos infinitos que sí son fáciles de identificar sin ambigüedad: el <b>momento de inicio</b> y el <b>momento de finalización</b> del período.
+        </div>
+
+        <p class="soft">Esto explica por qué, de acá en adelante, vas a ver que las distintas unidades temáticas miden el tiempo genéricamente en "1 período", y que la duración de una operación se expresa como "n" períodos — no es una convención arbitraria, es la forma que se encontró para poder señalar momentos concretos dentro de algo que, de por sí, es un continuo infinito.</p>
+
+        <div class="tutor-block" data-section>
+          <p class="tutor-brief">Esta forma de pensar el tiempo —como una sucesión de períodos con inicio y fin identificables— va a ser la base de todo lo que viene. Vale la pena entenderla bien desde ahora.</p>
+          <button class="tutor-toggle" data-toggle type="button">Quiero entender esto con más profundidad <span class="chev">+</span></button>
+          <div class="tutor-detail">
+            <div class="tutor-detail-inner">
+              <p>Pensemos la diferencia entre un <b>momento</b> y un <b>período</b> con una imagen sencilla: un momento es como una <b>foto</b> — capta una situación congelada, sin duración, en un instante puntual. Un período, en cambio, es como una <b>película</b> — tiene duración, transcurre, contiene infinitos momentos (infinitos "fotogramas") entre su inicio y su fin.</p>
+
+              <p>Cuando en Cálculo Financiero hablamos del "momento 0" o del "momento n" de una operación, en realidad estamos señalando los dos fotogramas que delimitan una película: el fotograma inicial y el fotograma final de un período (o de una sucesión de períodos). Todo lo que pasa <b>dentro</b> de ese período — como el devengamiento de un interés, que se va generando de forma continua a lo largo del tiempo — es la "película"; los momentos de inicio y fin son las "fotos" que usamos para poder hablar de esa película con precisión, sin tener que describir cada uno de sus infinitos instantes.</p>
+
+              <p>Esta distinción no es solo una curiosidad filosófica — tiene consecuencias muy concretas más adelante en la materia. Por ejemplo, vas a ver que el <b>devengamiento</b> de una retribución financiera (un interés, un descuento) es un proceso continuo, que ocurre "en película" a lo largo de todo el período. Pero el <b>pago</b> o la <b>cancelación</b> de esa retribución suele ocurrir en un momento puntual — "en foto" — dentro (o al borde) de esa película. Confundir estas dos naturalezas distintas (lo continuo del devengamiento con lo puntual del pago) es una de las fuentes de confusión más frecuentes que vamos a encontrar.</p>
+
+              <p>De hecho, te adelantamos algo: cuando en la mayoría de los cursos se llega a la unidad de <b>Sistemas de Amortización</b>, es muy común que los alumnos arrastren justamente este tipo de dificultad — tratar al tiempo de forma imprecisa, sin distinguir bien entre "lo que pasa durante un período" y "lo que se identifica en un momento puntual de ese período". Si te queda clara la distinción foto/película desde acá, vas a llegar a esa unidad con una ventaja considerable.</p>
+
+              <p>Por último, un detalle sobre el origen de esta convención: no hay una razón matemática única e inevitable por la que el tiempo "tuviera" que medirse así. Es, en el fondo, una construcción práctica — una simplificación que permite trabajar con el tiempo de forma manejable, sin necesidad de lidiar con la totalidad de sus infinitos momentos. Como tantas otras cosas en esta materia, es una herramienta pensada para hacer operable algo que, en su estado puro, sería demasiado complejo de manejar.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 -->
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">A.9</span>
+      <h2>El capital financiero: una idea con dos dimensiones</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Cuando en Cálculo Financiero hablamos de "un capital", no nos referimos solamente a una cantidad de dinero. Nos referimos a una cantidad de dinero <b>y</b> a un momento — las dos cosas juntas, inseparables.</p>
+        <p>Un <b>capital financiero</b> es una variable con dos dimensiones: por un lado, la <b>magnitud monetaria</b> (cuánto dinero); por otro, el <b>momento</b> asociado a la libre disponibilidad de esa magnitud para alguno de los agentes que participan en la operación (quien presta, o quien recibe el préstamo). Un capital sin su momento asociado no está completamente definido — es como decir "tengo una reunión" sin decir cuándo.</p>
+
+        <div class="callout">
+          <b>Esto explica por qué los subíndices no son simples etiquetas.</b> Cuando más adelante veas notación como C₀ o Cₙ, el subíndice no es un número decorativo — es literalmente la <b>coordenada temporal</b> de ese capital. C₀ es la magnitud monetaria disponible en el inicio de la operación, porque no ha transcurrido nada de tiempo desde que comenzó (el "0" codificado en el subíndice te está dando esa información). Cₙ es la magnitud que va a estar disponible recién cuando transcurran "n" períodos desde el inicio de la operación financiera.
+        </div>
+
+        <div class="tutor-block" data-section>
+          <p class="tutor-brief">"Disponible" tiene un significado preciso acá: es el momento en que ese dinero queda libre para que alguno de los dos agentes de la operación (quien presta o quien recibe el préstamo) pueda usarla.</p>
+          <button class="tutor-toggle" data-toggle type="button">¿Qué significa exactamente "libre disponibilidad"? <span class="chev">+</span></button>
+          <div class="tutor-detail">
+            <div class="tutor-detail-inner">
+              <p>En toda operación financiera hay dos agentes: quien presta (el prestamista) y quien recibe el préstamo (el prestatario). En cada momento de la operación, la magnitud monetaria del capital tiene libre disponibilidad para <b>uno</b> de los dos — nunca para los dos a la vez.</p>
+              <p>Por ejemplo: antes de prestar, ese dinero es de libre disponibilidad para el prestamista (todavía no la prestó, la puede usar como quiera). Si decide prestarla, esa misma magnitud pasa a tener libre disponibilidad para el prestatario, que ahora sí puede usarla. El subíndice del capital te dice, entonces, en qué momento ocurre ese cambio de manos.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div style="text-align:center; margin:64px 0 40px; padding-top:40px; border-top:2px solid var(--line-strong);">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Parte B</p>
+    <h2 style="font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:8px 0 0; color:var(--ink);">Conceptos y su representación</h2>
+  </div>
+
+  <!-- B.1 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">B.1</span>
+      <h2>Conceptos y su representación</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Ya vimos, hace un momento, que la letra "n" no siempre representa lo mismo — cambia de significado entre unidades temáticas. Esa no fue una excepción aislada: es un patrón que se repite con más de una letra a lo largo de la materia.</p>
+        <p>Cada unidad temática define su propia nomenclatura, casi siempre reutilizando letras ya conocidas de otras unidades — pero asignándoles un significado propio, específico de ese contexto. La letra en sí misma no lleva el significado: el significado lo pone el contexto en el que aparece.</p>
+        <div class="callout">
+          <b>Una alerta para toda la cursada.</b> Cada vez que te encuentres con una letra que ya conocés de otra unidad, no des por sentado que significa lo mismo acá. Antes de operar con ella, fijate qué representa exactamente en el contexto puntual en el que la estás viendo.
+        </div>
+        <p class="soft">Esta alerta te va a acompañar en cada unidad nueva que curses. No hace falta que memorices de antemano qué letra cambia en cada caso — alcanza con que la sospecha esté siempre activa.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- B.2 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">B.2</span>
+      <h2>Otra fuente de confusión: mayúscula vs. minúscula</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">No es lo mismo \(m_t\) que \(M_t\).</p>
+        <p>El cuidado con la notación no termina en "qué unidad temática estás leyendo" — también importa si la letra está en mayúscula o en minúscula, porque pueden ser dos conceptos distintos dentro de la misma unidad temática.</p>
+        <p>En Sistemas de Amortización tradicionales, por ejemplo:</p>
+        <div class="notation-compare">
+          <div class="notation-col">
+            <span class="notation-tag">\(m_t\) (minúscula)</span>
+            Amortización periódica número "t" — cuánto capital se amortiza en esa cuota puntual (cuánto se devuelve del préstamo único).
+          </div>
+          <div class="notation-col">
+            <span class="notation-tag">\(M_t\) (mayúscula)</span>
+            Amortización acumulada — la suma de todo lo amortizado desde el inicio de la operación hasta la cuota t.
+          </div>
+        </div>
+        <p class="soft">Son dos magnitudes relacionadas, pero no son lo mismo: una es puntual, la otra es acumulada.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <div style="text-align:center; margin:64px 0 40px; padding-top:40px; border-top:2px solid var(--line-strong);">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Parte C</p>
+  </div>
+
+  <!-- C.1 -->
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">C.1</span>
+      <h2>No se pueden sumar peras con manzanas</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Seguramente en la escuela primaria alguna vez te dijeron esta frase. En su momento capaz sonó a algo obvio o hasta gracioso — pero tiene una profundidad que en Cálculo Financiero se vuelve central.</p>
+        <p>Dos magnitudes solo se pueden sumar (o comparar directamente) si tienen la <b>misma unidad de medida</b>. Si no la tienen, decimos que son <b>heterogéneas</b>, y combinarlas directamente no tiene sentido.</p>
+
+        <div class="example-card">
+          <span class="ex-tag">Un ejemplo cotidiano</span>
+          <h4>100 dólares + 1.000 pesos</h4>
+          <p>Si tenés 100 dólares y 1.000 pesos en la billetera, no podés sumar esas magnitudes y decir que tenés un total de "1.100" de algo — ni existe una unidad que combine ambas monedas directamente. Son magnitudes heterogéneas: cada una está expresada en una unidad de medida distinta.</p>
+        </div>
+
+        <div class="bridge-block">
+          <h4>Una idea más profunda todavía</h4>
+          <p>Acá viene el paso que realmente importa para toda la materia: <b>un mismo peso, en dos momentos distintos, también son unidades heterogéneas</b>. Un peso hoy y un peso dentro de un año no son "la misma cosa" desde el punto de vista financiero, aunque tengan el mismo nombre y el mismo símbolo — porque, como vimos en la sección anterior, un capital financiero no es solo una magnitud monetaria: también incluye un momento de libre disponibilidad de dicha magnitud.</p>
+          <p class="soft">Esto tiene una consecuencia enorme: no vas a poder sumar directamente un capital del momento 0 con un capital del momento n, por la misma razón por la que no podés sumar dólares con pesos. Antes hace falta <b>homogeneizar</b> esas magnitudes — llevarlas a una unidad de medida común. La herramienta que permite hacer eso, en Cálculo Financiero, es la <b>equivalencia financiera</b>: la misma relación de "capitales equivalentes" que mencionaremos al principio de cada unidad temática, y que vas a ver desarrollada en detalle más adelante.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div style="text-align:center; margin:64px 0 40px; padding-top:40px; border-top:2px solid var(--line-strong);">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Parte D</p>
+  </div>
+
+  <!-- C.1 -->
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">D.1</span>
+      <h2>Un indicador no es, todavía, una decisión</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Pensá en un semáforo. Cuando se pone rojo, ¿el semáforo "te hace" frenar? No — el semáforo solo te muestra un color. Frenar es algo que <b>vos</b> hacés, siguiendo una regla que asocia ese color con una acción.</p>
+        <p>Esta distinción parece obvia con un semáforo, pero conviene remarcarla porque en Cálculo Financiero vas a encontrar la misma estructura una y otra vez, con indicadores mucho menos evidentes que un color:</p>
+
+        <table class="data" style="margin:18px 0;">
+          <thead><tr><th>Indicador (lo que se observa)</th><th>Regla de decisión (qué hacer)</th></tr></thead>
+          <tbody>
+            <tr><td>Luz roja</td><td>Frenar</td></tr>
+            <tr><td>Luz amarilla</td><td>Prepararse para frenar</td></tr>
+            <tr><td>Luz verde</td><td>Avanzar</td></tr>
+          </tbody>
+        </table>
+
+        <div class="callout">
+          <b>El indicador informa; la regla de decisión prescribe.</b> Un indicador te muestra un dato o un escenario. La regla de decisión es otra cosa: le agrega qué hacer frente a ese escenario. Las dos cosas suelen aparecer juntas, tan pegadas, que es fácil confundirlas y pensar que el indicador "ya trae" la decisión incorporada — pero no es así.
+        </div>
+
+        <div class="tutor-block" data-section>
+          <p class="tutor-brief">Con el semáforo, la regla de decisión es fija: roja significa parar para cualquier persona, en cualquier momento. Pero no todas las reglas de decisión son así de rígidas.</p>
+          <button class="tutor-toggle" data-toggle type="button">¿Siempre la regla es igual para todos? <span class="chev">+</span></button>
+          <div class="tutor-detail">
+            <div class="tutor-detail-inner">
+              <p>Con el semáforo, la regla la fija la ley de tránsito — es externa, y es la misma para todo el mundo. Pero hay otros indicadores donde la regla de decisión depende de un <b>criterio personal</b>, que cada quien tiene que declarar antes de poder decidir nada.</p>
+              <p>Más adelante en la cursada, cuando entres en el análisis de proyectos de inversión, vas a encontrar exactamente este caso con el indicador <b>VAN</b> (Valor Actual Neto). El VAN te va a mostrar un escenario — algo así como "esta inversión rinde más, igual, o menos que cierta referencia" — pero la decisión de aceptar o rechazar un proyecto no sale del VAN solo: hace falta que cada inversor declare primero cuál es la rentabilidad mínima que está dispuesto a aceptar. Con esa referencia declarada, recién ahí el VAN se puede traducir en una decisión — y esa decisión puede ser distinta para dos inversores distintos, aunque estén mirando exactamente el mismo proyecto.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div style="text-align:center; margin:64px 0 40px; padding-top:40px; border-top:2px solid var(--line-strong);">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Parte E</p>
+  </div>
+
+  <!-- D.1 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">E.1</span>
+      <h2>Puede existir un desajuste/tensión entre lo formal y lo operativo</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">En cada tema de la materia vas a encontrar dos registros distintos, que conviene aprender a distinguir:</p>
+        <ul>
+          <li><b>Lo formal:</b> qué es un concepto, de dónde sale, cómo se lo define con precisión.</li>
+          <li><b>Lo operativo:</b> cómo se usa ese mismo concepto como herramienta para resolver algo concreto.</li>
+        </ul>
+        <p>Muchos materiales de estudio pasan de uno a otro sin avisar — y eso puede generar la sensación de estar "perdiendo el hilo" sin saber bien por qué. En este material vamos a tratar de ser explícitos cada vez que ese salto ocurra, para que siempre sepas si estás leyendo una definición o aprendiendo a operar con ella.</p>
+        <p>Este salto entre lo formal y lo operativo no aparece con la misma intensidad en todos los temas de la cursada — hay algunos donde prácticamente no lo vas a notar, y otros donde conviene estar más alerta.</p>
+
+        <div class="tutor-block" data-section>
+          <p class="tutor-brief">¿Dónde es más probable que aparezca esa discrepancia?</p>
+          <button class="tutor-toggle" data-toggle type="button">Ver dónde es más probable que aparezca <span class="chev">+</span></button>
+          <div class="tutor-detail">
+            <div class="tutor-detail-inner">
+              <p>En el Régimen de Interés Simple, esta discrepancia prácticamente brilla por su ausencia: el desarrollo matemático y los conceptos del marco teórico caminan tomados de la mano. "Amortización" es, formal y operativamente, la devolución del capital prestado — y el álgebra que la calcula coincide exactamente con esa idea, sin ningún desvío.</p>
+              <p>En cambio, vas a encontrar esta misma discrepancia de forma recurrente cuando estudies los regímenes de descuento más adelante en la cursada. Un ejemplo concreto: en esos regímenes, suele usarse el mismo lenguaje visual con el que en el Régimen de Interés Simple se representa la amortización, para mostrar cómo se comporta la base fija del capital — pero, en rigor, ahí no hay ninguna amortización periódica real (la cancelación del capital es un único pago, al vencimiento). El desarrollo matemático necesita ese andamiaje para funcionar, aunque el concepto formal de "amortización" no lo acompañe con la misma precisión.</p>
+              <p class="soft">Guardate esta alerta para cuando estudies esos regímenes: cuanto más se aleje un régimen del caso "de libro" (como el Régimen de Interés Simple), más conviene estar atento a que el álgebra y el concepto no se hayan despegado un poco el uno del otro.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div style="text-align:center; margin:64px 0 44px; padding-top:40px; border-top:2px solid var(--line-strong);">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Parte F</p>
+    <h2 style="font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:8px 0 0; color:var(--ink);">Una avenida de doble sentido</h2>
+  </div>
+
+  <!-- E.1 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">F.1</span>
+      <h2>La desagregación y agregación de rótulos</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Vas a encontrar, más de una vez en esta materia, dos o más formas distintas de nombrar exactamente lo mismo.</p>
+        <p>Un mismo movimiento de dinero se puede nombrar de dos maneras: con <b>rótulos separados</b> —una palabra distinta para cada tipo de movimiento, siempre en magnitudes positivas— o con un <b>rótulo unificado</b>, donde una sola palabra sirve para todos los movimientos, y es el <b>signo</b> el que distingue de qué tipo se trata.</p>
+        <div class="notation-compare">
+          <div class="notation-col">
+            <span class="notation-tag">Rótulos separados</span>
+            Una palabra por tipo de movimiento. Magnitudes siempre positivas.
+          </div>
+          <div class="notation-col">
+            <span class="notation-tag">Rótulo unificado</span>
+            Una sola palabra para todos. El signo hace la distinción.
+          </div>
+        </div>
+        <p class="soft">Ninguna de las dos formas es "más correcta" que la otra — son, ni más ni menos, dos formas distintas de agregar o desagregar la misma información. Vas a ver esta misma lógica aplicada, en un momento, a un caso concreto.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- E.2 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">F.2</span>
+      <h2>Primer ejemplo de desagregación y agregación</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Tomemos como ejemplo para desarrollar en esta parte un proyecto de inversión que intuitivamente ya sabés de qué se trata: mirado con la lógica que ya venimos trabajando, es ni más ni menos que una sucesión de movimientos de dinero en el tiempo — en algún momento (o momentos) ponés plata, y en otro momento (u otros momentos) esa plata te vuelve, con suerte, con algo de más.</p>
+        <p>Formalmente, cada uno de esos movimientos se llama <b>prestación</b> (cuando el potencial inversor entrega dinero) o <b>contraprestación</b> (cuando lo recibe). A diferencia de los regímenes que ya vimos —con una única prestación y una única contraprestación—, un proyecto de inversión puede tener varias de cada una, y no necesariamente en un orden fijo.</p>
+
+        <div class="callout">
+          <b>Dos formas de nombrar lo mismo.</b> Vas a encontrar los movimientos de un proyecto presentados de dos maneras distintas, que dicen exactamente lo mismo con un lenguaje diferente:
+        </div>
+
+        <table class="data" style="margin:18px 0;">
+          <thead><tr><th></th><th>Rótulos separados</th><th>Rótulo unificado</th></tr></thead>
+          <tbody>
+            <tr><td>Forma general</td><td>Prestación / Contraprestación<br><span class="soft" style="font-size:.85em;">(magnitudes positivas)</span></td><td>Flujo de fondos<br><span class="soft" style="font-size:.85em;">(negativo para la prestación / positivo para la contraprestación)</span></td></tr>
+            <tr><td>Desde el inversor</td><td>Inversión / Ingresos<br><span class="soft" style="font-size:.85em;">(magnitudes positivas)</span></td><td>Flujo de fondos<br><span class="soft" style="font-size:.85em;">(negativo para la inversión / positivo para los ingresos)</span></td></tr>
+          </tbody>
+        </table>
+
+        <p class="soft">Con rótulos separados, cada movimiento se nombra con una palabra distinta y su magnitud se expresa siempre en positivo. Con el rótulo unificado ("flujo de fondos"), es el <b>signo</b> el que hace el trabajo de distinguir: negativo cuando sale plata (inversión), positivo cuando entra (ingreso). Las dos formas conviven en la bibliografía — vas a tener que reconocer ambas.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- E.3 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">F.3</span>
+      <h2>Para reforzar: Ganancia, pérdida… o resultado</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">A esta altura de tu vida ya conocés perfectamente los conceptos de ganancia y pérdida. Vamos a apoyarnos en esa intuición para dar un paso más.</p>
+        <p>Igual que con prestación/contraprestación, acá también existen 2 formas de nombrar la misma idea:</p>
+
+        <table class="data" style="margin:18px 0;">
+          <thead><tr><th></th><th>Rótulos separados</th><th>Rótulo unificado</th></tr></thead>
+          <tbody>
+            <tr><td>Ejemplo</td><td>Pérdida de 50 · Ganancia de 100<br><span class="soft" style="font-size:.85em;">(magnitudes positivas)</span></td><td>Resultado de −50 · Resultado de 100<br><span class="soft" style="font-size:.85em;">(el signo indica el tipo)</span></td></tr>
+          </tbody>
+        </table>
+
+        <p class="soft">Con "resultado", un signo negativo se lee como pérdida y uno positivo como ganancia — por usos y costumbres, es la convención que vas a encontrar en la mayoría de los análisis financieros, y es la que vamos a usar de acá en más.</p>
+
+        <div class="tutor-block" data-section>
+          <p class="tutor-brief">Este mismo patrón —rótulos separados con magnitudes positivas, o un rótulo unificado donde el signo hace el trabajo— no es casualidad. Se repite una y otra vez en Cálculo Financiero.</p>
+          <button class="tutor-toggle" data-toggle type="button">¿Por qué se repite este patrón? <span class="chev">+</span></button>
+          <div class="tutor-detail">
+            <div class="tutor-detail-inner">
+              <p>Ya lo viste con prestación/contraprestación vs. flujo de fondos, en la sección anterior. Y lo vas a ver de nuevo, en varias unidades durante la cursada. La razón de fondo es que un signo, en Cálculo Financiero, casi nunca es un simple símbolo decorativo — codifica información real sobre la naturaleza de la magnitud. Acostumbrarte a leer el signo como parte del significado (no como un detalle aparte) te va a ahorrar errores de interpretación en toda la materia.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin:64px 0 44px; padding-top:40px; border-top:2px solid var(--line-strong);">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Parte G</p>
+    <h2 style="font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:8px 0 0; color:var(--ink);">¿Existe arte en el cálculo?</h2>
+  </div>
+
+  <div style="text-align:center; margin:0 0 44px;">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Nivel 1</p>
+    <h2 style="font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:8px 0 0; color:var(--ink);">¿Por qué existe este material?</h2>
+  </div>
+
+  <!-- 1 -->
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.1</span>
+      <h2>Un resultado que parece inmediato</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Cuando ya conocés una fórmula, aplicarla parece casi automático: metés los números, apretás algunas teclas y aparece el resultado. Pero esa sensación de inmediatez esconde algo — porque esa fórmula no siempre existió tal como la ves hoy.</p>
+        <p>Detrás de cada expresión algebraica que vas a usar en esta materia hay un problema que, en algún momento, alguien tuvo que representar, transformar y resolver. Una fórmula también puede pensarse como una forma de organizar y simplificar un procedimiento de cálculo — no es solamente el punto de llegada, es el resultado de un trabajo previo.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.2</span>
+      <h2>Problemas que se fueron complicando</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Los problemas financieros no siempre tuvieron la complejidad que tienen hoy. Con el tiempo se fueron complicando — y a medida que eso pasaba, ya no alcanzaba con conocer una relación matemática: hacía falta, además, poder calcularla de manera eficiente.</p>
+        <p>Esta distinción es importante y la vas a ver reaparecer más adelante: una cosa es <i>saber qué relación matemática describe un problema</i>, y otra distinta es <i>poder ejecutar ese cálculo</i> con las herramientas que uno tiene a mano. No son lo mismo, y esta materia se ocupa de las dos.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.3</span>
+      <h2>La creatividad frente al problema</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Frente a esa dificultad creciente, el ser humano no se quedó quieto: desarrolló nuevas formas de representar los problemas, de transformarlos, de simplificarlos y, sobre todo, de hacerlos calculables.</p>
+        <p>La creatividad matemática permitió encontrar estructuras que reducían el trabajo necesario para llegar a un resultado. Algunas expresiones que hoy usás con total naturalidad —y que ni siquiera notás como algo especial— pueden interpretarse, en el fondo, como verdaderos atajos matemáticos: caminos más cortos hacia el mismo resultado.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.4</span>
+      <h2>Las herramientas también importan</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Pero encontrar una relación matemática elegante no alcanza por sí solo. La solución a un problema financiero no depende únicamente del conocimiento matemático disponible en un momento dado: también depende de las herramientas de cálculo que existían en ese contexto.</p>
+        <p>Pensá en la diferencia entre resolver una cuenta con lápiz y papel, con una tabla ya armada, con una calculadora o con una planilla de cálculo. La operación de fondo puede ser exactamente la misma — pero lo que cambia es qué tan viable resulta resolverla en la práctica. Una misma estructura algebraica puede ser trivial con una herramienta y directamente inabordable con otra, según qué tenga a mano quien calcula.</p>
+        <div class="callout">
+          <b>La idea que orienta todo el material:</b> a medida que los problemas financieros se hicieron más complejos, el ser humano no solamente necesitó desarrollar nuevas formas de representar, transformar y simplificar esos problemas para hacerlos calculables con las herramientas disponibles — también buscó desarrollar herramientas tecnológicas cada vez más potentes, siempre en función de los recursos y las posibilidades de su propio contexto.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.5</span>
+      <h2>Dos búsquedas, una misma dirección</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Si lo pensás bien, en realidad hay dos búsquedas corriendo en paralelo, y las dos apuntan al mismo lugar: hacer que un problema financiero sea calculable con el menor esfuerzo posible.</p>
+        <div class="notation-compare">
+          <div class="notation-col">
+            <span class="notation-tag">Dimensión matemática</span>
+            Representar, transformar y simplificar el problema; reconocer estructuras; crear procedimientos más eficientes.
+          </div>
+          <div class="notation-col">
+            <span class="notation-tag">Dimensión tecnológica</span>
+            Crear herramientas; potenciar el cálculo; reducir tiempos, esfuerzo y la probabilidad de cometer errores.
+          </div>
+        </div>
+        <p class="soft">Ninguna de las dos alcanza sola. Una buena estructura algebraica sin herramienta para ejecutarla sigue siendo, en la práctica, difícil de calcular. Y una herramienta poderosa sin una buena estructura detrás desperdicia gran parte de su potencial.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.6</span>
+      <h2>El tiempo de cálculo como problema en sí mismo</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">No solo interesa llegar al resultado correcto. También interesa cuánto tiempo y esfuerzo cuesta llegar a él.</p>
+        <p>Un mismo problema puede requerir procedimientos muy diferentes según las herramientas disponibles, y esa diferencia no es un detalle menor: la eficiencia del cálculo se convierte, ella misma, en parte del problema a resolver. Vas a ver esto de manera muy concreta más adelante, cuando comparemos el esfuerzo que exige cada estructura algebraica de esta materia.</p>
+        <div class="tutor-block" data-section>
+          <p class="tutor-brief">Cuantas más operaciones tiene un procedimiento, más esfuerzo hace falta para controlarlo — y ese esfuerzo adicional también puede traducirse en más oportunidades de error.</p>
+          <button class="tutor-toggle" data-toggle type="button">¿Por qué importa tanto la cantidad de operaciones? <span class="chev">+</span></button>
+          <div class="tutor-detail">
+            <div class="tutor-detail-inner">
+              <p>Los procedimientos más eficientes no solo ahorran tiempo de cálculo: también reducen la probabilidad de cometer errores durante el proceso, simplemente porque hay menos pasos en los que algo puede salir mal. Esta idea —menos pasos, menos esfuerzo, menos riesgo de error— va a reaparecer todo el tiempo a lo largo de la materia, cada vez que comparemos dos formas distintas de llegar al mismo resultado.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.7</span>
+      <h2>La pregunta que abre el recorrido</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Hoy tenés calculadoras, planillas de cálculo y computadoras al alcance de la mano. Por eso muchas operaciones financieras te van a parecer casi triviales apenas las veas.</p>
+        <p>Pero vale la pena hacerse una pregunta antes de arrancar: ¿cómo resolvían estos mismos problemas quienes no disponían de esas herramientas? Esa pregunta no es solo curiosidad histórica — es la que le da sentido a todo lo que sigue en este material.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.8</span>
+      <h2>La licencia pedagógica de este material</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <div class="callout">
+          <b>Un aviso importante antes de seguir.</b> Este material no va a reconstruir los marcos teóricos completos de cada unidad temática — para eso está el resto del material de cátedra. Vamos a usar las denominaciones y la nomenclatura propias de Cálculo Financiero, y te vamos a pedir que confíes en las relaciones algebraicas que se presenten, sabiendo que su justificación conceptual completa se va a desarrollar oportunamente en la unidad correspondiente durante la cursada.
+        </div>
+        <p class="soft"><span class="ped-license">Es como si:</span> acá tenés, de antemano, el mapa completo de un camino que todavía no recorriste paso a paso — así, cuando lo recorras formalmente, ya vas a reconocer el terreno.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.9</span>
+      <h2>Espíritu crítico</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Este material no pretende presentar una única interpretación como si fuera la definitiva ni la única posible.</p>
+        <p>Busca, en cambio, que puedas observar, cuestionar y elaborar tu propia interpretación de lo que vas leyendo. Se promueve una actitud crítica tanto frente a las formas de calcular como frente a las herramientas que se usan para hacerlo — nada de lo que sigue está pensado para memorizarse sin entenderlo.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.10</span>
+      <h2>De qué se ocupa este recorrido</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Este material parte de estructuras algebraicas asociadas a operaciones financieras que vas a encontrar en distintas unidades temáticas de Cálculo Financiero — pero no las vamos a mirar de la misma forma en que las vas a ver en esas unidades.</p>
+        <p>El objetivo no es desarrollar el marco teórico de cada unidad. El objetivo es poner en evidencia las estructuras algebraicas necesarias para obtener determinados resultados financieros, y cómo esas estructuras condicionan el esfuerzo requerido para hacer los cálculos. Las variables, denominaciones y relaciones financieras que vas a ver acá corresponden a la nomenclatura propia de la materia, y van a ser formalmente conceptualizadas y justificadas en las unidades temáticas correspondientes.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 12 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.11</span>
+      <h2>El mapa del recorrido</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Antes de arrancar, conviene tener a mano el mapa del camino que vamos a recorrer juntos.</p>
+        <div class="formula-box">
+          <span class="label">Recorrido general</span>
+          RIS → RIC → Comparación de complejidad
+        </div>
+        <p>Vas a ver primero el Régimen de Interés Simple (RIS), después el Régimen de Interés Compuesto (RIC), y vamos a comparar la complejidad de ambos — el tipo de comparación que después vas a poder aplicar, por tu cuenta, a cualquier otra estructura financiera de la materia.</p>
+      </div>
+    </div>
+  </div>
+
+
+  <div style="text-align:center; margin:64px 0 44px; padding-top:40px; border-top:2px solid var(--line-strong);">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Nivel 2</p>
+    <h2 style="font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:8px 0 0; color:var(--ink);">¿Cómo representaremos cada estructura?</h2>
+  </div>
+
+  <!-- 14 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.12</span>
+      <h2>Un patrón que ya conocés</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Antes de meternos con las estructuras propias de esta materia, vale la pena detenerse un momento en algo que probablemente ya viste en Análisis Matemático — porque no vamos a inventar una forma nueva de pensar: vamos a reutilizar una que ya tenés.</p>
+        <p>Partimos de una función de varias variables:</p>
+        <div class="formula-box">
+          <span class="label">Función de varias variables</span>
+          \( f(x;y,z) \)
+        </div>
+        <p>Cuando querés hacer un análisis parcial respecto de \(x\), fijás valores determinados para las otras dos:</p>
+        <div class="formula-box">
+          \( y=y_0, \quad z=z_0 \)
+        </div>
+        <p>Con esos valores fijos, la función se transforma en:</p>
+        <div class="formula-box">
+          \( f(x;y_0,z_0) \)
+        </div>
+        <p>Y como \(y_0\) y \(z_0\) ahora son constantes, podés expresarla de forma abreviada como una función de una sola variable:</p>
+        <div class="formula-box">
+          \( f(x) \)
+        </div>
+        <p class="soft">No estamos enseñando de nuevo qué es un análisis parcial — eso ya lo conocés. Lo que estamos haciendo es señalar explícitamente esta forma de representación, porque la vamos a volver a usar en un instante, con otro nombre.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 15 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.13</span>
+      <h2>El mismo patrón, con la nomenclatura de Cálculo Financiero</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Ahora trasladamos exactamente esa misma estructura a nuestra materia, cambiando solamente los nombres.</p>
+        <p>En Cálculo Financiero, la función monto se escribe:</p>
+        <div class="formula-box">
+          <span class="label">Función monto</span>
+          \( C(n;i,C_0) \)
+        </div>
+        <p>Para el análisis parcial que nos interesa, fijamos la tasa y el capital inicial:</p>
+        <div class="formula-box">
+          \( i=i_0, \quad C_0=\overline{C_0} \)
+        </div>
+        <p>Y obtenemos una función que depende de una única variable, el plazo:</p>
+        <div class="formula-box">
+          \( C(n;i_0,\overline{C_0}) \;\longrightarrow\; C(n) \)
+        </div>
+        <div class="notation-compare">
+          <div class="notation-col">
+            <span class="notation-tag">Análisis Matemático</span>
+            \( f(x;y,z) \longrightarrow f(x) \)
+          </div>
+          <div class="notation-col">
+            <span class="notation-tag">Cálculo Financiero</span>
+            \( C(n;i,C_0) \longrightarrow C(n) \)
+          </div>
+        </div>
+        <p>La estructura lógica es exactamente la misma. Lo que cambia es la nomenclatura y, sobre todo, la interpretación financiera de cada variable: \(n\) va a representar el plazo, \(i\) la tasa, y \(C_0\) el capital inicial — pero el movimiento de "fijar dos variables y analizar la tercera" es el mismo que acabás de ver en Análisis Matemático.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 16 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.14</span>
+      <h2>Aplicación al Régimen de Interés Simple</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Veamos el patrón funcionando con números concretos, aunque todavía no hayamos visto formalmente esta unidad temática.</p>
+        <p>Para el Régimen de Interés Simple, la función monto se escribe:</p>
+        <div class="formula-box">
+          <span class="label">RIS</span>
+          \( C(n;i,C_0) = C_0\cdot(1+i\cdot n) \)
+        </div>
+        <p>Fijamos, por ejemplo:</p>
+        <div class="formula-box">
+          \( i=0{,}02, \quad C_0=100.000 \)
+        </div>
+        <p>Con esos valores fijos, nos queda una función de una sola variable, el plazo:</p>
+        <div class="formula-box">
+          \( C(n) = 100.000\cdot(1+0{,}02\cdot n) \)
+        </div>
+        <p>Y ahora podés analizar distintos valores de \(n\) — cada uno de ellos representa una operación financiera distinta, con el mismo capital inicial y la misma tasa, pero con un plazo diferente:</p>
+        <div class="formula-box">
+          \( C(1),\; C(2),\; C(5),\; C(10),\; \dots \)
+        </div>
+        <p>Vale la pena mirar de cerca qué conocimientos de álgebra hacen falta para llegar a ese resultado. Dentro del paréntesis aparecen, en una misma fila, tres pasos: una multiplicación, una suma, y una última multiplicación que aplica ese factor al capital inicial:</p>
+        <div class="formula-box">
+          <span class="label">Estructura algebraica — RIS</span>
+          <div class="algebra-steps">
+            <div class="algebra-step">
+              <div class="step-formula">\( i\cdot n \)</div>
+              <div class="step-label">multiplicación</div>
+            </div>
+            <div class="algebra-arrow">&rarr;</div>
+            <div class="algebra-step">
+              <div class="step-formula">\( 1+i\cdot n \)</div>
+              <div class="step-label">suma</div>
+            </div>
+            <div class="algebra-arrow">&rarr;</div>
+            <div class="algebra-step">
+              <div class="step-formula">\( C_0\cdot(1+i\cdot n) \)</div>
+              <div class="step-label">multiplicación</div>
+            </div>
+          </div>
+        </div>
+        <p class="soft">Y algo para tener presente: no importa qué valor tome \(n\). Sea \(n=1\) o \(n=100\), la cantidad y el tipo de operaciones necesarias no cambian — siempre es esa misma secuencia de tres pasos. Cambiar el plazo no modifica la complejidad del cómputo.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 17 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.15</span>
+      <h2>Aplicación al Régimen de Interés Compuesto</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Hacemos exactamente el mismo procedimiento para el Régimen de Interés Compuesto — sin aprender una forma nueva de organizar la función, solo reutilizando la que ya usamos para RIS.</p>
+        <div class="formula-box">
+          <span class="label">RIC</span>
+          \( C(n;i,C_0) = C_0\cdot(1+i)^n \)
+        </div>
+        <p>Con los mismos valores fijos que usamos antes:</p>
+        <div class="formula-box">
+          \( i=0{,}02, \quad C_0=100.000 \)
+        </div>
+        <p>llegamos a:</p>
+        <div class="formula-box">
+          \( C(n) = 100.000\cdot(1{,}02)^n \)
+        </div>
+        <p>Así, llegás al RIC sin tener que aprender una nueva forma de organizar la función: el patrón \(f(x) \to C(n)\) actuó como andamiaje para entrar directamente en esta estructura nueva.</p>
+        <p>Miremos también acá qué conocimientos de álgebra exige el cálculo. Primero hay una suma (\(1+i\)); después, una potenciación, elevando ese resultado a \(n\) (\((1+i)^n\)); y finalmente una multiplicación, la que aplica ese factor al capital inicial (\(C_0\cdot(1+i)^n\)):</p>
+        <div class="formula-box">
+          <span class="label">Secuencia de operaciones — RIC</span>
+          suma &rarr; potenciación &rarr; multiplicación
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 18 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.16</span>
+      <h2>Misma forma de leer, distinta estructura algebraica</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">Mirá lo que pasó: usamos exactamente el mismo capital inicial, la misma tasa y el mismo plazo de referencia para RIS y para RIC — y sin embargo, las dos expresiones que obtuvimos son distintas.</p>
+        <div class="notation-compare">
+          <div class="notation-col">
+            <span class="notation-tag">RIS</span>
+            \( C_0\cdot(1+i\cdot n) \)
+          </div>
+          <div class="notation-col">
+            <span class="notation-tag">RIC</span>
+            \( C_0\cdot(1+i)^n \)
+          </div>
+        </div>
+        <p>Manteniendo constantes los parámetros y usando el mismo plazo como referencia, la estructura algebraica de la función cambia — y con ella cambia también la naturaleza de las operaciones necesarias para llegar al resultado. Esto no es un detalle menor: es exactamente el tipo de diferencia que, más adelante en la materia, se traduce en distinto esfuerzo de cálculo.</p>
+        <p>Y hay algo más, todavía más sutil, que conviene dejar planteado acá aunque no lo resolvamos ahora.</p>
+        <div class="tutor-block" data-section>
+          <p class="tutor-brief">En RIS, la secuencia multiplicación → suma → multiplicación siempre se resuelve con esas operaciones elementales, sea cual sea el plazo. En RIC, en cambio, esa aparente simplicidad de "sumar → potenciación → multiplicación" esconde una complejidad que no siempre es la misma.</p>
+          <button class="tutor-toggle" data-toggle type="button">¿Por qué la potenciación no es siempre igual de simple? <span class="chev">+</span></button>
+          <div class="tutor-detail">
+            <div class="tutor-detail-inner">
+              <p>La potenciación \((1+i)^n\) se puede resolver con multiplicaciones repetidas cuando \(n\) es un número entero positivo: por ejemplo, \((1{,}02)^3\) es simplemente \(1{,}02\cdot 1{,}02\cdot 1{,}02\). Pero \(n\) puede tomar valores positivos que no están restringidos a números enteros — un plazo de \(n=2{,}5\), por ejemplo, es perfectamente válido en una operación financiera. En esos casos, ya no alcanza con "multiplicar varias veces": hace falta apelar a herramientas más avanzadas, que vas a ver formalmente más adelante en la materia. Por eso no podemos afirmar que, con los conocimientos de suma y multiplicación nada más, alcanza para resolver todas las cuentas que exige esta estructura algebraica.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div style="text-align:center; margin:64px 0 40px; padding-top:40px; border-top:2px solid var(--line-strong);">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Para cerrar</p>
+    <h2 style="font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:8px 0 20px; color:var(--ink);">¿Existe arte en el cálculo?</h2>
+    <p style="max-width:56ch; margin:0 auto 24px; color:var(--ink);">La creatividad matemática también puede encontrarse en la búsqueda de procedimientos más eficientes — no solo en encontrar la respuesta correcta, sino en encontrar el camino más elegante para llegar a ella.</p>
+    <p style="font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:0; color:var(--teal);">¿Y vos, qué pensás?</p>
+  </div>
+
+</main>
+
+<footer>
+  Cálculo Financiero — Como en el tenis, trabajemos juntos para reducir los errores no forzados
+  <div class="author-credit">
+    <p class="name">Orlando Orellana</p>
+    <p class="role">Licenciado en Economía (FCE-UBA)</p>
+    <p class="role">Profesor Adjunto Interino de Cálculo Financiero — FCE-UBA</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('notas_theme');
+    if(t) document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<script>
+  // Accordion de secciones y patrón tutor (handler único genérico)
+  document.querySelectorAll('[data-toggle]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      btn.closest('[data-section]').classList.toggle('open');
+    });
+  });
+
+  // ---- mini calculadora de precio (La base de casi todo) ----
+  // ---- mini calculadora de precio ----
+  (function(){
+    function parseEsNumber(str){
+      if(typeof str !== 'string') return NaN;
+      const cleaned = str.trim().replace(/\./g,'').replace(',', '.');
+      return parseFloat(cleaned);
+    }
+    function fmt(n, dec){
+      if(isNaN(n)) return '-';
+      return n.toLocaleString('es-AR', {minimumFractionDigits:dec, maximumFractionDigits:dec});
+    }
+    const precioEl = document.getElementById('pc-precio');
+    const refCantEl = document.getElementById('pc-ref-cant');
+    const compraCantEl = document.getElementById('pc-compra-cant');
+    const compraUnidadEl = document.getElementById('pc-compra-unidad');
+    const resultadoEl = document.getElementById('pc-resultado');
+    const detalleEl = document.getElementById('pc-detalle');
+
+    function recalc(){
+      const precio = parseEsNumber(precioEl.value);
+      const refCant = parseEsNumber(refCantEl.value);
+      const compraCant = parseEsNumber(compraCantEl.value);
+      const factorUnidad = parseFloat(compraUnidadEl.value); // cuantas galletas equivale la unidad elegida
+
+      if(isNaN(precio) || isNaN(refCant) || isNaN(compraCant) || refCant === 0){
+        resultadoEl.textContent = '-';
+        detalleEl.textContent = '';
+        return;
+      }
+      // precio esta dado "por docena" fijo en este ejemplo (refCant docenas)
+      const totalGalletas = compraCant * factorUnidad;
+      const docenasCompradas = totalGalletas / 12;
+      const cantidadEnRef = docenasCompradas / refCant;
+      const importeTotal = precio * cantidadEnRef;
+
+      resultadoEl.textContent = '$' + fmt(importeTotal, 2);
+      detalleEl.textContent = `${fmt(compraCant,0)} ${compraUnidadEl.options[compraUnidadEl.selectedIndex].text.toLowerCase()} equivalen a ${fmt(docenasCompradas,2)} docenas — sincronizado con el precio (por ${fmt(refCant,0)} docena${refCant==1?'':'s'})`;
+    }
+    [precioEl, refCantEl, compraCantEl].forEach(el => el.addEventListener('input', recalc));
+    compraUnidadEl.addEventListener('change', recalc);
+    recalc();
+  })();
+
+  // ---- selector de apariencia ----
+  function applyTheme(theme){
+    if(theme === 'default'){ document.documentElement.removeAttribute('data-theme'); }
+    else{ document.documentElement.setAttribute('data-theme', theme); }
+    document.querySelectorAll('.theme-swatch').forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
+    try{ localStorage.setItem('notas_theme', theme); }catch(e){}
+  }
+  document.querySelectorAll('.theme-swatch').forEach(b => {
+    b.addEventListener('click', () => applyTheme(b.dataset.theme));
+  });
+  let savedTheme = 'default';
+  try{ savedTheme = localStorage.getItem('notas_theme') || 'default'; }catch(e){}
+  applyTheme(savedTheme);
+</script>
+
+</body>
+</html>
