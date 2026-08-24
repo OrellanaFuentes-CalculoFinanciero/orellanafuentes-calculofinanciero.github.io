@@ -191,6 +191,127 @@ window.MathJax = {
   }
   .ctrl .val{font-family:var(--mono);color:var(--teal);font-weight:600;}
   .ctrl input[type=range]{width:100%;accent-color:var(--gold);}
+
+  .ledger-body{padding:20px;}
+  .ledger-readout{
+    font-family:var(--mono);
+    font-size:12.5px;
+    color:var(--ink-soft);
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px 18px;
+    margin-bottom:10px;
+  }
+  .ledger-readout b{color:var(--ink);font-weight:600;}
+  .chart-wrap{background:var(--paper-alt);border:1px solid var(--line);border-radius:var(--radius);padding:10px 8px 4px;}
+  .chart-wrap svg{width:100%;height:auto;display:block;}
+  .chart-caption{font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);text-align:center;margin:8px 0 0;}
+  .manual-input{
+    width:100%;
+    box-sizing:border-box;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:9px 11px;
+    font-family:var(--mono);
+    font-size:.9rem;
+    color:var(--ink);
+    background:var(--paper);
+    margin-top:8px;
+  }
+  .manual-input:focus{outline:none;border-color:var(--teal);}
+  .formula-error{font-family:var(--mono);font-size:11.5px;color:var(--err,#B85C46);margin-top:6px;min-height:14px;}
+  .ledger-status{
+    font-size:.85rem;
+    color:var(--ink-soft);
+    margin-top:10px;
+    padding-top:10px;
+    border-top:1px dashed var(--line);
+  }
+  .apply-btn{
+    background:var(--teal);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    padding:10px 18px;
+    font-family:var(--mono);
+    font-size:.85rem;
+    cursor:pointer;
+    transition:background .15s;
+  }
+  .apply-btn:hover{background:var(--teal-dim,#164F4B);}
+  .var-select-btn{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:8px 14px;
+    font-family:var(--mono);
+    font-size:.85rem;
+    color:var(--ink);
+    cursor:pointer;
+    transition:all .15s;
+  }
+  .var-select-btn.active{background:var(--ink);color:#fff;border-color:var(--ink);}
+  .mdc-role-select{
+    width:100%;
+    box-sizing:border-box;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:9px 11px;
+    font-family:var(--mono);
+    font-size:.9rem;
+    color:var(--ink);
+    background:var(--paper);
+    margin-top:8px;
+  }
+  .mdc-role-select:focus{outline:none;border-color:var(--teal);}
+  .mdc-row{
+    display:grid;
+    grid-template-columns:1fr 1.3fr;
+    gap:18px;
+    padding:14px 0;
+    border-top:1px solid var(--line);
+  }
+  .mdc-row:first-child{border-top:none;padding-top:4px;}
+  .mdc-row-select label{
+    display:block;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    font-size:.72rem;
+    color:var(--ink-soft);
+    min-height:29px;
+  }
+  .mdc-row-value label{
+    display:block;
+    font-size:.72rem;
+    color:var(--ink-soft);
+    min-height:29px;
+  }
+  .mdc-row-map{
+    margin-top:8px;
+    font-family:var(--mono);
+    font-size:.82rem;
+    color:var(--ink-soft);
+    min-height:20px;
+  }
+  .mdc-row-map b{color:var(--teal);}
+  .mdc-row-value .val{font-family:var(--mono);color:var(--teal);font-weight:600;text-transform:none;letter-spacing:0;}
+  .mdc-row-value input[type=range]{width:100%;accent-color:var(--gold);}
+
+  /* Alinear con precisión el select (columna izquierda) y el input de texto (columna
+     derecha) dentro de una misma fila: mismo padding, mismo tamaño de fuente, mismo
+     alto explícito y sin margen asimétrico — evita corrimientos por renderizado nativo
+     del <select> que varían entre navegadores (ej. Safari/macOS vs Chromium). */
+  .mdc-row-select > select.mdc-role-select,
+  .mdc-row-value > input.manual-input{
+    box-sizing:border-box;
+    height:40px;
+    margin-top:0;
+    padding:9px 11px;
+    font-size:.9rem;
+  }
+  @media (max-width:640px){
+    .mdc-row{grid-template-columns:1fr;gap:10px;}
+  }
   .ledger-intro{
     padding:16px 20px;
     background:var(--paper);
@@ -2092,6 +2213,144 @@ window.MathJax = {
   <div class="section-block" data-section>
     <button class="section-toggle" data-toggle>
       <span class="num">07</span>
+      <h2>Calculadora de sensibilidad: movimiento y desplazamiento de la función</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+        <p class="plain-intro">En criollo: la fórmula de RIS vincula 4 variables a la vez (C₀, Cₙ, i, n) — pero un gráfico común solo tiene 2 dimensiones. La salida: elegir una como resultado (dependiente), fijar dos, y dejar UNA libre, para poder graficar cómo responde la dependiente ante esa única variable.</p>
+        <p>Esta es la misma herramienta que ya usaron en Análisis Matemático para funciones de varias variables independientes — acá la traemos con la nomenclatura propia de RIS. La función monto (\(C_n = C_0\cdot(1+i\cdot n)\), con Cₙ como dependiente) es apenas <b>uno de los 4 análisis posibles</b>: con las 4 variables en juego, cualquiera de ellas podría cumplir el rol de dependiente, y vos elegís cuál explorar.</p>
+        <p>Hay dos efectos posibles cuando cambia una variable, según cuál sea:</p>
+        <ul class="glossary">
+          <li><span class="sym">Movimiento:</span> <span class="def">cambia la variable <b>libre</b> (la que quedó en el eje horizontal). La función no cambia — solo nos movemos a otro punto de la misma curva.</span></li>
+          <li><span class="sym">Desplazamiento:</span> <span class="def">cambia una variable que estaba <b>fijada</b>. Se obtiene, en rigor, una curva nueva — se ve como toda la función desplazándose de lugar.</span></li>
+        </ul>
+        <p class="soft">Esta distinción es, de hecho, un anticipo intuitivo de la derivada parcial: preguntarse "¿qué le pasa a la dependiente si muevo la libre, dejando las otras dos fijas?" es, en esencia, la misma pregunta que responde una derivada parcial — acá la contestamos mirando un gráfico, en vez de derivando.</p>
+
+        <div class="ledger" id="mdc-panel">
+          <div class="ledger-head"><h3>Elegí qué rol cumple cada variable</h3><span>4 variables, 4 roles</span></div>
+          <div class="ledger-body">
+            <p style="margin:0 0 18px;font-size:.9rem;color:var(--ink-soft);">De las 4 variables de RIS (C₀, Cₙ, i, n), elegí cuál es la <b>dependiente</b> (el resultado) y, de las 3 restantes, cuál es la <b>libre</b> (x, la del Gráfico 1) y cuáles son las <b>2 fijas</b> (y, z — modificables en el Gráfico 2). Cada variable solo puede ocupar un rol a la vez.</p>
+
+            <div class="mdc-row">
+              <div class="mdc-row-select">
+                <label>1 · Variable dependiente (el resultado)</label>
+                <select id="mdc-role-dep" class="mdc-role-select"></select>
+                <div class="mdc-row-map"><span id="mdc-map-dep"></span></div>
+              </div>
+            </div>
+
+            <div class="mdc-row">
+              <div class="mdc-row-select">
+                <label>2 · Variable libre — Gráfico 1 (Movimiento)</label>
+                <select id="mdc-role-x" class="mdc-role-select"></select>
+                <div class="mdc-row-map"><span id="mdc-map-x"></span></div>
+              </div>
+              <div class="mdc-row-value">
+                <label id="mdc-panel-x-label"><span id="mdc-panel-x-label-text">x</span></label>
+                <input type="text" class="manual-input" id="mdc-panel-x-manual" inputmode="decimal" placeholder="valor de x">
+              </div>
+            </div>
+
+            <div class="mdc-row">
+              <div class="mdc-row-select">
+                <label>3 · Fija 1 — Gráfico 2 (Desplazamiento)</label>
+                <select id="mdc-role-y" class="mdc-role-select"></select>
+                <div class="mdc-row-map"><span id="mdc-map-y"></span></div>
+              </div>
+              <div class="mdc-row-value">
+                <label id="mdc-panel-y-label"><span id="mdc-panel-y-label-text">y</span></label>
+                <input type="text" class="manual-input" id="mdc-panel-y-manual" inputmode="decimal" placeholder="valor de y">
+              </div>
+            </div>
+
+            <div class="mdc-row">
+              <div class="mdc-row-select">
+                <label>4 · Fija 2 — Gráfico 2 (Desplazamiento)</label>
+                <select id="mdc-role-z" class="mdc-role-select"></select>
+                <div class="mdc-row-map"><span id="mdc-map-z"></span></div>
+              </div>
+              <div class="mdc-row-value">
+                <label id="mdc-panel-z-label"><span id="mdc-panel-z-label-text">z</span></label>
+                <input type="text" class="manual-input" id="mdc-panel-z-manual" inputmode="decimal" placeholder="valor de z">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="soft">El campo de <b>x</b> (libre) está espejado con el que aparece arriba del Gráfico 1 — cargar un valor en cualquiera de los dos actualiza al otro. Los campos de <b>y</b> y <b>z</b> son el punto de partida para ambos gráficos: el Gráfico 1 los usa como valores fijos "de fondo", y el Gráfico 2 los toma como el "antes" del desplazamiento — siempre en vivo, reflejando lo último que hayas cargado acá. El "nuevo valor" que cargues en el Gráfico 2 nunca modifica estos campos: para cambiar el punto de partida hay que editarlo acá, a mano. Las barras deslizadoras solo están disponibles arriba de cada gráfico, para la variable que se explora ahí.</p>
+
+        <div class="tutor-block" data-section>
+          <button class="tutor-toggle" data-toggle type="button">Antes de usar esta calculadora con un caso concreto... <span class="chev">+</span></button>
+          <div class="tutor-detail">
+            <div class="tutor-detail-inner">
+              <p>Esta calculadora trabaja con el caso genérico, donde se asume que la tasa y el plazo ya están sincronizados (misma unidad de tiempo). Antes de usarla para un ejercicio concreto, asegurate primero esa sincronía — de lo contrario, los gráficos van a mostrar una relación matemática correcta, pero que no corresponde a la operación real que estás analizando.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout">
+          <b>Formato de escritura (estilo Excel):</b> multiplicación <code>*</code>, división <code>/</code>, suma <code>+</code>, resta <code>-</code>, potencia <code>^</code>, paréntesis <code>( )</code> para agrupar en distintos niveles, decimales con <b>punto</b> (2.5, no 2,5). Funciones disponibles: <code>LN(...)</code> logaritmo natural, <code>EXP(...)</code> e elevado a, <code>SQRT(...)</code> raíz cuadrada. Solo pueden aparecer las variables <code>x</code>, <code>y</code>, <code>z</code> (mayúscula o minúscula, da igual) — la fórmula se genera sola según el mapeo de arriba, pero la podés editar libremente para explorar otras estructuras.
+        </div>
+
+        <div class="ledger">
+          <div class="ledger-head"><h3>Fórmula</h3><span id="mdc-formula-label">Cₙ = f(x;y,z)</span></div>
+          <div class="ledger-body" style="padding-top:18px;">
+            <input type="text" id="mdc-formula" class="manual-input" value="x*(1+z*y)">
+            <div id="mdc-formula-error" class="formula-error"></div>
+          </div>
+        </div>
+
+        <div class="ledger">
+          <div class="ledger-head"><h3>Gráfico 1 — Movimiento sobre la función</h3><span id="mdc-mov-tag">variable libre: x</span></div>
+          <div class="ledger-controls" style="grid-template-columns:1fr;">
+            <div class="ctrl">
+              <label id="mdc-x-label"><span id="mdc-x-label-text">x</span> — <span class="val" id="mdc-x-val">0</span></label>
+              <input type="range" id="mdc-x-slider" min="0" max="10" step="1" value="0">
+              <input type="text" class="manual-input" id="mdc-x-manual" inputmode="decimal" placeholder="o ingresá un valor manual (admite decimales)">
+            </div>
+          </div>
+          <div class="ledger-status" id="mdc-mov-status">La función queda fija (según los valores de arriba) — el punto se desliza sobre ella a medida que cambiás la variable libre.</div>
+          <div class="formula-error" id="mdc-mov-warning"></div>
+          <div class="ledger-body">
+            <div class="ledger-readout" id="mdc-mov-readout"></div>
+            <div class="chart-wrap"><div id="mdc-chart-mov"></div><p class="chart-caption">La función completa, con trazo difuminado, y el punto actual resaltado</p></div>
+          </div>
+        </div>
+
+        <div class="ledger">
+          <div class="ledger-head"><h3>Gráfico 2 — Desplazamiento</h3><span>elegí qué variable fijada modificar</span></div>
+          <div class="ledger-body" style="padding-top:18px;">
+            <div style="display:flex;gap:8px;margin-bottom:16px;">
+              <button type="button" class="var-select-btn active" id="mdc-shift-select-y" data-role="y">Modificar <span id="mdc-shift-btn-y-label">y</span></button>
+              <button type="button" class="var-select-btn" id="mdc-shift-select-z" data-role="z">Modificar <span id="mdc-shift-btn-z-label">z</span></button>
+            </div>
+            <div class="ledger-controls" style="grid-template-columns:1fr;margin-bottom:16px;">
+              <div class="ctrl">
+                <label id="mdc-shift-label"><span id="mdc-shift-label-text">y</span> — <span class="val" id="mdc-shift-val">0</span> <span style="text-transform:none;font-weight:400;">— arrastrá para ver varios desplazamientos de forma ágil</span></label>
+                <input type="range" id="mdc-shift-slider" min="0" max="10" step="1" value="0">
+              </div>
+            </div>
+            <div class="ctrl" style="border:none;padding:0;">
+              <label id="mdc-shift-newval-label">Nuevo valor para <span id="mdc-shift-varname">y</span></label>
+              <input type="text" class="manual-input" id="mdc-shift-manual" inputmode="decimal" placeholder="nuevo valor">
+            </div>
+            <button type="button" class="apply-btn" id="mdc-shift-apply">Aplicar desplazamiento</button>
+            <div class="ledger-status" id="mdc-shift-status" style="margin-top:14px;">Elegí una variable, escribí su nuevo valor (o arrastrá la barra), y aplicá.</div>
+            <div class="formula-error" id="mdc-shift-warning"></div>
+            <div class="chart-wrap"><div id="mdc-chart-shift"></div><p class="chart-caption">Función antes (punteada, diluida) y después (sólida, resaltada) — la libre no interviene acá</p></div>
+          </div>
+        </div>
+
+        <p class="soft">El Gráfico 1 muestra el <b>movimiento</b>: la función queda fija (con los valores de y y z que hayas cargado) y el punto se desliza sobre ella a medida que cambiás la variable libre. El Gráfico 2 muestra el <b>desplazamiento</b>: ahí la libre no participa — lo que se compara es la función completa antes y después de cambiar la variable que elijas (y o z).</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8 -->
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">08</span>
       <h2>Indicadores RIS</h2>
       <span class="chev">+</span>
     </button>
@@ -3211,6 +3470,399 @@ $('te2_decimales').addEventListener('change', calcular);
 refreshRegimenConstraints();
 refreshConditionals();
 calcular();
+
+})();
+</script>
+
+<script>
+/* Motor de gráficos SVG reutilizable — sin librerías externas.
+   curves: array de {pts:[{q,p}], color, dash:bool, noPoints:bool}
+   q = eje horizontal (variable libre), p = eje vertical (variable dependiente) */
+function svgChart(curves, qMax, pMax, opts){
+  opts = opts || {};
+  var qMin = (opts.qMin!==undefined) ? opts.qMin : 0;
+  var pMin = (opts.pMin!==undefined) ? opts.pMin : 0;
+  var W=440, H=240, L=50, R=14, T=12, B=30;
+  function mx(q){ return L + ((q-qMin)/(qMax-qMin))*(W-L-R); }
+  function my(p){ return H-B - ((p-pMin)/(pMax-pMin))*(H-T-B); }
+  var s = '<svg viewBox="0 0 '+W+' '+H+'" xmlns="http://www.w3.org/2000/svg">';
+  var steps=5;
+  for(var i=0;i<=steps;i++){
+    var qv = qMin + (qMax-qMin)*i/steps, pv = pMin + (pMax-pMin)*i/steps;
+    var xg = mx(qv), yg = my(pv);
+    s += '<line x1="'+xg+'" y1="'+T+'" x2="'+xg+'" y2="'+(H-B)+'" stroke="#E4E9E7" stroke-width="1"/>';
+    s += '<line x1="'+L+'" y1="'+yg+'" x2="'+(W-R)+'" y2="'+yg+'" stroke="#E4E9E7" stroke-width="1"/>';
+    s += '<text x="'+xg+'" y="'+(H-B+14)+'" font-size="8" fill="#5B6570" text-anchor="middle" font-family="monospace">'+fmt(qv,1)+'</text>';
+    s += '<text x="'+(L-7)+'" y="'+(yg+3)+'" font-size="8" fill="#5B6570" text-anchor="end" font-family="monospace">'+fmt(pv,1)+'</text>';
+  }
+  s += '<line x1="'+L+'" y1="'+T+'" x2="'+L+'" y2="'+(H-B)+'" stroke="#B9C2BE" stroke-width="1.3"/>';
+  s += '<line x1="'+L+'" y1="'+(H-B)+'" x2="'+(W-R)+'" y2="'+(H-B)+'" stroke="#B9C2BE" stroke-width="1.3"/>';
+  s += '<text x="'+(W-R)+'" y="'+(H-B-6)+'" font-size="9.5" fill="#1B2430" text-anchor="end" font-family="sans-serif">'+(opts.xLabel||'x')+'</text>';
+  s += '<text x="'+(L+4)+'" y="'+(T+10)+'" font-size="9.5" fill="#1B2430" text-anchor="start" font-family="sans-serif">'+(opts.yLabel||'f(x)')+'</text>';
+  curves.forEach(function(c){
+    if(!c.pts.length) return;
+    var pts = c.pts.map(function(pt){ return mx(pt.q)+','+my(pt.p); }).join(' ');
+    var dash = c.dash ? 'stroke-dasharray="5,4"' : '';
+    s += '<polyline points="'+pts+'" fill="none" stroke="'+c.color+'" stroke-width="2.4" '+dash+'/>';
+    if(!c.noPoints){ c.pts.forEach(function(pt,idx){ if(idx % Math.max(1,Math.floor(c.pts.length/12))===0) s += '<circle cx="'+mx(pt.q)+'" cy="'+my(pt.p)+'" r="2.4" fill="'+c.color+'"/>'; }); }
+  });
+  if(opts.highlight && isFinite(opts.highlight.p)){
+    s += '<circle cx="'+mx(opts.highlight.q)+'" cy="'+my(opts.highlight.p)+'" r="5.5" fill="#B8862B" stroke="#fff" stroke-width="1.5"/>';
+  }
+  s += '</svg>';
+  return s;
+}
+</script>
+
+<script>
+(function(){
+  // ===== Metadatos de las 4 variables de RIS =====
+  var MDC_VARS = {
+    C0: { label:'C₀', name:'Capital inicial (dato)',      min:100,  max:5000, step:100, def:1000, pct:false },
+    Cn: { label:'Cₙ', name:'Capital final o monto',       min:100,  max:8000, step:100, def:1100, pct:false },
+    i:  { label:'i',  name:'Tasa de interés periódica',   min:0.5,  max:15,   step:0.5, def:2,    pct:true  },
+    n:  { label:'n',  name:'Plazo en períodos',           min:1,    max:24,   step:1,   def:5,    pct:false }
+  };
+  var MDC_ORDER = ['C0','Cn','i','n'];
+
+  // ===== Plantillas de fórmula (una por variable dependiente posible), en nombres reales =====
+  var MDC_TEMPLATES = {
+    Cn: 'C0*(1+i*n)',
+    C0: 'Cn/(1+i*n)',
+    i:  '(Cn/C0-1)/n',
+    n:  '(Cn/C0-1)/i'
+  };
+
+  var mdc = { dep: 'Cn', x: 'C0', y: 'n', z: 'i' };
+
+  // Valores actuales de x/y/z, cargados en la parametrización (unidad de cálculo — tasas como decimal)
+  var mdcPanelValues = {};
+
+  // Gráfico 2: para cada fija (y/z), el "nuevo valor" que el alumno cargó ahí — null = todavía no tocó nada
+  var mdcShiftAfter = { y: null, z: null };
+  var mdcShiftRole = 'y';
+
+  function mdc$(id){ return document.getElementById(id); }
+
+  // ===== Poblar los 4 selects de roles =====
+  function mdcPopulateSelects(){
+    ['dep','x','y','z'].forEach(function(role){
+      var sel = mdc$('mdc-role-'+role);
+      sel.innerHTML = '';
+      MDC_ORDER.forEach(function(key){
+        var opt = document.createElement('option');
+        opt.value = key;
+        opt.textContent = MDC_VARS[key].label + ' — ' + MDC_VARS[key].name;
+        if(key === mdc[role]) opt.selected = true;
+        sel.appendChild(opt);
+      });
+    });
+  }
+
+  function mdcOnRoleChange(role, newVal){
+    var oldVal = mdc[role];
+    var roles = ['dep','x','y','z'];
+    var conflictRole = null;
+    roles.forEach(function(r){ if(r!==role && mdc[r]===newVal) conflictRole = r; });
+
+    mdc[role] = newVal;
+    if(conflictRole){ mdc[conflictRole] = oldVal; }
+
+    mdcPopulateSelects();
+    mdcRebuildFormula();
+    ['x','y','z'].forEach(function(r){
+      if(r === role || r === conflictRole){
+        mdcResetPanelControl(r);
+      }
+    });
+    ['y','z'].forEach(function(r){
+      if(r === role || r === conflictRole){
+        mdcShiftAfter[r] = null;
+      }
+    });
+    mdcRefreshShiftLabels();
+    mdcRenderAll();
+  }
+
+  // ===== Generar el texto de fórmula en x/y/z a partir del mapeo actual, y los rótulos de mapeo =====
+  function mdcRebuildFormula(){
+    var template = MDC_TEMPLATES[mdc.dep];
+    var text = template;
+    ['x','y','z'].forEach(function(role){
+      var realKey = mdc[role];
+      var re = new RegExp('\\b' + realKey + '\\b', 'g');
+      text = text.replace(re, role);
+    });
+    mdc$('mdc-formula').value = text;
+    mdc$('mdc-formula-label').textContent = MDC_VARS[mdc.dep].label + ' = f(x;y,z)';
+    mdc$('mdc-mov-tag').textContent = 'variable libre: ' + MDC_VARS[mdc.x].label;
+
+    mdc$('mdc-map-dep').innerHTML = MDC_VARS[mdc.dep].label + ' <b>= dependiente</b> (resultado, se calcula solo)';
+    mdc$('mdc-map-x').innerHTML = MDC_VARS[mdc.x].label + ' <b>= x</b> (libre)';
+    mdc$('mdc-map-y').innerHTML = MDC_VARS[mdc.y].label + ' <b>= y</b> (fija 1)';
+    mdc$('mdc-map-z').innerHTML = MDC_VARS[mdc.z].label + ' <b>= z</b> (fija 2)';
+
+    mdc$('mdc-x-label-text').textContent = MDC_VARS[mdc.x].label + ' = x (libre)';
+    mdc$('mdc-panel-x-label-text').textContent = 'Valor de x';
+    mdc$('mdc-panel-y-label-text').textContent = 'Valor de y';
+    mdc$('mdc-panel-z-label-text').textContent = 'Valor de z';
+  }
+
+  function mdcRefreshShiftLabels(){
+    mdc$('mdc-shift-btn-y-label').textContent = MDC_VARS[mdc.y].label;
+    mdc$('mdc-shift-btn-z-label').textContent = MDC_VARS[mdc.z].label;
+    var role = mdcShiftRole, key = mdc[role], v = MDC_VARS[key];
+    mdc$('mdc-shift-varname').textContent = v.label;
+    mdc$('mdc-shift-label-text').textContent = v.label + ' = ' + role;
+    var startVal = mdcShiftAfter[role] !== null ? mdcShiftAfter[role] : mdcPanelVal(role);
+    var slider = mdc$('mdc-shift-slider');
+    slider.min = v.min; slider.max = v.max; slider.step = v.step;
+    slider.value = v.pct ? startVal*100 : startVal;
+    mdc$('mdc-shift-val').textContent = fmt(v.pct ? startVal*100 : startVal, v.pct?1:2) + (v.pct?'%':'');
+    mdc$('mdc-shift-manual').value = '';
+    mdcRefreshShiftStatus();
+  }
+
+  function mdcRefreshShiftStatus(){
+    var role = mdcShiftRole, v = MDC_VARS[mdc[role]];
+    var beforeVal = mdcPanelVal(role); // siempre en vivo, desde la parametrización
+    if(mdcShiftAfter[role] === null){
+      mdc$('mdc-shift-status').innerHTML = 'Punto de partida (parametrización): ' + v.label + ' = ' +
+        fmt(v.pct?beforeVal*100:beforeVal, v.pct?1:2) + (v.pct?'%':'') + '. Todavía no cargaste un nuevo valor.';
+    } else {
+      mdc$('mdc-shift-status').innerHTML = '<b>Desplazamiento</b> — antes (parametrización): ' + v.label + ' = ' +
+        fmt(v.pct?beforeVal*100:beforeVal, v.pct?1:2) + (v.pct?'%':'') + ' &rarr; ahora: ' + v.label + ' = ' +
+        fmt(v.pct?mdcShiftAfter[role]*100:mdcShiftAfter[role], v.pct?1:2) + (v.pct?'%':'') + '.';
+    }
+  }
+
+  // ===== Panel: campos de carga (sin slider) para x, y, z =====
+  function mdcResetPanelControl(role){
+    var key = mdc[role], v = MDC_VARS[key];
+    mdcPanelValues[role] = v.pct ? v.def/100 : v.def;
+    mdc$('mdc-panel-'+role+'-manual').value = fmt(v.def, v.pct?1:0);
+    if(role === 'x'){
+      var xSlider = mdc$('mdc-x-slider');
+      xSlider.min = v.min; xSlider.max = v.max; xSlider.step = v.step; xSlider.value = v.def;
+      mdc$('mdc-x-manual').value = fmt(v.def, v.pct?1:0);
+      mdc$('mdc-x-val').textContent = fmt(v.def, v.pct?1:0) + (v.pct?'%':'');
+    }
+  }
+
+  // Lee y actualiza el estado de una variable desde su campo de carga en la parametrización
+  function mdcPanelVal(role){
+    var v = MDC_VARS[mdc[role]];
+    var raw = parseEsNumber(mdc$('mdc-panel-'+role+'-manual').value);
+    if(isFinite(raw)){ mdcPanelValues[role] = v.pct ? raw/100 : raw; }
+    return mdcPanelValues[role];
+  }
+
+  // x se edita en 2 lugares (panel y Gráfico 1) — cualquiera de los dos actualiza al otro
+  function mdcSetXEverywhere(rawDisplay, sourceId){
+    var v = MDC_VARS[mdc.x];
+    if(!isFinite(rawDisplay)) return;
+    mdcPanelValues.x = v.pct ? rawDisplay/100 : rawDisplay;
+    if(sourceId !== 'mdc-panel-x-manual') mdc$('mdc-panel-x-manual').value = fmt(rawDisplay, v.pct?1:2);
+    if(sourceId !== 'mdc-x-manual') mdc$('mdc-x-manual').value = fmt(rawDisplay, v.pct?1:2);
+    if(sourceId !== 'mdc-x-slider') mdc$('mdc-x-slider').value = rawDisplay;
+    mdc$('mdc-x-val').textContent = fmt(rawDisplay, v.pct?1:2) + (v.pct?'%':'');
+    mdcRenderMov();
+  }
+
+  // ===== Compilar fórmula x,y,z (whitelist + traducción de funciones) =====
+  function mdcCompile(text){
+    var t = text.replace(/\bLN\(/gi, 'Math.log(')
+                .replace(/\bEXP\(/gi, 'Math.exp(')
+                .replace(/\bSQRT\(/gi, 'Math.sqrt(')
+                .replace(/\^/g, '**')
+                .replace(/\b[xX]\b/g, 'x')
+                .replace(/\b[yY]\b/g, 'y')
+                .replace(/\b[zZ]\b/g, 'z');
+    if(!/^[0-9xyzXYZ+\-*/^().,\sMathlogexpsqrt]*$/.test(t.replace(/Math\.(log|exp|sqrt)/g,''))){
+      throw new Error('La fórmula contiene caracteres no permitidos.');
+    }
+    /* eslint-disable no-new-func */
+    return new Function('x','y','z', 'return (' + t + ');');
+  }
+
+  function mdcGetCalc(){
+    var text = mdc$('mdc-formula').value;
+    try{
+      var fn = mdcCompile(text);
+      fn(1,1,1);
+      mdc$('mdc-formula-error').textContent = '';
+      return fn;
+    }catch(e){
+      mdc$('mdc-formula-error').textContent = 'Fórmula inválida: revisá la sintaxis.';
+      return null;
+    }
+  }
+
+  // ===== Gráfico 1: Movimiento — x del estado espejado, y/z de la parametrización (en vivo) =====
+  function mdcRenderMov(){
+    var calc = mdcGetCalc();
+    if(!calc) return;
+    var xKey = mdc.x, xv = MDC_VARS[xKey];
+    var xNow = mdcPanelValues.x;
+    var yNow = mdcPanelVal('y');
+    var zNow = mdcPanelVal('z');
+
+    var pts = [];
+    var lo = 0, hi = xv.pct ? xv.max/100 : xv.max; // el dominio siempre incluye 0, para que el eje vertical quede correctamente ubicado
+    for(var k=0;k<=40;k++){
+      var xv2 = lo + (hi-lo)*k/40;
+      var yv2 = calc(xv2, yNow, zNow);
+      if(isFinite(yv2)) pts.push({q:xv2, p:yv2});
+    }
+    var curPt = calc(xNow, yNow, zNow);
+
+    var allP = pts.map(function(pt){return pt.p;});
+    var rawMin = allP.length ? Math.min.apply(null, allP.concat([curPt])) : 0;
+    var pMin = rawMin;
+    var pMax = allP.length ? Math.max.apply(null, allP.concat([curPt])) : 1;
+    if(pMin>0) pMin = 0;
+
+    var movWarn = mdc$('mdc-mov-warning');
+    movWarn.textContent = (!isFinite(curPt) || rawMin < 0)
+      ? '⚠ Este resultado no tiene sentido financiero — revisá los valores cargados (puede ser un error de tipeo, por ejemplo una tasa igual o mayor al 100%).'
+      : '';
+
+    var svg = svgChart([{pts:pts, color:'#C7CFCC', dash:false, noPoints:true}], hi, pMax, {
+      qMin:lo, pMin:pMin,
+      xLabel: MDC_VARS[xKey].label, yLabel: MDC_VARS[mdc.dep].label,
+      highlight: isFinite(curPt) ? {q:xNow, p:curPt} : null
+    });
+    mdc$('mdc-chart-mov').innerHTML = svg;
+
+    mdc$('mdc-mov-readout').innerHTML =
+      '<span>' + MDC_VARS[xKey].label + ' = <b>' + fmt(xv.pct?xNow*100:xNow, xv.pct?1:2) + (xv.pct?'%':'') + '</b></span>' +
+      '<span>' + MDC_VARS[mdc.y].label + ' (fija) = <b>' + fmt(MDC_VARS[mdc.y].pct?yNow*100:yNow, MDC_VARS[mdc.y].pct?1:2) + (MDC_VARS[mdc.y].pct?'%':'') + '</b></span>' +
+      '<span>' + MDC_VARS[mdc.z].label + ' (fija) = <b>' + fmt(MDC_VARS[mdc.z].pct?zNow*100:zNow, MDC_VARS[mdc.z].pct?1:2) + (MDC_VARS[mdc.z].pct?'%':'') + '</b></span>' +
+      '<span>' + MDC_VARS[mdc.dep].label + ' = <b>' + fmt(curPt,2) + '</b></span>';
+  }
+
+  // ===== Gráfico 2: Desplazamiento — "antes" siempre en vivo desde la parametrización =====
+  function mdcRenderShift(previewVal){
+    var calc = mdcGetCalc();
+    if(!calc) return;
+    var xKey = mdc.x, xv = MDC_VARS[xKey];
+    var role = mdcShiftRole;
+    var otherRole = role==='y' ? 'z' : 'y';
+    var otherVal = mdcPanelVal(otherRole); // la otra fija, también en vivo desde la parametrización
+    var beforeVal = mdcPanelVal(role); // el "antes" es, siempre, lo que hay cargado en la parametrización
+    var afterVal = (previewVal !== undefined && isFinite(previewVal)) ? previewVal :
+                   (mdcShiftAfter[role] !== null ? mdcShiftAfter[role] : beforeVal);
+
+    var lo = 0, hi = xv.pct ? xv.max/100 : xv.max; // el dominio siempre incluye 0, para que el eje vertical quede correctamente ubicado
+    function curveFor(fixedVal){
+      var pts = [];
+      for(var k=0;k<=40;k++){
+        var xv2 = lo + (hi-lo)*k/40;
+        var yArg = role==='y' ? fixedVal : otherVal;
+        var zArg = role==='z' ? fixedVal : otherVal;
+        var pv = calc(xv2, yArg, zArg);
+        if(isFinite(pv)) pts.push({q:xv2, p:pv});
+      }
+      return pts;
+    }
+    var ptsBefore = curveFor(beforeVal);
+    var ptsAfter = curveFor(afterVal);
+    var allP = ptsBefore.concat(ptsAfter).map(function(pt){return pt.p;});
+    var pMin = allP.length ? Math.min.apply(null, allP) : 0, pMax = allP.length ? Math.max.apply(null, allP) : 1;
+    if(pMin>0) pMin = 0;
+
+    var afterInvalid = ptsAfter.length === 0 || Math.min.apply(null, ptsAfter.map(function(pt){return pt.p;})) < 0;
+    var shiftWarn = mdc$('mdc-shift-warning');
+    shiftWarn.textContent = afterInvalid
+      ? '⚠ El nuevo valor no da un resultado con sentido financiero — revisá el dato cargado (puede ser un error de tipeo, por ejemplo una tasa igual o mayor al 100%).'
+      : '';
+
+    var svg = svgChart([
+      {pts:ptsBefore, color:'#C7CFCC', dash:true},
+      {pts:ptsAfter, color:'#B8862B', dash:false}
+    ], hi, pMax, { qMin:lo, pMin:pMin, xLabel: MDC_VARS[xKey].label, yLabel: MDC_VARS[mdc.dep].label });
+    mdc$('mdc-chart-shift').innerHTML = svg;
+  }
+
+  function mdcSelectShiftRole(role){
+    mdcShiftRole = role;
+    mdc$('mdc-shift-select-y').classList.toggle('active', role==='y');
+    mdc$('mdc-shift-select-z').classList.toggle('active', role==='z');
+    mdcRefreshShiftLabels();
+    mdcRenderShift();
+  }
+
+  function mdcOnShiftSliderInput(){
+    var role = mdcShiftRole, v = MDC_VARS[mdc[role]];
+    var raw = parseFloat(mdc$('mdc-shift-slider').value);
+    var val = v.pct ? raw/100 : raw;
+    mdc$('mdc-shift-val').textContent = fmt(raw, v.pct?1:2) + (v.pct?'%':'');
+    mdc$('mdc-shift-manual').value = '';
+    mdcRenderShift(val);
+  }
+
+  function mdcOnShiftManualInput(){
+    var role = mdcShiftRole, v = MDC_VARS[mdc[role]];
+    var raw = parseEsNumber(mdc$('mdc-shift-manual').value);
+    if(!isFinite(raw)){ mdcRenderShift(); return; }
+    var val = v.pct ? raw/100 : raw;
+    mdc$('mdc-shift-slider').value = raw;
+    mdc$('mdc-shift-val').textContent = fmt(raw, v.pct?1:2) + (v.pct?'%':'');
+    mdcRenderShift(val);
+  }
+
+  function mdcApplyShift(){
+    var role = mdcShiftRole;
+    var v = MDC_VARS[mdc[role]];
+    var manualRaw = parseEsNumber(mdc$('mdc-shift-manual').value);
+    var raw = isFinite(manualRaw) ? manualRaw : parseFloat(mdc$('mdc-shift-slider').value);
+    if(!isFinite(raw)){
+      mdc$('mdc-shift-status').textContent = 'Ingresá un valor numérico válido antes de aplicar.';
+      return;
+    }
+    mdcShiftAfter[role] = v.pct ? raw/100 : raw;
+    mdc$('mdc-shift-manual').value = '';
+    mdc$('mdc-shift-slider').value = raw;
+    mdc$('mdc-shift-val').textContent = fmt(raw, v.pct?1:2) + (v.pct?'%':'');
+    mdcRefreshShiftStatus();
+    mdcRenderShift();
+  }
+
+  function mdcRenderAll(){
+    mdcRenderMov();
+    mdcRenderShift();
+  }
+
+  // ===== Listeners =====
+  ['dep','x','y','z'].forEach(function(role){
+    mdc$('mdc-role-'+role).addEventListener('change', function(e){ mdcOnRoleChange(role, e.target.value); });
+  });
+  mdc$('mdc-formula').addEventListener('input', mdcRenderAll);
+
+  // Gráfico 1 — x espejado con el panel (solo campo manual en el panel; slider + manual en el gráfico)
+  mdc$('mdc-x-slider').addEventListener('input', function(){ mdcSetXEverywhere(parseFloat(mdc$('mdc-x-slider').value), 'mdc-x-slider'); });
+  mdc$('mdc-x-manual').addEventListener('input', function(){ mdcSetXEverywhere(parseEsNumber(mdc$('mdc-x-manual').value), 'mdc-x-manual'); });
+  mdc$('mdc-panel-x-manual').addEventListener('input', function(){ mdcSetXEverywhere(parseEsNumber(mdc$('mdc-panel-x-manual').value), 'mdc-panel-x-manual'); });
+
+  // Panel — y/z: al cambiar, refresca Gráfico 1 (fijas) y Gráfico 2 (su "antes" en vivo + status)
+  mdc$('mdc-panel-y-manual').addEventListener('input', function(){ mdcRenderMov(); mdcRefreshShiftStatus(); mdcRenderShift(); });
+  mdc$('mdc-panel-z-manual').addEventListener('input', function(){ mdcRenderMov(); mdcRefreshShiftStatus(); mdcRenderShift(); });
+
+  // Gráfico 2
+  mdc$('mdc-shift-select-y').addEventListener('click', function(){ mdcSelectShiftRole('y'); });
+  mdc$('mdc-shift-select-z').addEventListener('click', function(){ mdcSelectShiftRole('z'); });
+  mdc$('mdc-shift-slider').addEventListener('input', mdcOnShiftSliderInput);
+  mdc$('mdc-shift-manual').addEventListener('input', mdcOnShiftManualInput);
+  mdc$('mdc-shift-apply').addEventListener('click', mdcApplyShift);
+
+  // ===== Inicialización =====
+  mdcPopulateSelects();
+  mdcRebuildFormula();
+  mdcResetPanelControl('x');
+  mdcResetPanelControl('y');
+  mdcResetPanelControl('z');
+  mdcRefreshShiftLabels();
+  mdcRenderAll();
 
 })();
 </script>
