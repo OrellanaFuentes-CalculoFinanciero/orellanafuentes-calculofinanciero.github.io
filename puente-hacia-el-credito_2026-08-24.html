@@ -1,0 +1,1903 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="author" content="Orlando Orellana">
+<meta name="date" content="2026-08-24">
+<!--
+  Autor original del contenido: Orlando Orellana
+  Licenciado en Economía (FCE-UBA)
+  Profesor Adjunto Interino de Cálculo Financiero (FCE-UBA)
+  Unidad: El puente hacia el crédito: por qué existen las operaciones financieras
+  Fecha de creación de este material: 24 de agosto de 2026
+  Material adaptado, con fines exclusivamente didácticos, a partir del
+  contenido originalmente desarrollado por Orlando Orellana en
+  "Introducción a Cálculo Financiero" (2021). Ver la nota de licencia
+  pedagógica al inicio del documento.
+-->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El puente hacia el crédito: por qué existen las operaciones financieras — Cálculo Financiero</title>
+<script>
+window.MathJax = {
+  tex: { inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']] },
+  svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js" defer crossorigin="anonymous"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2430;
+    --ink-soft:#5B6570;
+    --paper:#FFFFFF;
+    --paper-alt:#F3F6F5;
+    --paper-deep:#ECF0EE;
+    --gold:#B8862B;
+    --gold-soft:#E8D9B8;
+    --teal:#1F6F6B;
+    --teal-soft:#DCEBEA;
+    --line:#DDE3E0;
+    --line-strong:#B9C2BE;
+    --pastel-gold:#FBF1DC;
+    --pastel-teal:#E3F2F0;
+    --pastel-blue:#E7EEF7;
+    --pastel-rust:#EBA99B;
+    --rust:#A8462F;
+    --radius:4px;
+    --serif:'Fraunces', Georgia, serif;
+    --sans:'Source Sans 3', -apple-system, sans-serif;
+    --mono:'Source Sans 3', -apple-system, sans-serif;
+  }
+  /* ---------- temas alternativos para distintos entornos de luminosidad ---------- */
+  html[data-theme="oscuro"]{
+    --ink:#EDEFF3; --ink-soft:#9FB0C3; --paper:#12202F; --paper-alt:#1B2B3D; --paper-deep:#0E1826;
+    --gold:#D9B24C; --gold-soft:#4A3F22; --teal:#5FC4B8; --teal-soft:#173A38;
+    --line:#28394C; --line-strong:#3C5066;
+    --pastel-gold:#3A3221; --pastel-teal:#16302D; --pastel-blue:#1A2A3E; --pastel-rust:#4A2A20;
+  }
+  html[data-theme="contraste"]{
+    --ink:#000000; --ink-soft:#2E2E2E; --paper:#FFFFFF; --paper-alt:#EFEFEF; --paper-deep:#E2E2E2;
+    --gold:#7A5900; --gold-soft:#FFE6A0; --teal:#00594E; --teal-soft:#CBEAE4;
+    --line:#A6A6A6; --line-strong:#707070;
+    --pastel-gold:#FFEFC2; --pastel-teal:#CFEEE8; --pastel-blue:#D6E4F5; --pastel-rust:#F0A594;
+  }
+  html[data-theme="sepia"]{
+    --ink:#3B2F22; --ink-soft:#70604A; --paper:#F6EFDD; --paper-alt:#EFE4C9; --paper-deep:#E6D8B7;
+    --gold:#9C6B26; --gold-soft:#E6CC93; --teal:#5C7B67; --teal-soft:#DCE5D3;
+    --line:#DDCEA5; --line-strong:#C6B285;
+    --pastel-gold:#F1E1B5; --pastel-teal:#DEE8D6; --pastel-blue:#E1E6EA; --pastel-rust:#DE9F8C;
+  }
+  *{box-sizing:border-box; font-feature-settings:"zero" 0; font-variant-numeric:normal;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:880px;margin:0 auto;padding:0 28px;}
+
+  /* ---------- selector de apariencia ---------- */
+  .theme-switcher{
+    position:fixed; top:16px; right:16px; z-index:150; display:flex; align-items:center; gap:9px;
+    background:var(--paper); border:1px solid var(--line-strong); border-radius:20px; padding:7px 12px 7px 14px;
+    box-shadow:0 6px 20px rgba(0,0,0,0.15);
+  }
+  .theme-switcher-label{
+    font-family:var(--mono); font-size:9.5px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft);
+  }
+  .theme-swatch{
+    width:20px; height:20px; border-radius:50%; border:2px solid transparent; cursor:pointer; padding:0;
+    background:linear-gradient(135deg, var(--swatch-bg) 50%, var(--swatch-accent) 50%);
+    transition:border-color .15s, transform .15s;
+  }
+  .theme-swatch:hover{transform:scale(1.12);}
+  .theme-swatch.active{border-color:var(--ink);}
+  @media (max-width:640px){
+    .theme-switcher{top:10px; right:10px; padding:6px 8px;}
+    .theme-switcher-label{display:none;}
+  }
+
+  /* ===== HERO ===== */
+  header.hero{
+    border-bottom:1px solid var(--line);
+    padding:64px 0 48px;
+    background:var(--paper);
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin:0 0 18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--gold);display:inline-block;}
+  h1.title{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:clamp(2.3rem,5vw,3.4rem);
+    line-height:1.05;
+    margin:0 0 14px;
+    letter-spacing:-.01em;
+  }
+  h1.title em{font-style:italic;font-weight:500;color:var(--teal);}
+  .subtitle{
+    font-size:1.08rem;
+    color:var(--ink-soft);
+    max-width:56ch;
+    margin:0 0 8px;
+  }
+  .nodo-tag{
+    display:inline-block;
+    margin-top:18px;
+    font-family:var(--mono);
+    font-size:13px;
+    background:var(--paper);
+    border:1px solid var(--line-strong);
+    padding:5px 12px;
+    border-radius:999px;
+    color:var(--ink-soft);
+  }
+  .nodo-tag b{color:var(--ink);}
+
+  /* ===== LIVE LEDGER (signature element) ===== */
+  .ledger{
+    margin:40px 0 0;
+    border:1px solid var(--line-strong);
+    background:var(--paper);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .ledger-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    padding:16px 20px;
+    background:var(--ink);
+    color:var(--paper-alt);
+  }
+  .ledger-head h3{
+    font-family:var(--serif);
+    font-weight:500;
+    font-size:1.05rem;
+    margin:0;
+    color:#fff;
+  }
+  .ledger-head span{font-family:var(--mono);font-size:11.5px;color:var(--gold-soft);letter-spacing:.06em;}
+  .ledger-controls{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:0;
+    border-bottom:1px solid var(--line);
+  }
+  .ctrl{
+    padding:16px 20px;
+    border-right:1px solid var(--line);
+  }
+  .ctrl:last-child{border-right:none;}
+  .ctrl label{
+    display:block;
+    font-family:var(--mono);
+    font-size:11.5px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:var(--ink-soft);
+    margin-bottom:8px;
+  }
+  .ctrl .val{font-family:var(--mono);color:var(--teal);font-weight:600;}
+  .ctrl input[type=range]{width:100%;accent-color:var(--gold);}
+  .ledger-intro{
+    padding:16px 20px;
+    background:var(--paper);
+    border-bottom:1px solid var(--line);
+  }
+  .ledger-intro p{
+    margin:0 0 8px;
+    font-size:.92rem;
+    color:var(--ink-soft);
+    max-width:none;
+  }
+  .ledger-intro p:first-child{white-space:nowrap;}
+  @media (max-width:640px){
+    .ledger-intro p:first-child{white-space:normal;}
+  }
+  .ledger-intro p:last-child{margin-bottom:0;}
+  .ledger-intro ul.intro-list{
+    margin:0 0 10px;
+    padding-left:20px;
+    font-size:.92rem;
+    color:var(--ink-soft);
+    max-width:70ch;
+  }
+  .ledger-intro ul.intro-list li{margin-bottom:3px;}
+  .ledger-result{
+    padding:22px 20px 26px;
+    background:var(--paper-alt);
+  }
+  .ledger-sims{
+    padding:22px 20px 26px;
+    background:var(--paper);
+    border-top:1px solid var(--line);
+  }
+  .formula-line{
+    font-family:var(--mono);
+    font-size:14px;
+    color:var(--ink-soft);
+    margin-bottom:10px;
+  }
+  .result-big{
+    font-family:var(--mono);
+    font-size:2.1rem;
+    font-weight:600;
+    color:var(--ink);
+  }
+  .result-big small{
+    font-family:var(--sans);
+    font-size:.95rem;
+    font-weight:500;
+    color:var(--ink-soft);
+    margin-left:8px;
+  }
+  .period-strip{
+    margin-top:18px;
+    display:flex;
+    gap:3px;
+    align-items:flex-end;
+    height:70px;
+  }
+  .period-bar{
+    flex:1;
+    background:var(--teal-soft);
+    border-top:2px solid var(--teal);
+    position:relative;
+    min-width:4px;
+    transition:height .15s ease;
+  }
+
+  /* ===== SECTIONS / ACCORDION ===== */
+  main{padding:8px 0 100px;}
+  .section-block{
+    border-bottom:1px solid var(--line);
+  }
+  .section-toggle{
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:18px;
+    padding:26px 0;
+    background:none;
+    border:none;
+    text-align:left;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .section-toggle .num{
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--gold);
+    min-width:26px;
+  }
+  .section-toggle h2{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:1.5rem;
+    margin:0;
+    flex:1;
+    color:var(--ink);
+  }
+  .section-toggle .chev{
+    font-family:var(--mono);
+    color:var(--ink-soft);
+    font-size:18px;
+    transition:transform .25s ease;
+  }
+  .section-block.open .chev{transform:rotate(45deg);}
+  .section-body{
+    max-height:0;
+    overflow:hidden;
+    transition:max-height .35s ease;
+  }
+  .section-body-inner{
+    padding:0 0 34px 44px;
+    max-width:64ch;
+  }
+  .section-block.open .section-body{max-height:30000px; overflow:visible;}
+
+  .section-body-inner p{margin:0 0 16px;color:var(--ink);}
+  .section-body-inner ul{margin:0 0 16px;padding-left:22px;color:var(--ink);}
+  .section-body-inner ul li{margin:0 0 8px;}
+  .section-body-inner p.soft{color:var(--ink-soft);}
+  .callout{
+    border-left:3px solid var(--gold);
+    background:var(--pastel-gold);
+    padding:14px 18px;
+    margin:18px 0;
+    font-size:.96rem;
+    border-radius:0 var(--radius) var(--radius) 0;
+  }
+  .callout b{color:var(--ink);}
+  .plain-intro{
+    font-style:italic;
+    color:var(--ink-soft);
+    border-left:3px solid var(--teal);
+    padding:2px 0 2px 16px;
+    margin:0 0 14px;
+    font-size:.97rem;
+  }
+  .plain-intro b{font-style:normal; color:var(--ink);}
+  .ped-license{font-style:italic; color:var(--teal);}
+  .prereq-block{
+    padding:0 0 34px;
+    margin-bottom:8px;
+    border-bottom:1px solid var(--line);
+  }
+  .prereq-tag{
+    display:inline-block;
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink);
+    background:var(--pastel-gold);
+    border:1px solid var(--gold);
+    border-radius:20px;
+    padding:6px 14px;
+    margin:0 0 14px;
+  }
+  .prereq-block h2{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:1.4rem;
+    margin:0 0 18px;
+    color:var(--ink);
+  }
+  .prereq-block p{margin:0 0 16px; color:var(--ink);}
+  .prereq-block p.soft{color:var(--ink-soft);}
+  .formula-box{
+    background:var(--pastel-teal);
+    color:var(--ink);
+    padding:32px 26px;
+    border-radius:var(--radius);
+    margin:20px 0;
+    text-align:center;
+    font-size:1.15rem;
+    line-height:1.9;
+    overflow-x:auto;
+    overflow-y:visible;
+    border:1px solid var(--line-strong);
+  }
+  .formula-box mjx-container{
+    color:var(--ink) !important;
+  }
+  .formula-box mjx-container[jax="CHTML"][display="true"]{
+    margin:0 !important;
+  }
+  .formula-box .label{
+    display:block;
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--teal);
+    margin-bottom:10px;
+  }
+  .algebra-steps{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px 14px;
+  }
+  .algebra-step{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:4px;
+  }
+  .algebra-step .step-formula{
+    font-size:1.15rem;
+  }
+  .algebra-step .step-label{
+    font-family:var(--mono);
+    font-size:10.5px;
+    letter-spacing:.04em;
+    text-transform:uppercase;
+    color:var(--teal);
+  }
+  .algebra-arrow{
+    font-size:1.2rem;
+    color:var(--ink-soft);
+  }
+  .notation-compare{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin:18px 0 6px;
+  }
+  .notation-col{
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    padding:18px 16px 14px;
+    text-align:center;
+    background:var(--pastel-blue);
+    overflow-x:auto;
+  }
+  .notation-col::-webkit-scrollbar{height:8px;background:#F7F8F7;}
+  .notation-col::-webkit-scrollbar-track{background:#F7F8F7;border-radius:8px;}
+  .notation-col::-webkit-scrollbar-thumb{background:#C9CDCB;border-radius:8px;}
+  .notation-col{scrollbar-width:thin;scrollbar-color:#C9CDCB #F7F8F7;}
+  .notation-col:last-child{background:var(--pastel-gold);}
+  .notation-tag{
+    display:block;
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--teal);
+    margin-bottom:10px;
+  }
+  @media (max-width:640px){
+    .notation-compare{grid-template-columns:1fr;}
+  }
+  .num-inputs{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:14px;
+    margin-top:18px;
+    padding-top:16px;
+    border-top:1px dashed var(--line-strong);
+  }
+  .num-field label{
+    display:block;
+    font-family:var(--mono);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .num-field .num-wrap{
+    display:flex;
+    align-items:center;
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    background:#fff;
+    overflow:hidden;
+  }
+  .num-field .num-wrap span{
+    padding:8px 10px;
+    font-family:var(--mono);
+    font-size:13px;
+    color:var(--ink-soft);
+    background:var(--paper-alt);
+    border-right:1px solid var(--line-strong);
+  }
+  .num-field .num-wrap span.suffix{
+    border-right:none;
+    border-left:1px solid var(--line-strong);
+  }
+  .num-field input[type=number],
+  .num-field input[type=text]{
+    border:none;
+    outline:none;
+    padding:8px 10px;
+    font-family:var(--mono);
+    font-size:14px;
+    width:100%;
+    text-align:center;
+    color:var(--ink);
+    background:transparent;
+  }
+  .num-field input[type=number]::-webkit-inner-spin-button{opacity:.5;}
+
+  /* ===== ALWAYS-VISIBLE MULTI-SIMULATOR BLOCK ===== */
+  .sim-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:18px;
+    margin:26px 0 20px;
+  }
+  .sim-card{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:18px 18px 14px;
+    background:var(--paper);
+  }
+  .sim-card.full{grid-column:1 / -1;}
+  .sim-card h4{
+    font-family:var(--serif);
+    font-size:1.02rem;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .sim-card p.sim-desc{
+    font-size:.86rem;
+    color:var(--ink-soft);
+    margin:0 0 16px;
+  }
+  .chart{
+    display:flex;
+    align-items:flex-end;
+    gap:4px;
+    height:110px;
+    padding:0 2px;
+  }
+  .chart-col{
+    flex:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    align-items:center;
+    height:100%;
+    position:relative;
+  }
+  .chart-bar{
+    width:100%;
+    max-width:34px;
+    border-radius:2px 2px 0 0;
+    background:var(--teal-soft);
+    border-top:2px solid var(--teal);
+    transition:height .15s ease;
+    position:relative;
+  }
+  .chart-bar.gold{background:var(--gold-soft);border-top-color:var(--gold);}
+  .chart-bar .bar-value{
+    position:absolute;
+    left:0;right:0;
+    top:5px;
+    font-family:var(--mono);
+    font-size:9px;
+    font-weight:600;
+    color:var(--ink);
+    text-align:center;
+    line-height:1.15;
+    pointer-events:none;
+    white-space:nowrap;
+    overflow:hidden;
+    padding:0 1px;
+  }
+  .chart-bar .bar-value.outside{
+    top:auto;
+    bottom:100%;
+    margin-bottom:3px;
+    color:var(--ink-soft);
+  }
+  .chart-bar .stack-top{
+    position:absolute;
+    left:0;right:0;bottom:100%;
+    border-radius:2px 2px 0 0;
+    background:var(--gold-soft);
+    border-top:2px solid var(--gold);
+  }
+  .chart-bar .stack-top .bar-value{top:4px;}
+  .chart-axis{
+    display:flex;
+    gap:4px;
+    padding:0 2px;
+    margin-top:6px;
+    border-top:1px solid var(--line-strong);
+    padding-top:6px;
+  }
+  .chart-axis span{
+    flex:1;
+    text-align:center;
+    font-family:var(--mono);
+    font-size:10px;
+    color:var(--ink-soft);
+  }
+  .chart-legend{
+    display:flex;
+    gap:16px;
+    margin-top:12px;
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--ink-soft);
+  }
+  .chart-legend .dot{
+    display:inline-block;
+    width:9px;height:9px;
+    border-radius:2px;
+    margin-right:5px;
+    vertical-align:middle;
+  }
+  .flow-labels{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    padding:0 2px;
+  }
+  .flow-labels .flabel{
+    text-align:center;
+    font-size:.72rem;
+    color:var(--ink-soft);
+    line-height:1.3;
+  }
+  .flow-labels .flabel b{display:block;color:var(--ink);font-size:.76rem;}
+  @media (max-width:640px){
+    .sim-grid{grid-template-columns:1fr;}
+    .num-inputs{grid-template-columns:1fr;}
+  }
+    list-style:none;
+    margin:16px 0;
+    padding:0;
+    border-top:1px solid var(--line);
+  }
+  .glossary li{
+    padding:14px 0;
+    border-bottom:1px solid var(--line);
+    display:grid;
+    grid-template-columns:64px 1fr;
+    gap:16px;
+  }
+  .glossary .sym{
+    font-family:var(--serif);
+    font-style:italic;
+    font-size:1.2rem;
+    color:var(--teal);
+  }
+  .glossary .def{font-size:.95rem;color:var(--ink-soft);}
+  .glossary .def b{color:var(--ink);font-weight:600;}
+
+  .steps{counter-reset:step;margin:20px 0;}
+  .step{
+    position:relative;
+    padding:0 0 22px 38px;
+    border-left:1px solid var(--line);
+    margin-left:10px;
+  }
+  .step:last-child{border-left:1px solid transparent;padding-bottom:0;}
+  .step::before{
+    counter-increment:step;
+    content:counter(step);
+    position:absolute;
+    left:-11px;
+    top:0;
+    width:22px;height:22px;
+    border-radius:50%;
+    background:var(--paper);
+    border:1px solid var(--teal);
+    color:var(--teal);
+    font-family:var(--mono);
+    font-size:12px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .step h4{margin:0 0 6px;font-family:var(--serif);font-weight:600;font-size:1.05rem;}
+  .step p{margin:0;font-size:.95rem;color:var(--ink-soft);}
+
+  table.data{
+    width:100%;
+    border-collapse:collapse;
+    margin:18px 0;
+    font-family:var(--mono);
+    font-size:.86rem;
+  }
+  table.data caption{
+    text-align:left;
+    font-family:var(--sans);
+    font-size:.85rem;
+    color:var(--ink-soft);
+    margin-bottom:8px;
+    caption-side:top;
+  }
+  table.data th{
+    text-align:right;
+    padding:8px 10px;
+    background:var(--ink);
+    color:var(--paper-alt);
+    font-weight:500;
+  }
+  table.data th:first-child, table.data td:first-child{text-align:left;}
+  table.data td{
+    text-align:right;
+    padding:7px 10px;
+    border-bottom:1px solid var(--line);
+  }
+  table.data tr:hover td{background:var(--paper-alt);}
+
+  .example-card{
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:20px 22px;
+    margin:20px 0;
+    background:var(--paper);
+  }
+  .example-card .ex-tag{
+    font-family:var(--mono);
+    font-size:11px;
+    color:var(--gold);
+    text-transform:uppercase;
+    letter-spacing:.08em;
+  }
+  .example-card h4{
+    font-family:var(--serif);
+    font-size:1.1rem;
+    margin:6px 0 12px;
+    font-weight:600;
+  }
+
+  .placeholder-card{
+    border:1px dashed var(--line-strong);
+    border-radius:var(--radius);
+    padding:26px;
+    text-align:center;
+    color:var(--ink-soft);
+    background:var(--paper-alt);
+  }
+  .placeholder-card .icon{font-size:1.6rem;margin-bottom:8px;display:block;}
+  .placeholder-card b{color:var(--ink);}
+
+  /* ===== Indicadores RIS ===== */
+  .indic-card{
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    padding:26px 26px 28px;
+    background:var(--paper);
+  }
+  .indic-title{font-family:var(--serif); font-weight:600; font-size:1.25rem; margin:0 0 4px;}
+  .indic-sub{color:var(--ink-soft); font-size:.92rem; margin:0 0 20px;}
+  .indic-tabs{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:20px;
+  }
+  .indic-tab{
+    font-family:var(--mono);
+    font-size:12.5px;
+    padding:8px 14px;
+    border-radius:20px;
+    border:1px solid var(--line-strong);
+    background:var(--paper);
+    color:var(--ink-soft);
+    cursor:pointer;
+    transition:background .15s,color .15s,border-color .15s;
+  }
+  .indic-tab:hover{border-color:var(--teal);}
+  .indic-tab.active{background:var(--ink); color:#fff; border-color:var(--ink);}
+  .indic-fields{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:22px;
+  }
+  .indic-field label{
+    display:block;
+    font-family:var(--mono);
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .indic-field .indic-wrap{
+    display:flex;
+    align-items:center;
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    background:#fff;
+    overflow:hidden;
+  }
+  .indic-field .indic-wrap span{
+    padding:8px 8px;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-soft);
+    background:var(--paper-alt);
+    border-right:1px solid var(--line-strong);
+  }
+  .indic-field input{
+    border:none;
+    outline:none;
+    padding:8px 8px;
+    font-family:var(--mono);
+    font-size:14px;
+    width:100%;
+    text-align:center;
+    color:var(--ink);
+    background:transparent;
+  }
+  .indic-field.is-target .indic-wrap{
+    background:var(--pastel-gold);
+    border-color:var(--gold);
+  }
+  .indic-field.is-target input{
+    color:var(--gold);
+    font-weight:600;
+  }
+  .indic-field.is-target input::placeholder{color:var(--gold); opacity:.7;}
+  .indic-prompt{
+    color:var(--ink-soft);
+    font-size:.92rem;
+    font-style:italic;
+    padding:14px 0;
+  }
+  .indic-result{
+    background:var(--pastel-teal);
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    padding:18px 20px;
+    margin-bottom:22px;
+  }
+  .indic-result .k{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); margin-bottom:6px;}
+  .indic-result .v{font-family:var(--mono); font-size:1.8rem; font-weight:600; color:var(--ink);}
+  .indic-steps-title{font-family:var(--serif); font-weight:600; font-size:1rem; margin:0 0 10px;}
+  .indic-chart{
+    display:flex;
+    align-items:flex-end;
+    gap:3px;
+    height:70px;
+    margin-top:18px;
+  }
+  .indic-select{
+    width:100%;
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    background:#fff;
+    font-family:var(--mono);
+    font-size:14px;
+    padding:9px 8px;
+    color:var(--ink);
+  }
+  .indic-sync-box{
+    border-radius:var(--radius);
+    padding:16px 18px;
+    margin:18px 0;
+    font-size:.92rem;
+  }
+  .indic-sync-box.ok{background:var(--pastel-teal); border:1px solid var(--teal);}
+  .indic-sync-box.warn{background:var(--pastel-gold); border:1px solid var(--gold);}
+  .indic-sync-box .indic-sync-title{font-weight:700; color:var(--ink); margin-bottom:6px;}
+  .indic-strategy-btns{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
+  .indic-strategy-btn{
+    font-family:var(--mono);
+    font-size:12px;
+    padding:9px 16px;
+    border-radius:20px;
+    border:1px solid var(--gold);
+    background:#fff;
+    color:var(--ink);
+    cursor:pointer;
+    transition:background .15s,color .15s;
+  }
+  .indic-strategy-btn:hover{background:var(--gold); color:#fff;}
+  .indic-strategy-btn.chosen{background:var(--gold); color:#fff;}
+  .indic-chart .bar{
+    flex:1;
+    background:var(--teal-soft);
+    border-top:2px solid var(--teal);
+    min-width:4px;
+  }
+  @media (max-width:640px){
+    .indic-fields{grid-template-columns:1fr 1fr;}
+  }
+
+  .app-embed{
+    border:1px solid var(--line-strong);
+    border-radius:var(--radius);
+    overflow-x:auto;
+    overflow-y:visible;
+    max-width:none;
+    margin-left:-70px;
+    margin-right:-70px;
+  }
+  @media (max-width:760px){
+    .app-embed{margin-left:0;margin-right:0;}
+  }
+  .app-embed-head{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-wrap:wrap;
+    gap:10px;
+    padding:14px 28px;
+    background:var(--paper-alt);
+    border-bottom:1px solid var(--line-strong);
+    font-size:.92rem;
+    text-align:center;
+  }
+  .app-embed-head b{color:var(--ink);}
+  .app-embed-tag{
+    font-family:var(--mono);
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:var(--teal);
+    background:var(--pastel-teal);
+    border:1px solid var(--line-strong);
+    border-radius:20px;
+    padding:3px 10px;
+  }
+  .app-embed > div.te1, .app-embed > div.te2{
+    padding:8px 0 20px;
+  }
+
+  footer{
+    border-top:1px solid var(--line);
+    padding:26px 0 60px;
+    font-family:var(--mono);
+    font-size:12px;
+    color:var(--ink-soft);
+    text-align:center;
+  }
+
+  @media (max-width:640px){
+    .ledger-controls{grid-template-columns:1fr;}
+    .ctrl{border-right:none;border-bottom:1px solid var(--line);}
+    .section-body-inner{padding-left:0;}
+    .glossary li{grid-template-columns:44px 1fr;}
+  }
+
+/* ===== Apps embebidas: tasas equivalentes ===== */
+
+.te1{
+  --ink:#101a24; --ink2:#16222f;
+  --parchment:#efe7d6; --parchment-dim:#c9beaa;
+  --gold:#b98a3d; --gold-bright:#d9ab5c;
+  --teal:#4c8378; --teal-dim:#325850;
+  --rust:#a1503a; --rust-dim:#6e3729;
+  --line: rgba(239,231,214,0.14);
+  --bg-grad1:#1b2836; --bg-grad2:#1a2e2a;
+  --result-bg:#1c1a12;
+  --err:#c96a5a;
+  --hint-bg: rgba(185,138,61,0.1); --hint-border: rgba(185,138,61,0.35);
+  --btn-text:#101a24;
+}
+
+/* Claro — fondo papel claro con texto oscuro */
+/* Esmeralda — oscuro con tinte verde */
+/* Vino — oscuro con tinte borgoña */
+.te1 *{box-sizing:border-box;transition:background-color .25s ease, border-color .25s ease, color .25s ease;}
+.te1{
+  margin:0;
+  background:
+    radial-gradient(ellipse at 20% -10%, var(--bg-grad1) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 0%, var(--bg-grad2) 0%, transparent 45%),
+    var(--ink);
+  color:var(--parchment);
+  font-family:'Source Sans 3',-apple-system,sans-serif;
+  padding:0 0 80px 0;
+  font-variant-numeric: normal;
+  font-feature-settings: "zero" 0, "ss01" 0, "ss02" 0;
+  -webkit-font-feature-settings: "zero" 0, "ss01" 0, "ss02" 0;
+  transition: background-color .25s ease, color .25s ease;
+}
+.te1 .wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+
+.te1 header{padding:52px 28px 32px 40px;max-width:1120px;margin:0 auto;border-bottom:1px solid var(--line);}
+@media(max-width:480px){
+  .te1 header{padding:32px 18px 22px 18px;}
+  .te1 .card-section{padding:0 18px;}
+  .te1 .card{padding:22px 18px 20px 18px;}
+}
+.te1 .eyebrow{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:11.5px;letter-spacing:0.22em;
+  color:var(--gold-bright);text-transform:uppercase;margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.te1 .eyebrow::before{content:"";width:22px;height:1px;background:var(--gold-bright);display:inline-block;}
+.te1 h1{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,40px);
+  line-height:1.14;margin:0 0 14px 0;letter-spacing:-0.01em;
+}
+.te1 h1 em{font-style:italic;color:var(--gold-bright);font-weight:500;}
+.te1 .sub{font-size:15px;color:var(--parchment-dim);max-width:680px;line-height:1.6;}
+.te1 .install-hint{
+  margin-top:18px;padding:10px 14px;background:var(--hint-bg);
+  border:1px solid var(--hint-border);border-radius:2px;
+  font-size:12.5px;color:var(--gold-bright);max-width:680px;line-height:1.5;
+}
+.te1 .install-hint b{color:var(--parchment);}
+
+.te1 .card-section{max-width:1120px;margin:40px auto 0 auto;padding:0 28px;}
+.te1 .card{border:1px solid var(--line);background:var(--ink2);padding:30px 30px 26px 30px;}
+.te1 .card-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border:1px solid var(--gold);color:var(--gold-bright);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:12px;margin-right:10px;
+}
+.te1 .card-title{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:20px;font-weight:600;
+  display:flex;align-items:center;margin-bottom:4px;
+}
+.te1 .card-desc{font-size:13px;color:var(--parchment-dim);margin:0 0 22px 34px;}
+
+.te1 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 26px;}
+@media(max-width:760px){.te1 .grid{grid-template-columns:1fr;}}
+.te1 .field{transition:opacity .15s ease;}
+.te1 .field.disabled{opacity:0.35;pointer-events:none;}
+.te1 .field label{
+  display:flex;align-items:baseline;gap:6px;
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:10.5px;letter-spacing:0.05em;
+  text-transform:uppercase;color:var(--parchment-dim);margin-bottom:7px;
+}
+.te1 .field label .num{color:var(--gold-bright);font-weight:600;}
+.te1 .field select, .te1 .field input{
+  width:100%;background:var(--ink);border:1px solid var(--line);color:var(--parchment);
+  padding:12px 10px;font-family:'Source Sans 3',-apple-system,sans-serif;font-size:16px;border-radius:1px;
+  min-height:44px;text-align:center;
+}
+.te1 .field select:focus, .te1 .field input:focus{outline:none;border-color:var(--gold);}
+.te1 .field .hint{font-size:11px;color:var(--parchment-dim);margin-top:5px;font-style:italic;}
+.te1 .field.indent{padding-left:18px;border-left:2px solid var(--line);}
+
+.te1 .pct-wrap{position:relative;}
+.te1 .pct-wrap input{
+  padding-right:36px;text-align:center;font-variant-numeric:normal;
+  font-feature-settings:"zero" 0;-webkit-font-feature-settings:"zero" 0;
+}
+.te1 .pct-wrap .pct-suffix{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  color:var(--gold-bright);font-family:'Source Sans 3',-apple-system,sans-serif;
+  font-size:15px;font-weight:600;pointer-events:none;
+}
+
+.te1 .run-row{margin-top:28px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
+.te1 button#calc{
+  background:var(--gold);color:var(--btn-text);border:none;padding:15px 30px;
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:13px;letter-spacing:0.1em;
+  text-transform:uppercase;font-weight:600;cursor:pointer;transition:background .15s ease;
+  min-height:48px;-webkit-tap-highlight-color:transparent;
+}
+.te1 button#calc:hover{background:var(--gold-bright);}
+.te1 .err{font-family:'Source Sans 3',-apple-system,sans-serif;font-size:12px;color:var(--err);}
+
+.te1 .result-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;}
+@media(max-width:760px){.te1 .result-grid{grid-template-columns:1fr;}}
+.te1 .result-box{border:1px solid var(--gold);background:var(--result-bg);padding:22px 24px;}
+.te1 .result-box .lbl{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-weight:700;font-size:10.5px;letter-spacing:0.1em;color:var(--gold-bright);text-transform:uppercase;margin-bottom:8px;}
+.te1 .result-box .val{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-size:30px;font-weight:700;color:var(--parchment);}
+.te1 .subresults{display:flex;flex-direction:column;gap:10px;}
+.te1 .subresults .row{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 0;font-size:13px;}
+.te1 .subresults .row span:first-child{color:var(--parchment-dim);}
+.te1 .subresults .row span:last-child{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-weight:700;}
+
+.te1 .formula-block{
+  margin-top:18px;padding:14px 16px;background:rgba(0,0,0,0.25);border-left:2px solid var(--gold);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-size:13px;line-height:1.9;color:var(--parchment-dim);white-space:pre-wrap;
+}
+
+.te1 footer{max-width:1120px;margin:50px auto 0 auto;padding:20px 28px 0 28px;border-top:1px solid var(--line);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:11px;color:var(--parchment-dim);}
+
+@media(max-width:480px){
+  }
+
+
+.te2{
+  --ink:#101a24; --ink2:#16222f;
+  --parchment:#efe7d6; --parchment-dim:#c9beaa;
+  --gold:#b98a3d; --gold-bright:#d9ab5c;
+  --teal:#4c8378; --teal-dim:#325850;
+  --rust:#a1503a; --rust-dim:#6e3729;
+  --line: rgba(239,231,214,0.14);
+  --bg-grad1:#1b2836; --bg-grad2:#1a2e2a;
+  --result-bg:#1c1a12;
+  --err:#c96a5a;
+  --hint-bg: rgba(185,138,61,0.1); --hint-border: rgba(185,138,61,0.35);
+  --btn-text:#101a24;
+}
+
+/* Claro — fondo papel claro con texto oscuro */
+/* Esmeralda — oscuro con tinte verde */
+/* Vino — oscuro con tinte borgoña */
+.te2 *{box-sizing:border-box;transition:background-color .25s ease, border-color .25s ease, color .25s ease;}
+.te2{
+  margin:0;
+  background:
+    radial-gradient(ellipse at 20% -10%, var(--bg-grad1) 0%, transparent 55%),
+    radial-gradient(ellipse at 90% 0%, var(--bg-grad2) 0%, transparent 45%),
+    var(--ink);
+  color:var(--parchment);
+  font-family:'Source Sans 3',-apple-system,sans-serif;
+  padding:0 0 80px 0;
+  font-variant-numeric: normal;
+  font-feature-settings: "zero" 0, "ss01" 0, "ss02" 0;
+  -webkit-font-feature-settings: "zero" 0, "ss01" 0, "ss02" 0;
+  transition: background-color .25s ease, color .25s ease;
+}
+.te2 .wrap{max-width:1120px;margin:0 auto;padding:0 28px;}
+
+.te2 header{padding:52px 28px 32px 40px;max-width:1120px;margin:0 auto;border-bottom:1px solid var(--line);}
+@media(max-width:480px){
+  .te2 header{padding:32px 18px 22px 18px;}
+  .te2 .card-section{padding:0 18px;}
+  .te2 .card{padding:22px 18px 20px 18px;}
+}
+.te2 .eyebrow{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:11.5px;letter-spacing:0.22em;
+  color:var(--gold-bright);text-transform:uppercase;margin-bottom:14px;
+  display:flex;align-items:center;gap:10px;
+}
+.te2 .eyebrow::before{content:"";width:22px;height:1px;background:var(--gold-bright);display:inline-block;}
+.te2 h1{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-weight:600;font-size:clamp(28px,3.6vw,40px);
+  line-height:1.14;margin:0 0 14px 0;letter-spacing:-0.01em;
+}
+.te2 h1 em{font-style:italic;color:var(--gold-bright);font-weight:500;}
+.te2 .sub{font-size:15px;color:var(--parchment-dim);max-width:680px;line-height:1.6;}
+.te2 .install-hint{
+  margin-top:18px;padding:10px 14px;background:var(--hint-bg);
+  border:1px solid var(--hint-border);border-radius:2px;
+  font-size:12.5px;color:var(--gold-bright);max-width:680px;line-height:1.5;
+}
+.te2 .install-hint b{color:var(--parchment);}
+
+.te2 .card-section{max-width:1120px;margin:40px auto 0 auto;padding:0 28px;}
+.te2 .card{border:1px solid var(--line);background:var(--ink2);padding:30px 30px 26px 30px;}
+.te2 .card-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:24px;height:24px;border:1px solid var(--gold);color:var(--gold-bright);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:12px;margin-right:10px;
+}
+.te2 .card-title{
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:20px;font-weight:600;
+  display:flex;align-items:center;margin-bottom:4px;
+}
+.te2 .card-desc{font-size:13px;color:var(--parchment-dim);margin:0 0 22px 34px;}
+
+.te2 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:18px 26px;}
+@media(max-width:760px){.te2 .grid{grid-template-columns:1fr;}}
+.te2 .field{transition:opacity .15s ease;}
+.te2 .field.disabled{opacity:0.35;pointer-events:none;}
+.te2 .field label{
+  display:flex;align-items:baseline;gap:6px;
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:10.5px;letter-spacing:0.05em;
+  text-transform:uppercase;color:var(--parchment-dim);margin-bottom:7px;
+}
+.te2 .field label .num{color:var(--gold-bright);font-weight:600;}
+.te2 .field select, .te2 .field input{
+  width:100%;background:var(--ink);border:1px solid var(--line);color:var(--parchment);
+  padding:12px 10px;font-family:'Source Sans 3',-apple-system,sans-serif;font-size:16px;border-radius:1px;
+  min-height:44px;text-align:center;
+}
+.te2 .field select:focus, .te2 .field input:focus{outline:none;border-color:var(--gold);}
+.te2 .field .hint{font-size:11px;color:var(--parchment-dim);margin-top:5px;font-style:italic;}
+.te2 .field.indent{padding-left:18px;border-left:2px solid var(--line);}
+
+.te2 .pct-wrap{position:relative;}
+.te2 .pct-wrap input{
+  padding-right:36px;text-align:center;font-variant-numeric:normal;
+  font-feature-settings:"zero" 0;-webkit-font-feature-settings:"zero" 0;
+}
+.te2 .pct-wrap .pct-suffix{
+  position:absolute;right:12px;top:50%;transform:translateY(-50%);
+  color:var(--gold-bright);font-family:'Source Sans 3',-apple-system,sans-serif;
+  font-size:15px;font-weight:600;pointer-events:none;
+}
+
+.te2 .run-row{margin-top:28px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
+.te2 button#calc{
+  background:var(--gold);color:var(--btn-text);border:none;padding:15px 30px;
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:13px;letter-spacing:0.1em;
+  text-transform:uppercase;font-weight:600;cursor:pointer;transition:background .15s ease;
+  min-height:48px;-webkit-tap-highlight-color:transparent;
+}
+.te2 button#calc:hover{background:var(--gold-bright);}
+.te2 .err{font-family:'Source Sans 3',-apple-system,sans-serif;font-size:12px;color:var(--err);}
+
+.te2 .result-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:24px;}
+@media(max-width:760px){.te2 .result-grid{grid-template-columns:1fr;}}
+.te2 .result-box{border:1px solid var(--gold);background:var(--result-bg);padding:22px 24px;}
+.te2 .result-box .lbl{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-weight:700;font-size:10.5px;letter-spacing:0.1em;color:var(--gold-bright);text-transform:uppercase;margin-bottom:8px;}
+.te2 .result-box .val{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-size:30px;font-weight:700;color:var(--parchment);}
+.te2 .subresults{display:flex;flex-direction:column;gap:10px;}
+.te2 .subresults .row{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding:8px 0;font-size:13px;}
+.te2 .subresults .row span:first-child{color:var(--parchment-dim);}
+.te2 .subresults .row span:last-child{font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-weight:700;}
+
+.te2 .formula-block{
+  margin-top:18px;padding:14px 16px;background:rgba(0,0,0,0.25);border-left:2px solid var(--gold);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-variant-numeric:tabular-nums;font-size:13px;line-height:1.9;color:var(--parchment-dim);white-space:pre-wrap;
+}
+
+.te2 footer{max-width:1120px;margin:50px auto 0 auto;padding:20px 28px 0 28px;border-top:1px solid var(--line);
+  font-family:'Source Sans 3',-apple-system,sans-serif;font-size:11px;color:var(--parchment-dim);}
+
+@media(max-width:480px){
+  }
+
+/* ===== Patrón tutor: texto breve + boton para expandir el detalle ===== */
+.tutor-block{ margin:18px 0; }
+.tutor-brief{ margin:0 0 10px; }
+.tutor-toggle{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:.03em;
+  color:var(--teal);
+  background:var(--pastel-teal);
+  border:1px solid var(--teal);
+  border-radius:20px;
+  padding:7px 14px;
+  cursor:pointer;
+  transition:background .15s;
+}
+.tutor-toggle:hover{ background:var(--teal); color:#fff; }
+.tutor-toggle .chev{ transition:transform .25s ease; }
+.tutor-block.open > .tutor-toggle .chev{ transform:rotate(45deg); }
+.tutor-detail{
+  max-height:0;
+  overflow-x:visible;
+  overflow-y:hidden;
+  transition:max-height .35s ease;
+}
+.tutor-block.open > .tutor-detail{ max-height:6000px; }
+.tutor-detail-inner{
+  margin-top:14px;
+  padding:16px 20px;
+  background:var(--paper-alt);
+  border-left:3px solid var(--teal);
+  border-radius:0 var(--radius) var(--radius) 0;
+}
+.tutor-detail-inner p:last-child{ margin-bottom:0; }
+
+/* ===== Bloque puente (galletas -> finanzas) ===== */
+.bridge-block{
+  background:var(--pastel-gold);
+  border:1px solid var(--gold);
+  border-radius:var(--radius);
+  padding:24px 28px;
+  margin:24px 0;
+}
+.bridge-block h4{ font-family:var(--serif); font-size:1.1rem; margin:0 0 10px; color:var(--ink); }
+
+/* ===== Mini calculadora de precio ===== */
+.price-calc{
+  border:1px solid var(--line-strong);
+  border-radius:var(--radius);
+  padding:24px 26px;
+  margin:22px 0;
+  background:var(--paper);
+}
+.price-calc .pc-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+.price-calc label{
+  display:block; font-family:var(--mono); font-size:10.5px; text-transform:uppercase;
+  letter-spacing:.06em; color:var(--ink-soft); margin-bottom:6px;
+}
+.price-calc .pc-wrap{
+  display:flex; align-items:center; border:1px solid var(--line-strong);
+  border-radius:var(--radius); background:#fff; overflow:hidden;
+}
+.price-calc .pc-wrap span{
+  padding:8px; font-family:var(--mono); font-size:12px; color:var(--ink-soft);
+  background:var(--paper-alt); border-right:1px solid var(--line-strong);
+}
+.price-calc input, .price-calc select{
+  border:none; outline:none; padding:9px 8px; font-family:var(--mono);
+  font-size:14px; width:100%; text-align:center; color:var(--ink); background:transparent;
+}
+.price-calc select{ text-align:left; }
+.price-calc .pc-result{
+  background:var(--pastel-teal); border:1px solid var(--teal); border-radius:var(--radius);
+  padding:16px 20px; margin-top:6px; text-align:center;
+}
+.price-calc .pc-result .k{ font-family:var(--mono); font-size:11px; text-transform:uppercase; color:var(--ink-soft); margin-bottom:4px; }
+.price-calc .pc-result .v{ font-family:var(--mono); font-size:1.6rem; font-weight:600; color:var(--ink); }
+
+
+/* ===== Pie de autoría ===== */
+.author-credit{
+  margin-top:26px;
+  padding-top:14px;
+  border-top:1px solid var(--line);
+  text-align:center;
+}
+.author-credit .name{
+  font-family:var(--serif);
+  font-size:15px;
+  font-weight:500;
+  margin:0;
+  color:var(--ink);
+}
+.author-credit .role{
+  font-size:11px;
+  color:var(--ink-soft);
+  margin:4px 0 0;
+}
+</style>
+
+</head>
+<body>
+
+<div class="theme-switcher" id="theme-switcher" role="group" aria-label="Elegir apariencia">
+  <span class="theme-switcher-label">Apariencia</span>
+  <button class="theme-swatch" type="button" data-theme="default" style="--swatch-bg:#FFFFFF; --swatch-accent:#B8862B" title="Por defecto" aria-label="Tema por defecto"></button>
+  <button class="theme-swatch" type="button" data-theme="oscuro" style="--swatch-bg:#12202F; --swatch-accent:#D9B24C" title="Oscuro (poca luz)" aria-label="Tema oscuro"></button>
+  <button class="theme-swatch" type="button" data-theme="contraste" style="--swatch-bg:#FFFFFF; --swatch-accent:#000000" title="Alto contraste (luz brillante)" aria-label="Tema de alto contraste"></button>
+  <button class="theme-swatch" type="button" data-theme="sepia" style="--swatch-bg:#F6EFDD; --swatch-accent:#9C6B26" title="Sepia (lectura prolongada)" aria-label="Tema sepia"></button>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <p class="eyebrow">Cálculo Financiero</p>
+    <h1 class="title">El puente hacia el <em>crédito</em>: por qué existen las operaciones financieras</h1>
+    <p class="subtitle">Antes de aprender a calcular, conviene entender por qué hay algo que calcular.</p>
+  </div>
+</header>
+
+
+<main class="wrap">
+
+  <div style="text-align:center; margin:0 0 44px;">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Apertura</p>
+    <h2 style="font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:8px 0 0; color:var(--ink);">Antes de empezar</h2>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">Ap.1</span>
+      <h2>Una aclaración necesaria antes de empezar</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <div class="callout">
+          El presente material tiene fines exclusivamente didácticos. Para ello, se han tomado licencias narrativas e históricas: se reorganiza la secuencia de ideas, se adopta un tono más conversacional y se presenta el origen del dinero según el relato convencional de la disciplina económica (la superación del trueque y su &laquo;doble coincidencia de necesidades&raquo;), sin que ello implique desconocer que existen otras miradas &mdash;antropológicas e históricas&mdash; que discuten esta narrativa tradicional. Estas licencias tienen como único propósito facilitar la lectura y la comprensión progresiva de los conceptos.
+        </div>
+        <p class="soft"><span class="ped-license">Una aclaración más:</span> este material no reemplaza el desarrollo teórico formal de cada unidad temática de la materia. Es, como ya viste en <i>&laquo;Como en el tenis&raquo;</i>, un recorrido previo &mdash;esta vez centrado en el <b>por qué</b> existe el crédito, antes de entrar en el <b>cómo</b> se calcula&mdash; que te va a dar el terreno conceptual sobre el que van a apoyarse las unidades técnicas que siguen.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin:0 0 44px;">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Parte A</p>
+    <h2 style="font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:8px 0 0; color:var(--ink);">De la necesidad al consumo</h2>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">A.1</span>
+      <h2>Necesidades que se repiten</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Los seres humanos compartimos algo muy simple: tenemos múltiples necesidades, y esas necesidades suelen ser recurrentes &mdash;no se resuelven una vez y para siempre, vuelven una y otra vez.</p>
+        <p>Pensemos en el ejemplo más básico posible: el hambre. Es una necesidad que se reduce, transitoriamente, a través del consumo de alimentos &mdash;y que, tarde o temprano, vuelve a aparecer.</p>
+        <div class="callout">
+          <b>¿Qué tienen en común nuestras necesidades?</b> Que pueden reducirse o aplacarse, de forma transitoria, a través del consumo de bienes o servicios.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">A.2</span>
+      <h2>El consumo como beneficio: la utilidad</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Del consumo se desprende algo más: cuando consumimos un bien o un servicio, obtenemos un beneficio. A ese beneficio, en economía, lo llamamos <b>utilidad</b>.</p>
+        <p class="soft">Esta idea &mdash;necesidad recurrente &rarr; consumo &rarr; utilidad&mdash; parece obvia dicha así, pero es el primer eslabón de una cadena que nos va a llevar, en pocos pasos, hasta el crédito y las operaciones financieras.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin:0 0 44px;">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Parte B</p>
+    <h2 style="font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:8px 0 0; color:var(--ink);">Consumir supone producir</h2>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">B.1</span>
+      <h2>Por qué no podemos ignorar la producción</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">El consumo es una actividad central en la vida cotidiana de las personas. Pero para poder consumir algo, antes tiene que existir &mdash;alguien, de alguna forma, tuvo que producirlo.</p>
+        <p>Por eso no podemos hablar de consumo sin preguntarnos, aunque sea de forma simplificada, cómo se genera todo aquello que la sociedad necesita consumir.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">B.2</span>
+      <h2>Dos formas de producir: directa e indirecta</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">De manera simplificada, existen dos formas de producción.</p>
+        <table class="data" style="margin:18px 0;">
+          <thead><tr><th>Forma de producción</th><th>Quién produce</th></tr></thead>
+          <tbody>
+            <tr><td>Directa</td><td>La producción la realizamos nosotros mismos</td></tr>
+            <tr><td>Indirecta</td><td>La producción la realizan otras personas</td></tr>
+          </tbody>
+        </table>
+        <p class="soft">En nuestra organización económica y social &mdash;una economía de mercado&mdash; usamos la forma de producción <b>indirecta</b> para generar la casi totalidad de los bienes y servicios que consumimos. Casi nadie produce por sí mismo todo lo que necesita: dependemos, en la enorme mayoría de los casos, de que otros produzcan por nosotros.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin:0 0 44px;">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Parte C</p>
+    <h2 style="font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:8px 0 0; color:var(--ink);">El problema de adquirir lo que otros producen</h2>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">C.1</span>
+      <h2>Tres formas de acceder a bienes ajenos</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Si la producción indirecta domina una economía de mercado, se abre una pregunta obligada: ¿de qué formas se puede adquirir o disponer de los bienes y servicios que produjeron terceros?</p>
+        <p>Son tres formas, con muy distinto grado de aplicabilidad:</p>
+        <table class="data" style="margin:18px 0;">
+          <thead><tr><th>Mecanismo</th><th>Alcance</th></tr></thead>
+          <tbody>
+            <tr><td>Transferencias (regalos)</td><td>Existe, pero solo da acceso a una parte muy pequeña de los bienes y servicios</td></tr>
+            <tr><td>Robo o hurto</td><td>Existe, pero no es un medio deseado por la gran mayoría de la sociedad</td></tr>
+            <tr><td>Intercambio</td><td>Existe y es, por lejos, el mecanismo más utilizado</td></tr>
+          </tbody>
+        </table>
+        <p class="soft">El intercambio tiene dos elementos que lo caracterizan: la <b>prestación</b> (dar) y la <b>contraprestación</b> (recibir). A quien brinda la prestación lo llamamos <b>prestamista</b>; a quien retribuye con la contraprestación, <b>prestatario</b>. Vas a volver a encontrar estos dos roles &mdash;con el mismo nombre&mdash; en cada operación financiera de la materia.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">C.2</span>
+      <h2>El límite del intercambio: la doble coincidencia de necesidades</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">El intercambio es el mecanismo dominante en una economía de mercado, pero tiene una desventaja de fondo: para que se concrete, hace falta que exista una <b>doble coincidencia</b> entre los deseos de ambas partes.</p>
+        <p>Quien tiene lo que vos necesitás tiene que, a su vez, necesitar exactamente lo que vos tenés para ofrecer &mdash;y los dos tienen que estar dispuestos a concretar el intercambio en el mismo momento. Cuando esa doble coincidencia no se da, el intercambio directo simplemente no ocurre, o se vuelve lento e ineficiente.</p>
+        <div class="tutor-block" data-section>
+          <p class="tutor-brief">Este problema &mdash;la doble coincidencia de necesidades&mdash; es el relato convencional que explica el surgimiento del dinero en la disciplina económica, desde Adam Smith hasta los manuales introductorios actuales.</p>
+          <button class="tutor-toggle" data-toggle type="button">¿Es esta la única explicación posible? <span class="chev">+</span></button>
+          <div class="tutor-detail">
+            <div class="tutor-detail-inner">
+              <p>Vale la pena saber que existe un debate real dentro de la propia disciplina. Algunos antropólogos y economistas heterodoxos cuestionan si alguna vez existió, históricamente, una economía de trueque generalizada tal como la describe el relato convencional &mdash;y proponen, en cambio, que el dinero habría surgido más ligado a relaciones de deuda y de autoridad. No vamos a desarrollar ese debate acá: seguimos el relato convencional porque es el que mejor conecta, de forma sencilla, con la lógica de las operaciones financieras que vamos a estudiar &mdash;pero conviene saber que no es la única mirada posible sobre el origen del dinero.</p>
+            </div>
+          </div>
+        </div>
+        <div class="callout">
+          <b>La pregunta que abre la siguiente parte:</b> ¿habrá alguna herramienta que permita agilizar el proceso de intercambio, evitando el problema de la doble coincidencia?
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin:0 0 44px;">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Parte D</p>
+    <h2 style="font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:8px 0 0; color:var(--ink);">El dinero como solución</h2>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">D.1</span>
+      <h2>El dinero como medio de cambio</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">La sociedad encontró una respuesta a ese problema y la llamó <b>dinero</b>.</p>
+        <p>El dinero es, ante todo, un <b>medio de cambio</b>: agiliza el proceso de intercambio evitando que haga falta la doble coincidencia de deseos entre prestamista y prestatario. En una economía de mercado, el dinero es un bien que todos los agentes económicos aceptan para concretar una transacción &mdash;y esa aceptación generalizada es, justamente, lo que lo vuelve útil.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">D.2</span>
+      <h2>El dinero como reserva de valor</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Además de agilizar el intercambio, el dinero cumple una segunda función: es <b>reserva de valor</b>. Permite mantener el poder de compra a lo largo del tiempo &mdash;guardar hoy algo que vas a poder usar mañana, sin que pierda (en principio) su capacidad de comprar bienes y servicios.</p>
+        <p class="soft">Guardate estas dos funciones &mdash;medio de cambio y reserva de valor&mdash; porque van a reaparecer, de una u otra forma, en toda la materia: cada vez que hablemos de un capital financiero, vamos a estar hablando de dinero cumpliendo alguna de estas dos funciones.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">D.3</span>
+      <h2>El dinero y el bien que lo representa no son lo mismo</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Hay una distinción importante que conviene aclarar: el <b>dinero</b> no es lo mismo que el <b>bien o activo que ocupa el rol de dinero</b>. El dinero, como institución, siempre va a existir en una economía de mercado; pero el bien concreto que cumple ese rol puede cambiar con el tiempo.</p>
+        <div class="bridge-block">
+          <h4>Una analogía para fijar la idea</h4>
+          <p>Pensá en Spider-Man. El <b>personaje</b> siempre es Spider-Man, sin importar quién lo interprete &mdash;pero a lo largo de los años, varios <b>actores</b> distintos ocuparon ese rol: Tobey Maguire, Andrew Garfield, Tom Holland. El personaje no cambió; lo que cambió fue quién lo representaba en cada momento. De la misma forma, el dinero (el &laquo;personaje&raquo;) siempre existe en una economía de mercado, mientras que el bien que ocupa ese rol (el &laquo;actor&raquo;: ganado, metales preciosos, papel moneda) fue cambiando a lo largo de la historia.</p>
+        </div>
+        <p class="soft">A lo largo de la historia, los bienes que ocuparon el rol de dinero fueron cambiando: primero el ganado, luego los metales preciosos, y en la actualidad el dinero fiduciario (papel moneda). El cambio ocurre, típicamente, cuando el bien deja de cumplir bien alguna de las dos funciones básicas del dinero &mdash;medio de cambio o reserva de valor.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">D.4</span>
+      <h2>Dos categorías de dinero: mercancía y fiduciario</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Según qué bien ocupe el rol de dinero, podemos distinguir dos categorías.</p>
+        <div class="notation-compare">
+          <div class="notation-col">
+            <span class="notation-tag">Dinero mercancía</span>
+            Por ejemplo, monedas de oro. Si deja de operar como dinero, todavía conserva valor &mdash;porque mantiene su valor como mercancía.
+          </div>
+          <div class="notation-col">
+            <span class="notation-tag">Dinero fiduciario</span>
+            Por ejemplo, el peso en Argentina. Si deja de operar como dinero, pierde prácticamente todo su valor &mdash;su valor como mercancía (papel impreso) es casi nulo.
+          </div>
+        </div>
+        <p class="soft">Por eso, con el dinero fiduciario, la totalidad del valor que le asignamos radica pura y exclusivamente en la <b>confianza</b> que la sociedad deposita en él.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">D.5</span>
+      <h2>El dinero como activo: liquidez, atesoramiento e inversión</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Desde el punto de vista económico, el dinero fiduciario se considera el <b>activo más líquido</b> de todos, y también un <b>activo o capital financiero</b>.</p>
+        <p>La liquidez combina dos elementos: la <b>rapidez</b> con la que un activo permite concretar una transacción, y el <b>costo</b> de concretarla. El dinero es el activo más líquido porque permite transacciones casi inmediatas, con un costo de transacción prácticamente nulo.</p>
+        <p class="soft">Quien posee dinero tiene libre disponibilidad sobre él: puede usarlo para consumir, o puede ahorrarlo. Y dentro del ahorro hay, a su vez, dos caminos posibles &mdash;guardar el dinero sin que crezca (atesoramiento: guardar $100 hoy y tener exactamente $100 mañana), o invertirlo, con la expectativa de que esa magnitud aumente con el tiempo (prestar $100 hoy y recibir más de $100 en el futuro). Ese segundo camino &mdash;invertir, prestar&mdash; es la puerta de entrada al resto de este recorrido.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin:0 0 44px;">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Parte E</p>
+    <h2 style="font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:8px 0 0; color:var(--ink);">De guardar dinero a prestarlo: nace el crédito</h2>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">E.1</span>
+      <h2>La necesidad de anticipar poder de compra</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">En una economía de mercado, las personas necesitan recursos para consumir o para emprender proyectos de inversión. Pero muchas veces esos recursos no están disponibles en el momento en que se necesitan &mdash;están disponibles recién en el futuro.</p>
+        <p>Como sociedad, podemos evitar esa postergación si otras personas, que sí tienen un excedente de recursos hoy, se los anticipan a quienes los necesitan. A ese servicio de anticipación lo llamamos <b>crédito</b> o <b>financiamiento</b>.</p>
+        <p class="soft">Ese servicio no es gratuito: debe restituirse, y además debe retribuirse. Genera derechos y obligaciones contractuales entre las partes &mdash;lo que, en esta materia, vamos a llamar una <b>operación financiera en un contexto de certeza</b>.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">E.2</span>
+      <h2>Qué es, en definitiva, una operación financiera</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Existen infinitas variantes de operaciones financieras, pero todas comparten algo: brindan un servicio de financiamiento o crédito.</p>
+        <div class="callout">
+          <b>De forma simplificada, una operación financiera es el intercambio de capitales financieros entre dos tipos de agentes económicos.</b>
+        </div>
+        <p class="soft">Con esta definición, ya estamos en condiciones de entrar en el terreno propio de Cálculo Financiero: identificar los elementos que forman parte de toda operación financiera, sin importar cuál sea su forma particular.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin:0 0 44px;">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Parte F</p>
+    <h2 style="font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:8px 0 0; color:var(--ink);">Los elementos propios de toda operación financiera</h2>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">F.1</span>
+      <h2>Prestación y contraprestación</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Una operación financiera es, básicamente, una transacción &mdash;y como toda transacción, involucra una prestación y una contraprestación.</p>
+        <table class="data" style="margin:18px 0;">
+          <thead><tr><th>Clasificación</th><th>Variantes</th></tr></thead>
+          <tbody>
+            <tr><td>Según la cantidad de prestaciones</td><td>Única (un solo préstamo) o múltiple (varios préstamos)</td></tr>
+            <tr><td>Según la cantidad de contraprestaciones</td><td>Única (una sola devolución) o múltiple (varias devoluciones)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">F.2</span>
+      <h2>Prestamista y prestatario</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Los dos tipos de agentes que intervienen en una operación financiera son el <b>prestamista</b> (quien otorga el préstamo, también llamado acreedor) y el <b>prestatario</b> (quien lo recibe, también llamado deudor).</p>
+        <table class="data" style="margin:18px 0;">
+          <thead><tr><th>Clasificación</th><th>Variantes</th></tr></thead>
+          <tbody>
+            <tr><td>Según la cantidad de prestamistas</td><td>Único acreedor o múltiples acreedores</td></tr>
+            <tr><td>Según la cantidad de prestatarios</td><td>Único deudor o múltiples deudores</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">F.3</span>
+      <h2>El desfasaje temporal</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">No tendría sentido que el prestamista le anticipe poder de compra al prestatario y, en ese mismo instante, el prestatario devuelva la totalidad de lo adeudado.</p>
+        <div class="callout">
+          <b>Por eso, en toda operación financiera existe un desfasaje temporal entre la prestación y la contraprestación.</b>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">F.4</span>
+      <h2>La onerosidad: por qué el préstamo tiene un precio</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Al otorgar o anticipar poder de compra, el prestamista le está brindando un servicio al prestatario &mdash;y todo servicio, en principio, tiene derecho a una retribución. Según el régimen financiero aplicado, esa retribución se llama <b>interés</b> o <b>descuento</b>.</p>
+        <p>La retribución mínima que exige el prestamista está asociada a sus expectativas de incrementar su poder de compra en términos reales. Para fijarla, toma en cuenta varios factores:</p>
+        <ul>
+          <li>El <b>riesgo</b> asociado al incumplimiento &mdash;ya sea en la magnitud de la devolución o en el plazo de restitución.</li>
+          <li>La <b>retribución real esperada</b>, influenciada a su vez por las expectativas sobre la fluctuación futura de precios (inflación o deflación esperada).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">F.5</span>
+      <h2>El contexto de riesgo que vamos a asumir en la materia</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Existen distintos tipos de riesgo en una operación financiera, asociados tanto a la magnitud de los flujos de fondos como al momento de su libre disponibilidad.</p>
+        <p class="soft">En la casi totalidad de este curso vamos a trabajar el caso más sencillo &mdash;de menor riesgo&mdash;, en el que tanto la magnitud de los flujos como el momento de su libre disponibilidad están preestablecidos en un contrato financiero, y partimos del supuesto de que ese compromiso se va a cumplir. Este es, precisamente, el &laquo;contexto de certeza&raquo; que ya mencionamos antes.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">F.6</span>
+      <h2>El capital financiero: magnitud y momento</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Llegamos a un concepto que ya conocés, si leíste <i>&laquo;Como en el tenis&raquo;</i>: el <b>capital financiero</b>.</p>
+        <p>Un capital financiero es una variable con dos dimensiones: su <b>magnitud</b> (por ejemplo, $100) y el <b>momento</b> de su libre disponibilidad (por ejemplo, dentro de 1 mes). La notación <i>C<sub>t</sub></i> da cuenta de un capital con determinada magnitud, disponible en el momento <i>t</i>.</p>
+        <div class="example-card">
+          <span class="ex-tag">Ejemplo</span>
+          <h4>Dos alternativas frente a $100</h4>
+          <p>Un potencial prestamista puede: <b>no prestar</b> C<sub>0</sub> = $100 y disponer hoy de ese dinero para lo que desee; o <b>prestarlo</b> hoy y recibir en el futuro C<sub>1</sub> = $110, con libre disponibilidad de esos $110 recién en ese momento.</p>
+        </div>
+        <p class="soft">Esta doble dimensión &mdash;magnitud y momento&mdash; es exactamente la misma idea que ya viste formalizada, con más detalle, en la sección A.9 de <i>&laquo;Como en el tenis&raquo;</i>. No es casualidad: es el mismo concepto &mdash;allá lo viste desde su tratamiento matemático, y acá lo estás viendo desde su origen económico.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">F.7</span>
+      <h2>La efectivización de una operación financiera</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Tanto el prestamista como el prestatario tienen, antes de negociar, un mínimo a recibir y un máximo a entregar que están dispuestos a aceptar.</p>
+        <div class="callout">
+          <b>Si ambas partes acuerdan una operación financiera, es porque esa operación cae dentro de los límites que cada una fijó de antemano.</b>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin:0 0 44px;">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Parte G</p>
+    <h2 style="font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:8px 0 0; color:var(--ink);">Hacia dónde apunta la materia</h2>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.1</span>
+      <h2>El foco de la materia</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Ya tenés todos los elementos para entender, en una sola frase, en qué se concentra Cálculo Financiero.</p>
+        <div class="callout">
+          <b>En Cálculo Financiero nos centramos, en mayor medida, en el análisis de alternativas financieras.</b>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.2</span>
+      <h2>Qué es una alternativa financiera</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Una alternativa financiera puede reconocerse como el combo &laquo;prestación y contraprestación&raquo;. Tanto la prestación como la contraprestación pueden ser únicas o múltiples &mdash;como ya vimos en la Parte F.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.3</span>
+      <h2>Analizar UNA alternativa financiera</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Analizar una alternativa financiera consiste en comparar la prestación con la contraprestación. De esa comparación se desprende, siempre, una de estas tres conclusiones &mdash;mutuamente excluyentes:</p>
+        <ul>
+          <li>Se prefiere la prestación a la contraprestación.</li>
+          <li>Se prefiere la contraprestación a la prestación.</li>
+          <li>Ambas alternativas son indiferentes entre sí.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block open" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.4</span>
+      <h2>La aplicación del análisis: decidir si concretar una operación</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Este análisis se aplica de forma previa a la decisión de concretar o no una operación financiera &mdash;recordá que una operación financiera es, en definitiva, el intercambio de capitales financieros entre prestamista y prestatario, con el desfasaje temporal que ya vimos.</p>
+        <p>Para que la operación se concrete, ambas partes tienen que obtener, en el intercambio, algo que prefieran o que al menos les resulte indiferente respecto de lo que entregan.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-block" data-section>
+    <button class="section-toggle" data-toggle>
+      <span class="num">G.5</span>
+      <h2>Las cuatro variantes de operación financiera</h2>
+      <span class="chev">+</span>
+    </button>
+    <div class="section-body">
+      <div class="section-body-inner">
+
+        <p class="plain-intro">Por último, según la cantidad de prestaciones y contraprestaciones que contemple, toda operación financiera cae en uno de cuatro tipos.</p>
+        <table class="data" style="margin:18px 0;">
+          <thead><tr><th>Tipo</th><th>Prestaciones</th><th>Contraprestaciones</th></tr></thead>
+          <tbody>
+            <tr><td>1&ordm;</td><td>Una</td><td>Una</td></tr>
+            <tr><td>2&ordm;</td><td>Una</td><td>Múltiples</td></tr>
+            <tr><td>3&ordm;</td><td>Múltiples</td><td>Una</td></tr>
+            <tr><td>4&ordm;</td><td>Múltiples</td><td>Múltiples</td></tr>
+          </tbody>
+        </table>
+        <p class="soft">Estas cuatro variantes van a reaparecer, con nombre y apellido, en cada uno de los regímenes financieros que vas a estudiar a continuación.</p>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin:64px 0 40px; padding-top:40px; border-top:2px solid var(--line-strong);">
+    <p style="font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--gold); margin:0;">Para cerrar</p>
+    <h2 style="font-family:var(--serif); font-weight:600; font-size:1.7rem; margin:8px 0 20px; color:var(--ink);">Ya tenés el por qué. Ahora falta el cómo</h2>
+    <p style="max-width:60ch; margin:0 auto 24px; color:var(--ink);">Recorriste el camino completo: de la necesidad humana al consumo, de la producción a la necesidad de intercambio, del intercambio al dinero, y del dinero al crédito. Ya sabés por qué existen las operaciones financieras y qué elementos comparten todas ellas.</p>
+    <p style="max-width:60ch; margin:0 auto 24px; color:var(--ink-soft);">Lo que sigue es el desarrollo formal de esas operaciones: el <b>Régimen de Interés Simple (RIS)</b>, el <b>Régimen de Descuento Simple Bancario (RDSB)</b>, el <b>Régimen de Descuento Simple Matemático (RDSM)</b>, el <b>Régimen de Interés Compuesto (RIC)</b> y el <b>Régimen de Descuento Compuesto (RDC)</b> &mdash;cada uno, una forma distinta de proyectar un capital financiero en el tiempo.</p>
+    <p style="font-family:var(--serif); font-weight:600; font-size:1.5rem; margin:0; color:var(--teal);">Nos vemos en el Régimen de Interés Simple.</p>
+  </div>
+
+</main>
+
+<footer>
+  Cálculo Financiero — El puente hacia el crédito: por qué existen las operaciones financieras
+  <div class="author-credit">
+    <p class="name">Orlando Orellana</p>
+    <p class="role">Licenciado en Economía (FCE-UBA)</p>
+    <p class="role">Profesor Adjunto Interino de Cálculo Financiero — FCE-UBA</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  try{
+    var t = localStorage.getItem('notas_theme');
+    if(t) document.documentElement.setAttribute('data-theme', t);
+  }catch(e){}
+})();
+</script>
+<script>
+  // Accordion de secciones y patrón tutor (handler único genérico)
+  document.querySelectorAll('[data-toggle]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      btn.closest('[data-section]').classList.toggle('open');
+    });
+  });
+
+  // ---- selector de apariencia ----
+  function applyTheme(theme){
+    if(theme === 'default'){ document.documentElement.removeAttribute('data-theme'); }
+    else{ document.documentElement.setAttribute('data-theme', theme); }
+    document.querySelectorAll('.theme-swatch').forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
+    try{ localStorage.setItem('notas_theme', theme); }catch(e){}
+  }
+  document.querySelectorAll('.theme-swatch').forEach(b => {
+    b.addEventListener('click', () => applyTheme(b.dataset.theme));
+  });
+  let savedTheme = 'default';
+  try{ savedTheme = localStorage.getItem('notas_theme') || 'default'; }catch(e){}
+  applyTheme(savedTheme);
+</script>
+
+</body>
+</html>
